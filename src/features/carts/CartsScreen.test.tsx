@@ -72,7 +72,8 @@ describe('CartsScreen', () => {
     renderScreen()
     await user.click(screen.getByRole('button', { name: 'Generar carrito' }))
 
-    expect(screen.getByRole('alert')).toHaveTextContent('No hay productos pendientes de compra')
+    // The notice appears after generateAutoCart's async pass — await it.
+    expect(await screen.findByRole('alert')).toHaveTextContent('No hay productos pendientes de compra')
     expect(await db.carts.count()).toBe(0)
   })
 
