@@ -50,10 +50,10 @@ Chain strategy: stacked-to-main
 
 ## Batch 4 — Purchase Planning (slice 4)
 
-- [ ] 4.1 TDD `src/lib/dates.ts`: `today()`, `addPeriod(date, 'semanal'|'quincenal'|'mensual')` with month-end clamp (2026-01-31 + mensual → 2026-02-28), `isDue(next)` (string compare). Verify: unit tests incl. weekly 2026-09-01 → 2026-09-08 and overflow. Implements: purchase-planning period.
-- [ ] 4.2 TDD `src/lib/money.ts` (parse "25.50" → 2550 centavos; format via `Intl.NumberFormat('es-MX', MXN)`) and `src/lib/id.ts` (unique ids for links). Verify: unit tests. Implements: purchase-planning prices.
-- [ ] 4.3 TDD `src/features/purchase/api.ts` `savePurchaseInfo`: prices ≥ 0 (reject negative), URL validation for links, period set → next = addPeriod(last, period), period none → next unset, lastPurchaseDate update recomputes next. Verify: unit tests cover record/negative-price/weekly/unset/recompute scenarios. Implements: purchase-planning.
-- [ ] 4.4 Purchase UI on ProductDetail ("Info de compra"): primary/secondary supplier selects, original/last price (MXN), `type="date"` dates, period select, links add + open. Verify: component test — negative price rejected with Spanish message. Implements: purchase-planning.
+- [x] 4.1 TDD `src/lib/dates.ts`: `today()`, `addPeriod(date, 'semanal'|'quincenal'|'mensual')` with month-end clamp (2026-01-31 + mensual → 2026-02-28), `isDue(next)` (string compare). Verify: unit tests incl. weekly 2026-09-01 → 2026-09-08 and overflow. Implements: purchase-planning period.
+- [x] 4.2 TDD `src/lib/money.ts` (parse "25.50" → 2550 centavos; format via `Intl.NumberFormat('es-MX', MXN)`) and `src/lib/id.ts` (unique ids for links). Verify: unit tests. Implements: purchase-planning prices.
+- [x] 4.3 TDD `src/features/purchase/api.ts` `savePurchaseInfo`: prices ≥ 0 (reject negative), URL validation for links, period set → next = addPeriod(last, period), period none → next unset, lastPurchaseDate update recomputes next. Verify: unit tests cover record/negative-price/weekly/unset/recompute scenarios. Implements: purchase-planning.
+- [x] 4.4 Purchase UI on ProductDetail ("Info de compra"): primary/secondary supplier selects, original/last price (MXN), `type="date"` dates, period select, links add + open. Verify: component test — negative price rejected with Spanish message. Implements: purchase-planning.
 
 ## Batch 5 — Carts + Buy Cart + Auto-generation (slice 5)
 
