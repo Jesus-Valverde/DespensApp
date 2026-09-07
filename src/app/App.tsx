@@ -8,6 +8,8 @@ import { ProductDetail } from '../features/products/ProductDetail'
 import { CartsScreen } from '../features/carts/CartsScreen'
 import { CartForm } from '../features/carts/CartForm'
 import { CartDetail } from '../features/carts/CartDetail'
+import { ListsScreen } from '../features/lists/ListsScreen'
+import { ListDetail } from '../features/lists/ListDetail'
 import { generateAutoCart } from '../features/carts/api'
 
 // Run-once guard: StrictMode double-invokes effects in dev, and the active-cart
@@ -48,10 +50,8 @@ export function App() {
           <Route path="/carts" element={<CartsScreen />} />
           <Route path="/carts/new" element={<CartForm />} />
           <Route path="/carts/:id" element={<CartDetail />} />
-          <Route
-            path="/lists"
-            element={<PlaceholderScreen title="Listas" note="Aquí organizarás tus listas de compras." />}
-          />
+          <Route path="/lists" element={<ListsScreen />} />
+          <Route path="/lists/:id" element={<ListDetail />} />
           <Route path="/settings/suppliers" element={<SuppliersScreen />} />
         </Routes>
       </Layout>

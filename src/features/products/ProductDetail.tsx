@@ -6,6 +6,7 @@ import { StockSection } from '../inventory/StockSection'
 import { MovementForm } from '../inventory/MovementForm'
 import { BitacoraList } from '../inventory/BitacoraList'
 import { PurchaseSection } from '../purchase/PurchaseSection'
+import { ListsSection } from '../lists/ListsSection'
 import { deleteProduct, duplicateProduct } from './api'
 
 export function ProductDetail() {
@@ -106,6 +107,7 @@ export function ProductDetail() {
       <MovementForm productId={current.id!} />
       <BitacoraList productId={current.id!} />
       <PurchaseSection product={current} />
+      <ListsSection productId={current.id!} />
     </section>
   )
 }
