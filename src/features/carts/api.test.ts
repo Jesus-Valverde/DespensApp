@@ -11,6 +11,7 @@ import {
   groupCartItems,
   suggestedQty,
   buyCart,
+  generateAutoCart,
 } from './api'
 import type { CartItem, Product } from '../../db/types'
 
@@ -385,5 +386,103 @@ describe('buyCart', () => {
 
     expect(await db.movements.count()).toBe(0)
     expect((await db.carts.get(active))?.status).toBe('active')
+  })
+})
+
+describe('generateAutoCart', () => {
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date(2026, 8, 6, 10, 0, 0))
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  /** A scheduled product due on `next` (default: overdue). */
+  async function makeScheduled(title: string, next: string, supplierId: number | null, lastPrice?: number) {
+    return makeProduct(title, {
+      purchase: { primarySupplierId: supplierId ?? undefined, secondarySupplierIds: [], lastPrice, nextPurchaseDate: next, period: 'semanal', links: [] },
+    })
+  }
+
+  it('creates an auto cart with all due products grouped by supplier (spec: auto-generate on app open)', async () => {
+    const aurrera = (await db.suppliers.add({ name: 'Bodega Aurrerá', locations: [] })) as number
+    const costco = (await db.suppliers.add({ name: 'Costco', locations: [] })) as number
+    const detergente = await makeScheduled('Detergente', '2026-09-01', aurrera, 3050)
+    const leche = await makeScheduled('Leche entera', '2026-09-06', costco)
+
+    const cart = await generateAutoCart()
+
+    expect(cart).toMatchObject({
+      status: 'active',
+      origin: 'auto',
+      name: 'Carrito generado (6 de septiembre de 2026)',
+    })
+    expect(cart?.generatedAt).toEqual(expect.any(String))
+    // Due-date order: 2026-09-01 before 2026-09-06 (today).
+    expect(cart?.items).toEqual([
+      { productId: detergente, title: 'Detergente', qty: 1, unitPrice: 3050, supplierId: aurrera, supplierName: 'Bodega Aurrerá' },
+      { productId: leche, title: 'Leche entera', qty: 1, unitPrice: 0, supplierId: costco, supplierName: 'Costco' },
+    ])
+    expect(await db.carts.count()).toBe(1)
+  })
+
+  it('groups products without a primary supplier under Sin proveedor', async () => {
+    const sal = await makeScheduled('Sal de grano', '2026-09-05', null, 1800)
+
+    const cart = await generateAutoCart()
+
+    expect(cart?.items).toEqual([
+      { productId: sal, title: 'Sal de grano', qty: 1, unitPrice: 1800, supplierId: null, supplierName: 'Sin proveedor' },
+    ])
+  })
+
+  it('skips not-yet-due and unscheduled products and those already in an active cart (spec: no duplicate)', async () => {
+    const covered = await makeScheduled('Detergente', '2026-09-05', null)
+    const future = await makeScheduled('Papel higiénico', '2026-09-10', null)
+    await makeProduct('Sin calendario') // no nextPurchaseDate
+    const activeId = await createCart({ name: 'Súper' })
+    await addCartItem(activeId, { productId: covered, qty: 1 })
+
+    // Every due product is already covered, so the trigger is a no-op.
+    expect(await generateAutoCart()).toBeNull()
+    expect(await db.carts.count()).toBe(1)
+    expect(future).toBeDefined()
+  })
+
+  it('generates only the due products not covered by active carts', async () => {
+    const covered = await makeScheduled('Detergente', '2026-09-01', null)
+    const libre = await makeScheduled('Leche entera', '2026-09-06', null)
+    const activeId = await createCart({ name: 'Súper' })
+    await addCartItem(activeId, { productId: covered, qty: 1 })
+
+    const cart = await generateAutoCart()
+
+    expect(cart?.items.map((item) => item.productId)).toEqual([libre])
+  })
+
+  it('still generates products that only sit in purchased or cancelled carts', async () => {
+    const detergente = await makeScheduled('Detergente', '2026-09-05', null)
+    const purchasedId = await createCart({ name: 'Ya pagado' })
+    await addCartItem(purchasedId, { productId: detergente, qty: 1 })
+    await buyCart(purchasedId)
+    const cancelledId = await createCart({ name: 'Cancelado' })
+    await addCartItem(cancelledId, { productId: detergente, qty: 1 })
+    await cancelCart(cancelledId)
+    await db.products.update(detergente, {
+      purchase: { secondarySupplierIds: [], nextPurchaseDate: '2026-09-05', period: 'semanal', links: [] },
+    })
+
+    const cart = await generateAutoCart()
+
+    expect(cart?.items.map((item) => item.productId)).toEqual([detergente])
+  })
+
+  it('is a no-op when nothing is due: no cart is created (spec: none due)', async () => {
+    await makeProduct('Leche entera') // unscheduled
+
+    expect(await generateAutoCart()).toBeNull()
+    expect(await db.carts.count()).toBe(0)
   })
 })

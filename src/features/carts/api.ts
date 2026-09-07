@@ -5,7 +5,7 @@
 import { db } from '../../db/db'
 import type { Cart, CartItem, CartOrigin, CartStatus, ProductStock } from '../../db/types'
 import { registerMovement } from '../inventory/api'
-import { addPeriod, today } from '../../lib/dates'
+import { addPeriod, formatDate, isDue, today } from '../../lib/dates'
 
 export const NO_SUPPLIER = 'Sin proveedor'
 
@@ -211,5 +211,60 @@ export async function buyCart(cartId: number, priceOverrides: PriceOverrides = {
       purchasedAt: new Date().toISOString(),
       items: purchasedItems,
     })
+  })
+}
+
+/** Generates a cart from scheduled products whose next purchase date is due
+ * (today or earlier) and that are not already in an active cart — the
+ * active-cart membership is the idempotency guard (design decision 9). Items
+ * default to qty 1 and the last known price, grouped by primary supplier with
+ * a "Sin proveedor" bucket. Returns the created cart, or null when nothing
+ * is due (no empty carts are created). */
+export async function generateAutoCart(): Promise<Cart | null> {
+  return db.transaction('rw', db.products, db.carts, db.suppliers, async () => {
+    const [products, activeCarts] = await Promise.all([
+      db.products.toArray(),
+      db.carts.where('status').equals('active').toArray(),
+    ])
+    const covered = new Set(activeCarts.flatMap((cart) => cart.items.map((item) => item.productId)))
+
+    const due = products
+      .filter(
+        (product) =>
+          product.purchase.nextPurchaseDate != null &&
+          isDue(product.purchase.nextPurchaseDate) &&
+          !covered.has(product.id!),
+      )
+      .sort((a, b) =>
+        a.purchase.nextPurchaseDate!.localeCompare(b.purchase.nextPurchaseDate!) ||
+        a.title.localeCompare(b.title, 'es'),
+      )
+
+    if (due.length === 0) return null
+
+    const items: CartItem[] = []
+    for (const product of due) {
+      const supplierId = product.purchase.primarySupplierId ?? null
+      items.push({
+        productId: product.id!,
+        title: product.title,
+        qty: 1,
+        unitPrice: product.purchase.lastPrice ?? 0,
+        supplierId,
+        supplierName: await resolveSupplierName(supplierId),
+      })
+    }
+
+    const now = new Date().toISOString()
+    const cart: Cart = {
+      name: `Carrito generado (${formatDate(today())})`,
+      status: 'active',
+      origin: 'auto',
+      createdAt: now,
+      generatedAt: now,
+      items,
+    }
+    const id = (await db.carts.add(cart)) as number
+    return { ...cart, id }
   })
 }
