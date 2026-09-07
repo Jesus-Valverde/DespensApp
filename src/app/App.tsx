@@ -1,9 +1,19 @@
+import { useEffect } from 'react'
 import { HashRouter, Route, Routes } from 'react-router'
 import { Layout } from './Layout'
 import { SuppliersScreen } from '../features/suppliers/SuppliersScreen'
 import { ProductList } from '../features/products/ProductList'
 import { ProductForm, EditProductScreen } from '../features/products/ProductForm'
 import { ProductDetail } from '../features/products/ProductDetail'
+import { CartsScreen } from '../features/carts/CartsScreen'
+import { CartForm } from '../features/carts/CartForm'
+import { CartDetail } from '../features/carts/CartDetail'
+import { generateAutoCart } from '../features/carts/api'
+
+// Run-once guard: StrictMode double-invokes effects in dev, and the active-cart
+// dedupe inside generateAutoCart already makes re-runs no-ops — the flag just
+// avoids the redundant pass (design decision 9: auto-cart on app open).
+let autoCartTriggered = false
 
 function PlaceholderScreen({ title, note }: { title: string; note: string }) {
   return (
@@ -15,6 +25,14 @@ function PlaceholderScreen({ title, note }: { title: string; note: string }) {
 }
 
 export function App() {
+  useEffect(() => {
+    if (autoCartTriggered) return
+    autoCartTriggered = true
+    void generateAutoCart().catch(() => {
+      // Best-effort trigger: local-first with nothing to show on failure.
+    })
+  }, [])
+
   return (
     <HashRouter>
       <Layout>
@@ -27,14 +45,9 @@ export function App() {
           <Route path="/products/new" element={<ProductForm />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/products/:id/edit" element={<EditProductScreen />} />
-          <Route
-            path="/carts"
-            element={<PlaceholderScreen title="Carritos" note="Aquí gestionarás tus carritos de compra." />}
-          />
-          <Route
-            path="/carts/new"
-            element={<PlaceholderScreen title="Nuevo carrito" note="La creación de carritos llegará en el próximo incremento." />}
-          />
+          <Route path="/carts" element={<CartsScreen />} />
+          <Route path="/carts/new" element={<CartForm />} />
+          <Route path="/carts/:id" element={<CartDetail />} />
           <Route
             path="/lists"
             element={<PlaceholderScreen title="Listas" note="Aquí organizarás tus listas de compras." />}

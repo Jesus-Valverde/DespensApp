@@ -67,26 +67,32 @@ export interface CartItemInput {
 
 /** Adds a product to an active cart, denormalizing title, unit price and the
  * product's primary supplier. Re-adding a product merges quantities. */
+/** Adds a product to an active cart, denormalizing title, unit price and the
+ * product's primary supplier. Re-adding a product merges quantities. The whole
+ * read-modify-write runs in one transaction so concurrent item edits cannot
+ * clobber each other. */
 export async function addCartItem(cartId: number, input: CartItemInput): Promise<void> {
-  const cart = await requireActiveCart(cartId)
-  const product = await db.products.get(input.productId)
-  if (!product) throw new Error('Producto no encontrado')
+  return db.transaction('rw', db.carts, db.products, db.suppliers, async () => {
+    const cart = await requireActiveCart(cartId)
+    const product = await db.products.get(input.productId)
+    if (!product) throw new Error('Producto no encontrado')
 
-  const qty = requireQty(input.qty ?? suggestedQty(product.stock))
-  const unitPrice = requireUnitPrice(input.unitPrice ?? product.purchase.lastPrice ?? 0)
-  const supplierId = product.purchase.primarySupplierId ?? null
-  const supplierName = await resolveSupplierName(supplierId)
+    const qty = requireQty(input.qty ?? suggestedQty(product.stock))
+    const unitPrice = requireUnitPrice(input.unitPrice ?? product.purchase.lastPrice ?? 0)
+    const supplierId = product.purchase.primarySupplierId ?? null
+    const supplierName = await resolveSupplierName(supplierId)
 
-  const inCart = cart.items.some((item) => item.productId === input.productId)
-  const items = inCart
-    ? cart.items.map((item) =>
-        item.productId === input.productId ? { ...item, qty: item.qty + qty } : item,
-      )
-    : [
-        ...cart.items,
-        { productId: input.productId, title: product.title, qty, unitPrice, supplierId, supplierName },
-      ]
-  await db.carts.update(cartId, { items })
+    const inCart = cart.items.some((item) => item.productId === input.productId)
+    const items = inCart
+      ? cart.items.map((item) =>
+          item.productId === input.productId ? { ...item, qty: item.qty + qty } : item,
+        )
+      : [
+          ...cart.items,
+          { productId: input.productId, title: product.title, qty, unitPrice, supplierId, supplierName },
+        ]
+    await db.carts.update(cartId, { items })
+  })
 }
 
 export interface CartItemUpdate {
@@ -96,40 +102,45 @@ export interface CartItemUpdate {
   supplierId?: number | null
 }
 
-/** Updates an item's quantity, price and/or supplier (editable per item). */
+/** Updates an item's quantity, price and/or supplier (editable per item).
+ * Runs in one transaction: the items array is read and written atomically. */
 export async function updateCartItem(
   cartId: number,
   productId: number,
   changes: CartItemUpdate,
 ): Promise<void> {
-  const cart = await requireActiveCart(cartId)
-  const item = cart.items.find((item) => item.productId === productId)
-  if (!item) throw new Error('El producto no está en el carrito')
+  return db.transaction('rw', db.carts, db.suppliers, async () => {
+    const cart = await requireActiveCart(cartId)
+    const item = cart.items.find((item) => item.productId === productId)
+    if (!item) throw new Error('El producto no está en el carrito')
 
-  const updated: CartItem = { ...item }
-  if (changes.qty != null) updated.qty = requireQty(changes.qty)
-  if (changes.unitPrice != null) updated.unitPrice = requireUnitPrice(changes.unitPrice)
-  if ('supplierId' in changes) {
-    const supplierId = changes.supplierId ?? null
-    if (supplierId != null && !(await db.suppliers.get(supplierId))) {
-      throw new Error('Proveedor no encontrado')
+    const updated: CartItem = { ...item }
+    if (changes.qty != null) updated.qty = requireQty(changes.qty)
+    if (changes.unitPrice != null) updated.unitPrice = requireUnitPrice(changes.unitPrice)
+    if ('supplierId' in changes) {
+      const supplierId = changes.supplierId ?? null
+      if (supplierId != null && !(await db.suppliers.get(supplierId))) {
+        throw new Error('Proveedor no encontrado')
+      }
+      updated.supplierId = supplierId
+      updated.supplierName = await resolveSupplierName(supplierId)
     }
-    updated.supplierId = supplierId
-    updated.supplierName = await resolveSupplierName(supplierId)
-  }
 
-  await db.carts.update(cartId, {
-    items: cart.items.map((item) => (item.productId === productId ? updated : item)),
+    await db.carts.update(cartId, {
+      items: cart.items.map((item) => (item.productId === productId ? updated : item)),
+    })
   })
 }
 
-/** Removes a product from an active cart. */
+/** Removes a product from an active cart (read-modify-write in one transaction). */
 export async function removeCartItem(cartId: number, productId: number): Promise<void> {
-  const cart = await requireActiveCart(cartId)
-  if (!cart.items.some((item) => item.productId === productId)) {
-    throw new Error('El producto no está en el carrito')
-  }
-  await db.carts.update(cartId, { items: cart.items.filter((item) => item.productId !== productId) })
+  return db.transaction('rw', db.carts, async () => {
+    const cart = await requireActiveCart(cartId)
+    if (!cart.items.some((item) => item.productId === productId)) {
+      throw new Error('El producto no está en el carrito')
+    }
+    await db.carts.update(cartId, { items: cart.items.filter((item) => item.productId !== productId) })
+  })
 }
 
 export interface SupplierGroup {
