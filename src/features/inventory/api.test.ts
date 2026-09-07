@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { db } from '../../db/db'
-import { createProduct, getProduct } from '../products/api'
-import { setStock, registerMovement } from './api'
+import { createProduct, getProduct, updateProduct } from '../products/api'
+import { setStock, registerMovement, getMovements } from './api'
+import * as inventoryApi from './api'
 
 beforeEach(async () => {
   await Promise.all([db.products.clear(), db.movements.clear()])
@@ -149,5 +150,41 @@ describe('registerMovement', () => {
 
   it('rejects registering a movement on a product that does not exist', async () => {
     await expect(registerMovement(9999, { type: 'entrada', qty: 1 })).rejects.toThrow('encontrado')
+  })
+})
+
+describe('getMovements (bitácora)', () => {
+  it('returns the product movements in reverse chronological order, other products excluded', async () => {
+    const id = await createProduct({ title: 'Leche entera', customProps: [] })
+    const otherId = await createProduct({ title: 'Jabón', customProps: [] })
+    await db.movements.bulkAdd([
+      { productId: id, date: '2026-09-01T10:00:00.000Z', type: 'entrada', qty: 4, delta: 4, resultingQty: 4 },
+      { productId: id, date: '2026-09-03T09:00:00.000Z', type: 'salida', qty: 1, delta: -1, resultingQty: 3 },
+      { productId: id, date: '2026-09-02T12:00:00.000Z', type: 'ajuste', qty: 6, delta: 2, resultingQty: 6 },
+      { productId: otherId, date: '2026-09-04T08:00:00.000Z', type: 'entrada', qty: 1, delta: 1, resultingQty: 1 },
+    ])
+
+    const movements = await getMovements(id)
+
+    expect(movements.map((movement) => movement.type)).toEqual(['salida', 'ajuste', 'entrada'])
+    expect(movements.every((movement) => movement.productId === id)).toBe(true)
+  })
+
+  it('exports no function that mutates movements (append-only log)', () => {
+    const mutators = Object.keys(inventoryApi).filter((name) =>
+      /update|delete|edit|remove/i.test(name),
+    )
+    expect(mutators).toEqual([])
+  })
+
+  it('keeps movements unchanged when the product catalog fields are edited', async () => {
+    const id = await createProduct({ title: 'Leche entera', customProps: [] })
+    await registerMovement(id, { type: 'entrada', qty: 4 })
+    const before = await getMovements(id)
+
+    await updateProduct(id, { title: 'Leche entera', brand: 'Alpura', customProps: [] })
+
+    expect(await getMovements(id)).toEqual(before)
+    expect((await getProduct(id))?.brand).toBe('Alpura')
   })
 })

@@ -4,7 +4,7 @@
 // Errors; forms catch and display them.
 
 import { db } from '../../db/db'
-import type { MovementType, ProductStock } from '../../db/types'
+import type { Movement, MovementType, ProductStock } from '../../db/types'
 
 export interface StockInput {
   current: number
@@ -96,4 +96,11 @@ export async function registerMovement(productId: number, input: MovementInput):
       updatedAt: new Date().toISOString(),
     })
   })
+}
+
+/** Bitácora: the product's movement log in reverse chronological order.
+ * Read-only by design — the log is append-only and offers no mutations. */
+export async function getMovements(productId: number): Promise<Movement[]> {
+  const movements = await db.movements.where('productId').equals(productId).sortBy('date')
+  return movements.reverse()
 }
