@@ -13,6 +13,43 @@ function icon(d: string): IconComponent {
   }
 }
 
+/** Brand mark: 3D box (Stitch design). */
+function LogoIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="m7.5 4.27 9 5.15" />
+      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+      <path d="m3.3 7 8.7 5 8.7-5" />
+      <path d="M12 22V12" />
+    </svg>
+  )
+}
+
+/** Plus glyph for the floating action button. */
+function PlusIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      {...props}
+    >
+      <path d="M12 5v14" />
+      <path d="M5 12h14" />
+    </svg>
+  )
+}
+
 const HomeIcon = icon(
   'M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25',
 )
@@ -25,7 +62,7 @@ const CartsIcon = icon(
 const ListsIcon = icon(
   'M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z',
 )
-const SettingsIcon = icon(
+const SuppliersIcon = icon(
   'M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75',
 )
 
@@ -34,7 +71,7 @@ const tabs: { to: string; label: string; end?: boolean; Icon: IconComponent }[] 
   { to: '/products', label: 'Productos', Icon: ProductsIcon },
   { to: '/carts', label: 'Carritos', Icon: CartsIcon },
   { to: '/lists', label: 'Listas', Icon: ListsIcon },
-  { to: '/settings/suppliers', label: 'Proveedores', Icon: SettingsIcon },
+  { to: '/settings/suppliers', label: 'Proveedores', Icon: SuppliersIcon },
 ]
 
 function fabFor(pathname: string): { to: string; label: string } | null {
@@ -49,46 +86,73 @@ export function Layout({ children }: { children: ReactNode }) {
   const fab = fabFor(pathname)
 
   return (
-    <div className="min-h-dvh bg-slate-50 text-slate-900">
-      <header className="sticky top-0 z-10 border-b border-slate-200 bg-white">
-        <div className="mx-auto flex h-14 max-w-md items-center px-4">
-          <span className="text-lg font-semibold text-blue-600">DespensApp</span>
-        </div>
-      </header>
+    // Phone frame: centered 430px column with edge borders (Stitch design).
+    <div className="flex min-h-dvh justify-center bg-slate-100 selection:bg-blue-100 selection:text-blue-700">
+      <div className="relative flex min-h-dvh w-full max-w-[430px] flex-col overflow-x-hidden border-x border-slate-200/60 bg-slate-50 text-slate-900 shadow-2xl">
+        <header className="sticky top-0 z-20 border-b border-slate-200/50 bg-slate-50/90 px-5 pb-2 pt-[max(env(safe-area-inset-top),12px)] backdrop-blur-md">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-sm shadow-blue-500/20">
+                <LogoIcon className="h-4 w-4" aria-hidden="true" />
+              </div>
+              <span className="text-xl font-bold tracking-tight text-blue-600">DespensApp</span>
+            </div>
+          </div>
+        </header>
 
-      <main className="mx-auto max-w-md px-4 pt-4 pb-28">{children}</main>
+        <main className="flex-1 px-5 pt-5 pb-28">{children}</main>
 
-      {fab && (
-        <Link
-          to={fab.to}
-          aria-label={fab.label}
-          title={fab.label}
-          className="fixed bottom-24 right-4 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-3xl leading-none text-white shadow-lg shadow-blue-600/30 hover:bg-blue-700"
+        {fab && (
+          <Link
+            to={fab.to}
+            aria-label={fab.label}
+            title={fab.label}
+            className="pressable fixed bottom-24 right-[max(1rem,calc(50vw-215px))] z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
+          >
+            <PlusIcon className="h-6 w-6" aria-hidden="true" />
+          </Link>
+        )}
+
+        <nav
+          aria-label="Navegación principal"
+          className="fixed bottom-0 left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2 border-t border-slate-200/80 bg-white/95 pb-[max(env(safe-area-inset-bottom),8px)] backdrop-blur-md"
         >
-          +
-        </Link>
-      )}
-
-      <nav aria-label="Navegación principal" className="fixed inset-x-0 bottom-0 z-10 border-t border-slate-200 bg-white">
-        <ul className="mx-auto grid max-w-md grid-cols-5">
-          {tabs.map(({ to, label, end, Icon }) => (
-            <li key={to}>
-              <NavLink
-                to={to}
-                end={end}
-                className={({ isActive }) =>
-                  `flex flex-col items-center gap-1 py-2 text-[11px] font-medium ${
-                    isActive ? 'text-blue-600' : 'text-slate-500'
-                  }`
-                }
-              >
-                <Icon className="h-5 w-5" aria-hidden="true" />
-                <span>{label}</span>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
+          <ul className="grid grid-cols-5 pt-1.5 pb-1">
+            {tabs.map(({ to, label, end, Icon }) => (
+              <li key={to}>
+                <NavLink
+                  to={to}
+                  end={end}
+                  className={({ isActive }) =>
+                    `pressable group flex flex-col items-center justify-center py-1 ${
+                      isActive ? 'text-blue-600' : 'text-slate-500 hover:text-slate-800'
+                    }`
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      <span
+                        className={`flex items-center justify-center rounded-full px-3.5 py-1 transition-transform group-active:scale-95 ${
+                          isActive ? 'bg-blue-50 text-blue-600' : ''
+                        }`}
+                      >
+                        <Icon className="h-5 w-5" aria-hidden="true" />
+                      </span>
+                      <span
+                        className={`mt-0.5 text-[11px] ${
+                          isActive ? 'font-bold text-blue-600' : 'font-medium'
+                        }`}
+                      >
+                        {label}
+                      </span>
+                    </>
+                  )}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
     </div>
   )
 }

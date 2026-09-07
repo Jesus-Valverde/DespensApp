@@ -6,7 +6,7 @@ import { db } from '../../db/db'
 import type { Product } from '../../db/types'
 
 beforeEach(async () => {
-  await Promise.all([db.products.clear(), db.carts.clear()])
+  await Promise.all([db.products.clear(), db.carts.clear(), db.lists.clear(), db.movements.clear()])
 })
 
 async function makeProduct(patch: Partial<Product>): Promise<void> {
@@ -29,7 +29,7 @@ function renderScreen() {
 }
 
 describe('InicioScreen', () => {
-  it('shows faltantes ordered by severity and excludes products above minimum or without one', async () => {
+  it('splits Faltantes (sin stock) from Stock bajo, excluding products above min or without one', async () => {
     await makeProduct({ title: 'Frijol', stock: { current: 0, min: 5, max: null } })
     await makeProduct({ title: 'Arroz', stock: { current: 4, min: 5, max: null } })
     await makeProduct({ title: 'Leche', stock: { current: 10, min: 2, max: null } }) // above min
@@ -37,20 +37,17 @@ describe('InicioScreen', () => {
 
     renderScreen()
 
-    const faltantes = await screen.findByRole('region', { name: 'Faltantes' })
-    // The region renders before useLiveQuery delivers data; the count arrives async.
-    expect(
-      await within(faltantes).findByRole('heading', { name: 'Faltantes (2)' }),
-    ).toBeInTheDocument()
-
-    const frijol = within(faltantes).getByText('Frijol')
-    const arroz = within(faltantes).getByText('Arroz')
-    expect(frijol.compareDocumentPosition(arroz) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-
-    expect(within(faltantes).queryByText('Leche')).not.toBeInTheDocument()
-    expect(within(faltantes).queryByText('Sal')).not.toBeInTheDocument()
+    // Regions render before useLiveQuery delivers data; await data-bearing text.
+    const faltantes = screen.getByRole('region', { name: 'Faltantes' })
+    expect(await within(faltantes).findByText('Frijol')).toBeInTheDocument()
     expect(within(faltantes).getByText(/Faltan 5/)).toBeInTheDocument()
-    expect(within(faltantes).getByText(/Faltan 1/)).toBeInTheDocument()
+    expect(within(faltantes).queryByText('Arroz')).not.toBeInTheDocument()
+    expect(within(faltantes).queryByText('Leche')).not.toBeInTheDocument()
+
+    const bajo = screen.getByRole('region', { name: 'Stock bajo' })
+    expect(await within(bajo).findByText('Arroz')).toBeInTheDocument()
+    expect(within(bajo).getByText(/Quedan 4/)).toBeInTheDocument()
+    expect(within(bajo).queryByText('Sal')).not.toBeInTheDocument()
   })
 
   it('shows upcoming purchases by next date ascending with overdue first, excluding unscheduled ones', async () => {
@@ -66,10 +63,8 @@ describe('InicioScreen', () => {
 
     renderScreen()
 
-    const proximas = await screen.findByRole('region', { name: 'Próximas compras' })
-    expect(
-      await within(proximas).findByRole('heading', { name: 'Próximas compras (2)' }),
-    ).toBeInTheDocument()
+    const proximas = screen.getByRole('region', { name: 'Próximas compras' })
+    expect(await within(proximas).findByText('Café')).toBeInTheDocument()
 
     const overdueDate = within(proximas).getByText(/1 de septiembre de 2026/)
     const upcomingDate = within(proximas).getByText(/10 de septiembre de 2026/)
@@ -90,14 +85,54 @@ describe('InicioScreen', () => {
     renderScreen()
 
     const link = await screen.findByRole('link', { name: /Carritos/ })
-    expect(link).toHaveTextContent('2 activos')
+    expect(link).toHaveTextContent('activos')
     expect(link).toHaveAttribute('href', '/carts')
   })
 
-  it('shows the empty states when nothing is due', async () => {
+  it('shows the empty states and recent movements when nothing is due', async () => {
     renderScreen()
 
     expect(await screen.findByText('Sin productos en falta.')).toBeInTheDocument()
+    expect(screen.getByText('Sin alertas de stock bajo.')).toBeInTheDocument()
     expect(screen.getByText('Sin compras programadas.')).toBeInTheDocument()
+
+    const historial = screen.getByRole('region', { name: 'Historial de movimientos' })
+    expect(await within(historial).findByText('Sin movimientos recientes')).toBeInTheDocument()
+  })
+
+  it('lists recent movements newest first with product titles', async () => {
+    const productId = (await db.products.add({
+      title: 'Frijol',
+      customProps: [],
+      stock: { current: 6, min: null, max: null },
+      purchase: { secondarySupplierIds: [], period: null, links: [] },
+      createdAt: '2026-09-01T00:00:00.000Z',
+      updatedAt: '2026-09-01T00:00:00.000Z',
+    } as Product)) as number
+
+    await db.movements.add({
+      productId,
+      type: 'entrada',
+      qty: 6,
+      delta: 6,
+      resultingQty: 6,
+      date: '2026-09-05T10:00:00.000Z',
+    })
+    await db.movements.add({
+      productId,
+      type: 'salida',
+      qty: 2,
+      delta: -2,
+      resultingQty: 4,
+      date: '2026-09-06T10:00:00.000Z',
+    })
+
+    renderScreen()
+
+    const historial = screen.getByRole('region', { name: 'Historial de movimientos' })
+    expect(await within(historial).findByText('Salida -2 → 4')).toBeInTheDocument()
+    const salidaRow = within(historial).getByText('Salida -2 → 4').closest('li')!
+    const entradaRow = within(historial).getByText('Entrada +6 → 6').closest('li')!
+    expect(salidaRow.compareDocumentPosition(entradaRow) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 })
