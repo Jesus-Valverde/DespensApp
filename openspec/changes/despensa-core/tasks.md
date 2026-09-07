@@ -65,8 +65,8 @@ Chain strategy: stacked-to-main
 
 ## Batch 6 — Lists + Reports + PWA Gate (slice 6)
 
-- [ ] 6.1 TDD `src/features/lists/api.ts`: create/rename (title required), `deleteList` (products preserved), `addMember` (reject duplicate), `removeMember`. Verify: unit tests cover all 6 shopping-lists scenarios. Implements: shopping-lists.
-- [ ] 6.2 Lists screens (`/lists`, `/lists/:id` membership add/remove) + "listas" section on ProductDetail. Verify: component tests — empty title and duplicate membership rejected with Spanish messages. Implements: shopping-lists.
-- [ ] 6.3 TDD `src/features/reports/api.ts`: `outOfStock` (current ≤ min, min set, shortfall desc), `upcomingPurchases` (scheduled only, next date asc, overdue first). Verify: unit tests cover all 5 reporting scenarios. Implements: reporting.
-- [ ] 6.4 Inicio screen `/` (`src/features/reports/`): Faltantes + Próximas compras cards via `useLiveQuery`, es-MX dates, MXN. Verify: component test with fixtures asserts ordering + exclusions. Implements: reporting.
-- [ ] 6.5 Final gate: `npm test`, `npm run build`, `npx tsc --noEmit` green; manual PWA checklist — installable (browser install prompt), offline start with data, image upload on device, buy-cart happy path. Implements: proposal success criteria.
+- [x] 6.1 TDD `src/features/lists/api.ts`: create/rename (title required), `deleteList` (products preserved), `addMember` (reject duplicate), `removeMember`. Verify: unit tests cover all 6 shopping-lists scenarios. Implements: shopping-lists.
+- [x] 6.2 Lists screens (`/lists`, `/lists/:id` membership add/remove) + "listas" section on ProductDetail. Verify: component tests — empty title and duplicate membership rejected with Spanish messages. Implements: shopping-lists.
+- [x] 6.3 TDD `src/features/reports/api.ts`: `outOfStock` (current ≤ min, min set, shortfall desc), `upcomingPurchases` (scheduled only, next date asc, overdue first). Verify: unit tests cover all 5 reporting scenarios. Implements: reporting.
+- [x] 6.4 Inicio screen `/` (`src/features/reports/`): Faltantes + Próximas compras cards via `useLiveQuery`, es-MX dates, MXN. Verify: component test with fixtures asserts ordering + exclusions. Implements: reporting.
+- [x] 6.5 Final gate: `npm test`, `npm run build`, `npx tsc --noEmit` green; manual PWA checklist — installable (browser install prompt), offline start with data, image upload on device, buy-cart happy path. Implements: proposal success criteria.

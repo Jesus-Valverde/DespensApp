@@ -1,0 +1,21 @@
+# PWA Manual Checklist — despensa-core
+
+Run against a production build (`npm run build && npm run preview`), on desktop Chromium/Firefox and at least one Android device.
+
+| # | Check | Steps | Expected | Status |
+|---|-------|-------|----------|--------|
+| 1 | Installable | Open the app, browser shows the install prompt (or menu icon shows "Install app") | App installs and opens standalone (no browser bar) | ☐ |
+| 2 | Manifest correct | DevTools → Application → Manifest | `lang: es`, `display: standalone`, name "DespensApp", icons 192/512 | ☐ |
+| 3 | Service worker registered | DevTools → Application → Service Workers | `sw.js` activated, `dist/` precache entries listed | ☐ |
+| 4 | Offline shell | Load app once → DevTools → Network → Offline → reload | App loads; navigating between tabs works with no connection | ☐ |
+| 5 | Offline data | Create a product with image while offline | Product + image persist after reload and after going back online | ☐ |
+| 6 | Image upload on device | Add photo from phone camera/file picker | Downscaled image (≤512px) renders in list/detail; no size errors | ☐ |
+| 7 | Auto-cart on open | Set a product's `nextPurchaseDate` to today (or past), close and reopen the app | A cart "Carrito generado (fecha)" exists with the product under its primary supplier | ☐ |
+| 8 | Auto-cart idempotent | Reopen the app again with no changes | No duplicate cart/items are generated | ☐ |
+| 9 | Buy cart happy path | Add items to a cart, set prices, "Comprar" | Stock increases, last price/date update, next date recomputed from period, cart moves to history | ☐ |
+| 10 | Update flow | Deploy a new build, revisit the app | Service worker updates in background; app reloads with new version (autoUpdate) | ☐ |
+
+## Known placeholders
+
+- App icons are solid-color placeholders — replace `public/pwa-192x192.png` and `public/pwa-512x512.png` with real artwork before distribution.
+- No E2E suite: items 1-10 are the manual regression checklist for each release.
