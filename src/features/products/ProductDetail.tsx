@@ -2,6 +2,9 @@ import { Link, useNavigate, useParams } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
 import { useObjectUrl } from '../../lib/useObjectUrl'
+import { StockSection } from '../inventory/StockSection'
+import { MovementForm } from '../inventory/MovementForm'
+import { BitacoraList } from '../inventory/BitacoraList'
 import { deleteProduct, duplicateProduct } from './api'
 
 export function ProductDetail() {
@@ -97,6 +100,10 @@ export function ProductDetail() {
       ) : (
         <p className="mt-2 text-sm text-slate-500">Sin datos adicionales.</p>
       )}
+
+      <StockSection product={current} />
+      <MovementForm productId={current.id!} />
+      <BitacoraList productId={current.id!} />
     </section>
   )
 }
