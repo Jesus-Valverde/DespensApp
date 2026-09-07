@@ -112,7 +112,7 @@ export function Layout({ children }: { children: ReactNode }) {
             to={fab.to}
             aria-label={fab.label}
             title={fab.label}
-            className="pressable fixed bottom-24 right-[max(1rem,calc(50vw-215px))] z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
+            className="pressable fixed bottom-24 right-[max(1.25rem,calc(50vw-195px))] z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
           >
             <PlusIcon className="h-6 w-6" aria-hidden="true" />
           </Link>
