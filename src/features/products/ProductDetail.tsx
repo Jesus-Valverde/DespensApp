@@ -5,6 +5,7 @@ import { useObjectUrl } from '../../lib/useObjectUrl'
 import { StockSection } from '../inventory/StockSection'
 import { MovementForm } from '../inventory/MovementForm'
 import { BitacoraList } from '../inventory/BitacoraList'
+import { PurchaseSection } from '../purchase/PurchaseSection'
 import { deleteProduct, duplicateProduct } from './api'
 
 export function ProductDetail() {
@@ -104,6 +105,7 @@ export function ProductDetail() {
       <StockSection product={current} />
       <MovementForm productId={current.id!} />
       <BitacoraList productId={current.id!} />
+      <PurchaseSection product={current} />
     </section>
   )
 }
