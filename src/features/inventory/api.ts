@@ -4,7 +4,7 @@
 // Errors; forms catch and display them.
 
 import { db } from '../../db/db'
-import type { ProductStock } from '../../db/types'
+import type { MovementType, ProductStock } from '../../db/types'
 
 export interface StockInput {
   current: number
@@ -33,4 +33,67 @@ export async function setStock(productId: number, stock: StockInput): Promise<vo
   const existing = await db.products.get(productId)
   if (!existing) throw new Error('Producto no encontrado')
   await db.products.update(productId, { stock: validateStock(stock), updatedAt: new Date().toISOString() })
+}
+
+export interface MovementInput {
+  type: MovementType
+  qty: number
+  note?: string
+}
+
+/** Computes the delta and resulting stock for a movement against the current
+ * quantity. entrada adds, salida subtracts (never below zero), ajuste targets
+ * an absolute quantity (design movement semantics). */
+export function movementResult(
+  input: MovementInput,
+  current: number,
+): { delta: number; resultingQty: number } {
+  if (input.type !== 'ajuste' && input.qty <= 0) {
+    throw new Error('La cantidad debe ser mayor a cero')
+  }
+  if (input.type === 'ajuste' && input.qty < 0) {
+    throw new Error('La cantidad no puede ser negativa')
+  }
+  if (input.type === 'salida' && input.qty > current) {
+    throw new Error('La salida no puede ser mayor que el stock actual')
+  }
+  let delta: number
+  switch (input.type) {
+    case 'entrada':
+      delta = input.qty
+      break
+    case 'salida':
+      delta = -input.qty
+      break
+    case 'ajuste':
+      delta = input.qty - current
+      break
+  }
+  return { delta, resultingQty: current + delta }
+}
+
+/** Registers a stock movement (entrada/salida/ajuste) and updates the embedded
+ * stock in one transaction; the movement log is append-only. */
+export async function registerMovement(productId: number, input: MovementInput): Promise<void> {
+  return db.transaction('rw', db.products, db.movements, async () => {
+    const product = await db.products.get(productId)
+    if (!product) throw new Error('Producto no encontrado')
+
+    const { delta, resultingQty } = movementResult(input, product.stock.current)
+
+    await db.movements.add({
+      productId,
+      date: new Date().toISOString(),
+      type: input.type,
+      qty: input.qty,
+      delta,
+      resultingQty,
+      note: input.note,
+    })
+
+    await db.products.update(productId, {
+      stock: { ...product.stock, current: resultingQty },
+      updatedAt: new Date().toISOString(),
+    })
+  })
 }
