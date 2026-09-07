@@ -16,7 +16,7 @@ testing:
   detected: 2026-09-06 # updated by despensa-core batch 1 (task 0.5)
   test_runner:
     available: true
-    command: "npm test"
+    command: "pnpm test"
     framework: "Vitest 5 + Testing Library (happy-dom + fake-indexeddb, setup at src/test/setup.ts)"
   layers:
     unit:
@@ -33,7 +33,7 @@ testing:
     command: "" # planned: vitest --coverage
   quality:
     linter: { available: false, command: "" } # planned: eslint
-    type_checker: { available: true, command: "npm run typecheck" } # tsc -b (project references)
+    type_checker: { available: true, command: "pnpm typecheck" } # tsc -b (project references)
     formatter: { available: false, command: "" } # planned: prettier (unconfirmed)
 
 rules:
@@ -54,9 +54,9 @@ rules:
   apply:
     - "Follow existing code patterns"
     - "TDD is disabled until a test runner exists; after despensa-core task 0, treat strict_tdd as true"
-    - "test_command: npm test (valid only after despensa-core task 0 scaffold)"
+    - "test_command: pnpm test (package manager: pnpm — packageManager pinned in package.json)"
   verify:
-    - "test_command: npm test; build_command: npm run build (both valid only after despensa-core task 0 scaffold)"
+    - "test_command: pnpm test; build_command: pnpm build (package manager: pnpm)"
     - "coverage_threshold: 0 — raise once coverage tooling is installed"
   archive:
     - "Warn before merging destructive deltas"

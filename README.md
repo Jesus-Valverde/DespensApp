@@ -12,12 +12,12 @@ PWA local-first para gestionar la despensa: productos, inventario, compras progr
 ## Desarrollo
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 ## Pruebas
 
 ```bash
-npm test
+pnpm test
 ```

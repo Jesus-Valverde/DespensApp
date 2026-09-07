@@ -1,6 +1,6 @@
 # PWA Manual Checklist — despensa-core
 
-Run against a production build (`npm run build && npm run preview`), on desktop Chromium/Firefox and at least one Android device.
+Run against a production build (`pnpm build && pnpm preview`), on desktop Chromium/Firefox and at least one Android device.
 
 | # | Check | Steps | Expected | Status |
 |---|-------|-------|----------|--------|
