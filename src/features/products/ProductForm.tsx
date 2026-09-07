@@ -5,17 +5,18 @@ import { db } from '../../db/db'
 import type { CustomProp, Product } from '../../db/types'
 import { downscaleImage } from '../../lib/image'
 import { useObjectUrl } from '../../lib/useObjectUrl'
-import { createProduct, updateProduct, distinctAreas } from './api'
+import { createProduct, updateProduct, distinctAreas, distinctFamilies } from './api'
 
 interface TextFieldState {
   title: string
   brand: string
   contentSize: string
   area: string
+  family: string
   model: string
 }
 
-const EMPTY_FIELDS: TextFieldState = { title: '', brand: '', contentSize: '', area: '', model: '' }
+const EMPTY_FIELDS: TextFieldState = { title: '', brand: '', contentSize: '', area: '', family: '', model: '' }
 
 export function ProductForm({ product }: { product?: Product }) {
   const navigate = useNavigate()
@@ -26,6 +27,7 @@ export function ProductForm({ product }: { product?: Product }) {
           brand: product.brand ?? '',
           contentSize: product.contentSize ?? '',
           area: product.area ?? '',
+          family: product.family ?? '',
           model: product.model ?? '',
         }
       : EMPTY_FIELDS,
@@ -39,6 +41,7 @@ export function ProductForm({ product }: { product?: Product }) {
 
   const products = useLiveQuery(() => db.products.toArray(), []) ?? []
   const areas = distinctAreas(products)
+  const families = distinctFamilies(products)
 
   function setField(field: keyof TextFieldState) {
     return (event: { target: { value: string } }) =>
@@ -71,6 +74,7 @@ export function ProductForm({ product }: { product?: Product }) {
       brand: fields.brand.trim() || undefined,
       contentSize: fields.contentSize.trim() || undefined,
       area: fields.area.trim() || undefined,
+      family: fields.family.trim() || undefined,
       model: fields.model.trim() || undefined,
       customProps: customProps
         .map((prop) => ({ key: prop.key.trim(), value: prop.value.trim() }))
@@ -136,6 +140,24 @@ export function ProductForm({ product }: { product?: Product }) {
           <datalist id="product-areas">
             {areas.map((area) => (
               <option key={area} value={area} />
+            ))}
+          </datalist>
+        </div>
+        <div>
+          <label htmlFor="product-family" className="text-sm font-medium">
+            Familia
+          </label>
+          <input
+            id="product-family"
+            list="product-families"
+            value={fields.family}
+            onChange={setField('family')}
+            placeholder="Leche, Refrescos…"
+            className={inputClass}
+          />
+          <datalist id="product-families">
+            {families.map((family) => (
+              <option key={family} value={family} />
             ))}
           </datalist>
         </div>

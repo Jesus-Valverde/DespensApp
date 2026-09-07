@@ -11,6 +11,7 @@ export interface ProductDatos {
   brand?: string
   contentSize?: string
   area?: string
+  family?: string
   model?: string
   image?: Blob
   customProps: CustomProp[]
@@ -34,9 +35,11 @@ function validateCustomProps(props: CustomProp[]): CustomProp[] {
 }
 
 function validateDatos(datos: ProductDatos): ProductDatos {
+  const family = datos.family?.trim()
   return {
     ...datos,
     title: requireTitle(datos.title),
+    family: family || undefined,
     customProps: validateCustomProps(datos.customProps),
   }
 }
@@ -49,6 +52,7 @@ export async function createProduct(datos: ProductDatos): Promise<number> {
     brand: valid.brand,
     contentSize: valid.contentSize,
     area: valid.area,
+    family: valid.family,
     model: valid.model,
     image: valid.image,
     customProps: valid.customProps,
@@ -136,4 +140,14 @@ export function distinctAreas(products: Pick<Product, 'area'>[]): string[] {
     if (area) areas.add(area)
   }
   return [...areas].sort((a, b) => a.localeCompare(b, 'es'))
+}
+
+/** Distinct, alphabetically sorted, non-empty families of the given products. */
+export function distinctFamilies(products: Pick<Product, 'family'>[]): string[] {
+  const families = new Set<string>()
+  for (const product of products) {
+    const family = product.family?.trim()
+    if (family) families.add(family)
+  }
+  return [...families].sort((a, b) => a.localeCompare(b, 'es'))
 }

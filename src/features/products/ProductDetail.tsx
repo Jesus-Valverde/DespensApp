@@ -47,6 +47,7 @@ export function ProductDetail() {
     ['Marca', current.brand],
     ['Contenido', current.contentSize],
     ['Área', current.area],
+    ['Familia', current.family],
     ['Modelo', current.model],
   ]
   const filledDatos = datos.filter(([, value]) => value)

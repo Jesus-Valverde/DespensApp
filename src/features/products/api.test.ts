@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { db } from '../../db/db'
-import { createProduct, updateProduct, deleteProduct, duplicateProduct, getProduct, distinctAreas } from './api'
+import { createProduct, updateProduct, deleteProduct, duplicateProduct, getProduct, distinctAreas, distinctFamilies } from './api'
 
 beforeEach(async () => {
   await Promise.all([db.products.clear(), db.movements.clear(), db.carts.clear(), db.lists.clear()])
@@ -243,5 +243,38 @@ describe('distinctAreas', () => {
   it('returns an empty list when no product has an area', () => {
     const products = [{ area: undefined }, {}]
     expect(distinctAreas(products)).toEqual([])
+  })
+})
+
+describe('family (variant grouping, e.g. "Leche" for Lala/Nutri)', () => {
+  it('stores a trimmed family and clears it when saved without one', async () => {
+    const id = await createProduct({ title: 'Leche Lala', family: '  Leche  ', customProps: [] })
+    expect((await getProduct(id))?.family).toBe('Leche')
+
+    await updateProduct(id, { title: 'Leche Lala', customProps: [] })
+    expect((await getProduct(id))?.family).toBeUndefined()
+  })
+
+  it('blank family is normalized to undefined on create', async () => {
+    const id = await createProduct({ title: 'Leche Nutri', family: '   ', customProps: [] })
+    expect((await getProduct(id))?.family).toBeUndefined()
+  })
+
+  it('duplicate copies the family', async () => {
+    const id = await createProduct({ title: 'Leche Nutri', family: 'Leche', customProps: [] })
+    const copyId = await duplicateProduct(id)
+    expect((await getProduct(copyId))?.family).toBe('Leche')
+  })
+
+  it('distinctFamilies returns unique non-empty sorted values', () => {
+    const products = [
+      { family: 'Leche' },
+      { family: 'Aguas' },
+      { family: 'Leche' },
+      { family: undefined },
+      { family: '  ' },
+      {},
+    ]
+    expect(distinctFamilies(products)).toEqual(['Aguas', 'Leche'])
   })
 })

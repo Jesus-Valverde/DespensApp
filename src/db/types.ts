@@ -37,6 +37,8 @@ export interface Product {
   brand?: string
   contentSize?: string
   area?: string
+  /** Variant family, e.g. "Leche" groups Lala/Nutri/Alpura products. */
+  family?: string
   model?: string
   image?: Blob
   customProps: CustomProp[]
