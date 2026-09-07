@@ -1,5 +1,6 @@
 import { HashRouter, Route, Routes } from 'react-router'
 import { Layout } from './Layout'
+import { SuppliersScreen } from '../features/suppliers/SuppliersScreen'
 
 function PlaceholderScreen({ title, note }: { title: string; note: string }) {
   return (
@@ -39,10 +40,7 @@ export function App() {
             path="/lists"
             element={<PlaceholderScreen title="Listas" note="Aquí organizarás tus listas de compras." />}
           />
-          <Route
-            path="/settings/suppliers"
-            element={<PlaceholderScreen title="Ajustes" note="Aquí administrarás tus proveedores." />}
-          />
+          <Route path="/settings/suppliers" element={<SuppliersScreen />} />
         </Routes>
       </Layout>
     </HashRouter>
