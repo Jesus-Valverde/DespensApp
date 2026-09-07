@@ -66,9 +66,13 @@ const SuppliersIcon = icon(
   'M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75',
 )
 
+/** Catalog glyph: grid of squares (Productos tab). */
+const CatalogIcon = icon('M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z')
+
 const tabs: { to: string; label: string; end?: boolean; Icon: IconComponent }[] = [
   { to: '/', label: 'Inicio', end: true, Icon: HomeIcon },
   { to: '/despensa', label: 'Despensa', Icon: ProductsIcon },
+  { to: '/products', label: 'Productos', Icon: CatalogIcon },
   { to: '/carts', label: 'Carritos', Icon: CartsIcon },
   { to: '/lists', label: 'Listas', Icon: ListsIcon },
   { to: '/settings/suppliers', label: 'Proveedores', Icon: SuppliersIcon },
@@ -118,7 +122,7 @@ export function Layout({ children }: { children: ReactNode }) {
           aria-label="Navegación principal"
           className="fixed bottom-0 left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2 border-t border-slate-200/80 bg-white/95 pb-[max(env(safe-area-inset-bottom),8px)] backdrop-blur-md"
         >
-          <ul className="grid grid-cols-5 pt-1.5 pb-1">
+          <ul className="grid grid-cols-6 pt-1.5 pb-1">
             {tabs.map(({ to, label, end, Icon }) => (
               <li key={to}>
                 <NavLink
@@ -133,14 +137,14 @@ export function Layout({ children }: { children: ReactNode }) {
                   {({ isActive }) => (
                     <>
                       <span
-                        className={`flex items-center justify-center rounded-full px-3.5 py-1 transition-transform group-active:scale-95 ${
+                        className={`flex items-center justify-center rounded-full px-2.5 py-1 transition-transform group-active:scale-95 ${
                           isActive ? 'bg-blue-50 text-blue-600' : ''
                         }`}
                       >
                         <Icon className="h-5 w-5" aria-hidden="true" />
                       </span>
                       <span
-                        className={`mt-0.5 text-[11px] ${
+                        className={`mt-0.5 text-[10px] leading-tight ${
                           isActive ? 'font-bold text-blue-600' : 'font-medium'
                         }`}
                       >
