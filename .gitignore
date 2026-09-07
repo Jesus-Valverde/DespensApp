@@ -4,6 +4,7 @@ dev-dist
 coverage
 *.local
 .DS_Store
+.zcode/
 .env
 .env.*
 !.env.example
