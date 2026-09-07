@@ -10,21 +10,13 @@ import { CartForm } from '../features/carts/CartForm'
 import { CartDetail } from '../features/carts/CartDetail'
 import { ListsScreen } from '../features/lists/ListsScreen'
 import { ListDetail } from '../features/lists/ListDetail'
+import { InicioScreen } from '../features/reports/InicioScreen'
 import { generateAutoCart } from '../features/carts/api'
 
 // Run-once guard: StrictMode double-invokes effects in dev, and the active-cart
 // dedupe inside generateAutoCart already makes re-runs no-ops — the flag just
 // avoids the redundant pass (design decision 9: auto-cart on app open).
 let autoCartTriggered = false
-
-function PlaceholderScreen({ title, note }: { title: string; note: string }) {
-  return (
-    <section>
-      <h1 className="text-xl font-semibold">{title}</h1>
-      <p className="mt-2 text-sm text-slate-500">{note}</p>
-    </section>
-  )
-}
 
 export function App() {
   useEffect(() => {
@@ -39,10 +31,7 @@ export function App() {
     <HashRouter>
       <Layout>
         <Routes>
-          <Route
-            path="/"
-            element={<PlaceholderScreen title="Inicio" note="Aquí verás Faltantes y Próximas compras." />}
-          />
+          <Route path="/" element={<InicioScreen />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/products/new" element={<ProductForm />} />
           <Route path="/products/:id" element={<ProductDetail />} />
