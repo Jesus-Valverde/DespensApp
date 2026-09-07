@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
 import { App } from './App'
 
-const TABS = ['Inicio', 'Productos', 'Carritos', 'Listas', 'Ajustes']
+const TABS = ['Inicio', 'Productos', 'Carritos', 'Listas', 'Proveedores']
 
 describe('App shell', () => {
   it('renders the 5 Spanish bottom tabs', () => {

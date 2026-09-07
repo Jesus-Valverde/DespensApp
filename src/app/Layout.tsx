@@ -34,7 +34,7 @@ const tabs: { to: string; label: string; end?: boolean; Icon: IconComponent }[] 
   { to: '/products', label: 'Productos', Icon: ProductsIcon },
   { to: '/carts', label: 'Carritos', Icon: CartsIcon },
   { to: '/lists', label: 'Listas', Icon: ListsIcon },
-  { to: '/settings/suppliers', label: 'Ajustes', Icon: SettingsIcon },
+  { to: '/settings/suppliers', label: 'Proveedores', Icon: SettingsIcon },
 ]
 
 function fabFor(pathname: string): { to: string; label: string } | null {
