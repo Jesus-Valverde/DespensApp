@@ -17,11 +17,12 @@ function requireName(name: string): string {
 }
 
 export async function createSupplier(input: SupplierInput): Promise<number> {
-  return db.suppliers.add({
+  const id = await db.suppliers.add({
     name: requireName(input.name),
     type: input.type,
     locations: input.locations,
   })
+  return id as number
 }
 
 export async function updateSupplier(id: number, input: SupplierInput): Promise<void> {

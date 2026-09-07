@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { db } from '../../db/db'
-import type { Product } from '../../db/types'
 import { createProduct, updateProduct, deleteProduct, duplicateProduct, getProduct, distinctAreas } from './api'
 
 beforeEach(async () => {

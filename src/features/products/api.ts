@@ -44,7 +44,7 @@ function validateDatos(datos: ProductDatos): ProductDatos {
 export async function createProduct(datos: ProductDatos): Promise<number> {
   const valid = validateDatos(datos)
   const now = new Date().toISOString()
-  return db.products.add({
+  const id = await db.products.add({
     title: valid.title,
     brand: valid.brand,
     contentSize: valid.contentSize,
@@ -57,6 +57,7 @@ export async function createProduct(datos: ProductDatos): Promise<number> {
     createdAt: now,
     updatedAt: now,
   })
+  return id as number
 }
 
 export async function updateProduct(id: number, datos: ProductDatos): Promise<void> {
@@ -116,7 +117,7 @@ export async function duplicateProduct(id: number): Promise<number> {
     updatedAt: now,
   }
   delete copy.id
-  return db.products.add(copy)
+  return (await db.products.add(copy)) as number
 }
 
 export async function getProduct(id: number): Promise<Product | undefined> {
