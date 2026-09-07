@@ -7,3 +7,25 @@
 .pressable:active {
   transform: scale(0.98);
 }
+
+/* Empty-state illustration float (Stitch design) */
+@keyframes subtle-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+.animate-subtle-float {
+  animation: subtle-float 3.5s ease-in-out infinite;
+}
+
+/* Hide scrollbar for horizontal chip rows */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

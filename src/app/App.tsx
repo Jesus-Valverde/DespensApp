@@ -11,6 +11,7 @@ import { CartDetail } from '../features/carts/CartDetail'
 import { ListsScreen } from '../features/lists/ListsScreen'
 import { ListDetail } from '../features/lists/ListDetail'
 import { InicioScreen } from '../features/reports/InicioScreen'
+import { DespensaScreen } from '../features/despensa/DespensaScreen'
 import { generateAutoCart } from '../features/carts/api'
 
 // Run-once guard: StrictMode double-invokes effects in dev, and the active-cart
@@ -32,6 +33,7 @@ export function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<InicioScreen />} />
+          <Route path="/despensa" element={<DespensaScreen />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/products/new" element={<ProductForm />} />
           <Route path="/products/:id" element={<ProductDetail />} />
