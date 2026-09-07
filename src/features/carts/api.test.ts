@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { db } from '../../db/db'
 import { createProduct } from '../products/api'
 import {
@@ -10,11 +10,12 @@ import {
   removeCartItem,
   groupCartItems,
   suggestedQty,
+  buyCart,
 } from './api'
 import type { CartItem, Product } from '../../db/types'
 
 beforeEach(async () => {
-  await Promise.all([db.carts.clear(), db.products.clear(), db.suppliers.clear()])
+  await Promise.all([db.carts.clear(), db.products.clear(), db.suppliers.clear(), db.movements.clear()])
 })
 
 /** A product row with overrides over the defaults createProduct would set. */
@@ -258,5 +259,131 @@ describe('suggestedQty', () => {
     expect(suggestedQty({ current: 7, max: 6 })).toBe(1)
     expect(suggestedQty({ current: 3, max: null })).toBe(1)
     expect(suggestedQty({ current: 0, max: null })).toBe(1)
+  })
+})
+
+describe('buyCart', () => {
+  beforeEach(() => {
+    // Only Date is faked (timers stay real for Dexie/fake-indexeddb), so today()
+    // is deterministic: 2026-09-06 local, matching the spec scenario dates.
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(new Date(2026, 8, 6, 10, 0, 0))
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.restoreAllMocks()
+  })
+
+  it('buys a cart: entrada movement, last price/date updated, next date recomputed (spec scenario)', async () => {
+    const leche = await makeProduct('Leche entera', {
+      stock: { current: 2, min: 1, max: 12 },
+      purchase: {
+        secondarySupplierIds: [],
+        lastPrice: 2600,
+        lastPurchaseDate: '2026-08-30',
+        nextPurchaseDate: '2026-09-06',
+        period: 'semanal',
+        links: [],
+      },
+    })
+    const cartId = await createCart({ name: 'Súper de la semana' })
+    await addCartItem(cartId, { productId: leche, qty: 6, unitPrice: 2800 })
+
+    await buyCart(cartId)
+
+    expect((await db.carts.get(cartId))?.status).toBe('purchased')
+    expect((await db.carts.get(cartId))?.purchasedAt).toEqual(expect.any(String))
+
+    expect((await db.products.get(leche))?.stock.current).toBe(8)
+    const [movement] = await db.movements.where('productId').equals(leche).toArray()
+    expect(movement).toMatchObject({
+      productId: leche,
+      type: 'entrada',
+      qty: 6,
+      delta: 6,
+      resultingQty: 8,
+      note: 'Compra: Súper de la semana',
+    })
+
+    expect((await db.products.get(leche))?.purchase).toMatchObject({
+      lastPrice: 2800,
+      lastPurchaseDate: '2026-09-06',
+      nextPurchaseDate: '2026-09-13', // weekly: 2026-09-06 + 7 days
+    })
+  })
+
+  it('applies per-item price overrides and unschedules products without a period', async () => {
+    const leche = await makeProduct('Leche entera', {
+      purchase: { secondarySupplierIds: [], lastPrice: 2600, period: 'semanal', links: [] },
+    })
+    const jabon = await makeProduct('Jabón de barra', {
+      purchase: { secondarySupplierIds: [], lastPrice: 900, period: null, links: [] },
+    })
+    const cartId = await createCart({ name: 'Súper' })
+    await addCartItem(cartId, { productId: leche, qty: 2, unitPrice: 2800 })
+    await addCartItem(cartId, { productId: jabon, qty: 1, unitPrice: 900 })
+
+    await buyCart(cartId, { [leche]: 3000 })
+
+    expect((await db.products.get(leche))?.purchase.lastPrice).toBe(3000)
+    expect((await db.products.get(jabon))?.purchase.lastPrice).toBe(900)
+    expect((await db.products.get(jabon))?.purchase.nextPurchaseDate).toBeUndefined()
+    // The stored cart reflects the price actually paid.
+    const items = (await db.carts.get(cartId))?.items ?? []
+    expect(items.find((item) => item.productId === leche)?.unitPrice).toBe(3000)
+    expect(items.find((item) => item.productId === jabon)?.unitPrice).toBe(900)
+  })
+
+  it('rolls back everything when a step fails mid-purchase (spec: no partial state)', async () => {
+    const leche = await makeProduct('Leche entera', {
+      stock: { current: 2, min: null, max: null },
+      purchase: { secondarySupplierIds: [], lastPrice: 2600, period: 'semanal', links: [] },
+    })
+    const jabon = await makeProduct('Jabón de barra')
+    const cartId = await createCart({ name: 'Súper' })
+    await addCartItem(cartId, { productId: leche, qty: 6, unitPrice: 2800 })
+    await addCartItem(cartId, { productId: jabon, qty: 1, unitPrice: 900 })
+
+    const realAdd = db.movements.add.bind(db.movements)
+    let calls = 0
+    const addSpy = vi.spyOn(db.movements, 'add').mockImplementation((...args: Parameters<typeof realAdd>) => {
+      calls += 1
+      // A native Promise is enough here; only the spy's declared return type
+      // needs to satisfy Dexie's PromiseExtended.
+      return (calls === 2
+        ? Promise.reject(new Error('storage error'))
+        : realAdd(...args)) as ReturnType<typeof realAdd>
+    })
+
+    await expect(buyCart(cartId)).rejects.toThrow('storage error')
+
+    addSpy.mockRestore()
+    expect(await db.movements.count()).toBe(0) // first entrada rolled back too
+    expect((await db.products.get(leche))?.stock.current).toBe(2)
+    expect((await db.products.get(jabon))?.stock.current).toBe(0)
+    expect((await db.products.get(leche))?.purchase.lastPrice).toBe(2600)
+    expect((await db.products.get(leche))?.purchase.lastPurchaseDate).toBeUndefined()
+    const cart = await db.carts.get(cartId)
+    expect(cart?.status).toBe('active')
+    expect(cart?.purchasedAt).toBeUndefined()
+    expect(cart?.items).toHaveLength(2)
+  })
+
+  it('rejects buying a cart that is missing or not active, and negative overrides', async () => {
+    await expect(buyCart(9999)).rejects.toThrow('encontrado')
+
+    const productId = await makeProduct('Leche entera')
+    const cancelled = await createCart({ name: 'Cancelado' })
+    await addCartItem(cancelled, { productId, qty: 1 })
+    await cancelCart(cancelled)
+    await expect(buyCart(cancelled)).rejects.toThrow('activo')
+
+    const active = await createCart({ name: 'Súper' })
+    await addCartItem(active, { productId, qty: 1, unitPrice: 2800 })
+    await expect(buyCart(active, { [productId]: -1 })).rejects.toThrow('negativo')
+
+    expect(await db.movements.count()).toBe(0)
+    expect((await db.carts.get(active))?.status).toBe('active')
   })
 })

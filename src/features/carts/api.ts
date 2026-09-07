@@ -4,6 +4,8 @@
 
 import { db } from '../../db/db'
 import type { Cart, CartItem, CartOrigin, CartStatus, ProductStock } from '../../db/types'
+import { registerMovement } from '../inventory/api'
+import { addPeriod, today } from '../../lib/dates'
 
 export const NO_SUPPLIER = 'Sin proveedor'
 
@@ -166,4 +168,48 @@ export async function cancelCart(id: number): Promise<void> {
   if (!existing) throw new Error('Carrito no encontrado')
   if (existing.status !== 'active') throw new Error('Solo se pueden cancelar carritos activos')
   await db.carts.update(id, { status: 'cancelled' })
+}
+
+/** Per-item actual prices entered in the buy UI, keyed by productId (centavos). */
+export type PriceOverrides = Record<number, number>
+
+/** Pays an active cart as ONE all-or-nothing transaction: per item an entrada
+ * movement, the product's last price/last purchase date, the recomputed next
+ * purchase date, and finally the cart marked purchased (cart-management spec). */
+export async function buyCart(cartId: number, priceOverrides: PriceOverrides = {}): Promise<void> {
+  return db.transaction('rw', db.products, db.movements, db.carts, async () => {
+    const cart = await db.carts.get(cartId)
+    if (!cart) throw new Error('Carrito no encontrado')
+    if (cart.status !== 'active') throw new Error('Solo se pueden pagar carritos activos')
+
+    // Prices are settled up-front so a bad override aborts before any write.
+    const purchasedItems: CartItem[] = cart.items.map((item) => ({
+      ...item,
+      unitPrice: requireUnitPrice(priceOverrides[item.productId] ?? item.unitPrice),
+    }))
+
+    const purchaseDate = today()
+    for (const item of purchasedItems) {
+      const product = await db.products.get(item.productId)
+      if (!product) throw new Error('Producto no encontrado')
+
+      await registerMovement(item.productId, {
+        type: 'entrada',
+        qty: item.qty,
+        note: `Compra: ${cart.name}`,
+      })
+
+      const purchase = { ...product.purchase }
+      purchase.lastPrice = item.unitPrice
+      purchase.lastPurchaseDate = purchaseDate
+      purchase.nextPurchaseDate = purchase.period ? addPeriod(purchaseDate, purchase.period) : undefined
+      await db.products.update(item.productId, { purchase, updatedAt: new Date().toISOString() })
+    }
+
+    await db.carts.update(cartId, {
+      status: 'purchased',
+      purchasedAt: new Date().toISOString(),
+      items: purchasedItems,
+    })
+  })
 }
