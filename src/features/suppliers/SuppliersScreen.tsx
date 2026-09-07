@@ -60,14 +60,18 @@ export function SuppliersScreen() {
   }
 
   async function handleDelete(supplier: Supplier) {
-    const count = await countProductsReferencing(supplier.id!)
-    const message =
-      count > 0
-        ? `${count} productos usan este proveedor; se quitará la referencia. ¿Eliminar proveedor?`
-        : '¿Eliminar el proveedor?'
-    if (!window.confirm(message)) return
-    await deleteSupplier(supplier.id!)
-    if (editingId === supplier.id) resetForm()
+    try {
+      const count = await countProductsReferencing(supplier.id!)
+      const message =
+        count > 0
+          ? `${count} productos usan este proveedor; se quitará la referencia. ¿Eliminar proveedor?`
+          : '¿Eliminar el proveedor?'
+      if (!window.confirm(message)) return
+      await deleteSupplier(supplier.id!)
+      if (editingId === supplier.id) resetForm()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo eliminar el proveedor')
+    }
   }
 
   return (

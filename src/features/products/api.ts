@@ -61,14 +61,18 @@ export async function createProduct(datos: ProductDatos): Promise<number> {
 }
 
 export async function updateProduct(id: number, datos: ProductDatos): Promise<void> {
-  const existing = await db.products.get(id)
-  if (!existing) throw new Error('Producto no encontrado')
   const valid = validateDatos(datos)
-  await db.products.put({
-    ...existing,
-    ...valid,
-    image: valid.image, // explicitly re-set so clearing the image (undefined) takes effect
-    updatedAt: new Date().toISOString(),
+  // Transaction-wrapped read-modify-write: a whole-record put outside a
+  // transaction can revert concurrent stock/purchase writes from another tab.
+  await db.transaction('rw', db.products, async () => {
+    const existing = await db.products.get(id)
+    if (!existing) throw new Error('Producto no encontrado')
+    await db.products.put({
+      ...existing,
+      ...valid,
+      image: valid.image, // explicitly re-set so clearing the image (undefined) takes effect
+      updatedAt: new Date().toISOString(),
+    })
   })
 }
 

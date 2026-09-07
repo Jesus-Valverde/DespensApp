@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
@@ -15,6 +16,7 @@ export function ProductDetail() {
   const productId = Number(id)
   const product = useLiveQuery(() => db.products.get(productId), [productId])
   const imageUrl = useObjectUrl(product?.image)
+  const [error, setError] = useState('')
 
   if (!product) return <p className="mt-4 text-sm text-slate-500">Cargando…</p>
 
@@ -22,15 +24,23 @@ export function ProductDetail() {
   const current = product
 
   async function handleDuplicate() {
-    const newId = await duplicateProduct(current.id!)
-    navigate(`/products/${newId}`)
+    try {
+      const newId = await duplicateProduct(current.id!)
+      navigate(`/products/${newId}`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo duplicar el producto')
+    }
   }
 
   async function handleDelete() {
     const message = `¿Eliminar "${current.title}"? Se borrarán su historial de movimientos y sus referencias en carritos y listas.`
     if (!window.confirm(message)) return
-    await deleteProduct(current.id!)
-    navigate('/products')
+    try {
+      await deleteProduct(current.id!)
+      navigate('/products')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo eliminar el producto')
+    }
   }
 
   const datos: [string, string | undefined][] = [
@@ -43,6 +53,11 @@ export function ProductDetail() {
 
   return (
     <section>
+      {error && (
+        <p role="alert" className="mb-3 rounded-lg bg-red-50 p-2 text-sm text-red-700">
+          {error}
+        </p>
+      )}
       {imageUrl ? (
         <img src={imageUrl} alt={product.title} className="h-40 w-40 rounded-lg object-cover" />
       ) : (

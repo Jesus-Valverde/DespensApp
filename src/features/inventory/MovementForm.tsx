@@ -17,6 +17,12 @@ export function MovementForm({ productId }: { productId: number }) {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
     setError('')
+    // Required at the form level: an empty input coerces to 0, which would
+    // append a no-op entry to the append-only log for type "ajuste".
+    if (qty.trim() === '') {
+      setError('La cantidad es obligatoria')
+      return
+    }
     try {
       await registerMovement(productId, { type, qty: Number(qty), note: note.trim() || undefined })
       setQty('')

@@ -38,8 +38,9 @@ const tabs: { to: string; label: string; end?: boolean; Icon: IconComponent }[] 
 ]
 
 function fabFor(pathname: string): { to: string; label: string } | null {
-  if (pathname.startsWith('/products')) return { to: '/products/new', label: 'Nuevo producto' }
-  if (pathname.startsWith('/carts')) return { to: '/carts/new', label: 'Nuevo carrito' }
+  // Exact list routes only — no FAB over detail/edit/new screens.
+  if (pathname === '/products') return { to: '/products/new', label: 'Nuevo producto' }
+  if (pathname === '/carts') return { to: '/carts/new', label: 'Nuevo carrito' }
   return null
 }
 

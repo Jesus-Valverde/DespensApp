@@ -66,8 +66,6 @@ export interface CartItemInput {
 }
 
 /** Adds a product to an active cart, denormalizing title, unit price and the
- * product's primary supplier. Re-adding a product merges quantities. */
-/** Adds a product to an active cart, denormalizing title, unit price and the
  * product's primary supplier. Re-adding a product merges quantities. The whole
  * read-modify-write runs in one transaction so concurrent item edits cannot
  * clobber each other. */
