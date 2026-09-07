@@ -35,11 +35,11 @@ Chain strategy: stacked-to-main
 
 ## Batch 2 — Suppliers + Products (slice 2)
 
-- [ ] 2.1 TDD `src/lib/image.ts` `downscaleImage(file)`: createImageBitmap + canvas, max 512px, JPEG q=0.8 Blob. Verify: `npm test -- image` (mock canvas; assert size/type). Implements: product-catalog image.
-- [ ] 2.2 TDD `src/features/suppliers/api.ts`: create/update (name required → Spanish Error), list, `deleteSupplier` (scan products → affected count, clear primary/secondary refs in one transaction, preserve prices/dates/period). Verify: unit tests cover all 5 supplier-management scenarios. Implements: supplier-management.
-- [ ] 2.3 Supplier screens `src/features/suppliers/` at `/settings/suppliers` (list + form, delete warn "N productos"). Verify: component test rejects empty name with Spanish message. Implements: supplier-management.
-- [ ] 2.4 TDD `src/features/products/api.ts`: create/update (title required; customProps unique non-empty keys), `deleteProduct` cascade (movements + cart items + list memberships, one `db.transaction`, Spanish confirm in UI), `duplicateProduct` (copy fields + purchase info, title "(copia)", stock zeroed, no movements). Verify: unit tests cover product-catalog CRUD/duplicate/custom-prop scenarios. Implements: product-catalog.
-- [ ] 2.5 Product screens `src/features/products/` (list + area `<datalist>` from distinct areas, ProductForm with image pick → downscale → replace/remove, ProductDetail "datos" + image placeholder). Verify: component tests — empty title rejected (Spanish), placeholder renders without image. Implements: product-catalog.
+- [x] 2.1 TDD `src/lib/image.ts` `downscaleImage(file)`: createImageBitmap + canvas, max 512px, JPEG q=0.8 Blob. Verify: `npm test -- image` (mock canvas; assert size/type). Implements: product-catalog image.
+- [x] 2.2 TDD `src/features/suppliers/api.ts`: create/update (name required → Spanish Error), list, `deleteSupplier` (scan products → affected count, clear primary/secondary refs in one transaction, preserve prices/dates/period). Verify: unit tests cover all 5 supplier-management scenarios. Implements: supplier-management.
+- [x] 2.3 Supplier screens `src/features/suppliers/` at `/settings/suppliers` (list + form, delete warn "N productos"). Verify: component test rejects empty name with Spanish message. Implements: supplier-management.
+- [x] 2.4 TDD `src/features/products/api.ts`: create/update (title required; customProps unique non-empty keys), `deleteProduct` cascade (movements + cart items + list memberships, one `db.transaction`, Spanish confirm in UI), `duplicateProduct` (copy fields + purchase info, title "(copia)", stock zeroed, no movements). Verify: unit tests cover product-catalog CRUD/duplicate/custom-prop scenarios. Implements: product-catalog.
+- [x] 2.5 Product screens `src/features/products/` (list + area `<datalist>` from distinct areas, ProductForm with image pick → downscale → replace/remove, ProductDetail "datos" + image placeholder). Verify: component tests — empty title rejected (Spanish), placeholder renders without image. Implements: product-catalog.
 
 ## Batch 3 — Inventory + Movements (slice 3)
 
