@@ -1,0 +1,62 @@
+# openspec/config.yaml — DespensApp SDD configuration
+schema: spec-driven
+
+context: |
+  App: DespensApp — local-first PWA to manage a household pantry (Spanish UI, English code identifiers).
+  Stack (planned; greenfield, no scaffold yet): Vite + React + TypeScript + Dexie (IndexedDB) + vite-plugin-pwa.
+  Testing (planned): Vitest + Testing Library — to be scaffolded in the first apply batch of change despensa-core (task 0).
+  Data: 100% local (IndexedDB); Google Drive encrypted backup is a later, separate change.
+  Styling: Tailwind likely — confirm explicitly during sdd-design.
+  SDD persistence: hybrid (openspec files + Engram project "despensapp").
+
+strict_tdd: false # NO test runner exists yet (greenfield: no package.json). Flip to true after despensa-core task 0 scaffolds Vitest.
+
+testing:
+  strict_tdd: false
+  detected: 2026-09-06
+  test_runner:
+    available: false
+    command: "" # planned: npm test (Vitest) — becomes real after despensa-core task 0
+    framework: "planned: Vitest + Testing Library"
+  layers:
+    unit:
+      available: false
+      tool: "planned: Vitest"
+    integration:
+      available: false
+      tool: "planned: @testing-library/react (jsdom)"
+    e2e:
+      available: false
+      tool: null
+  coverage:
+    available: false
+    command: "" # planned: vitest --coverage
+  quality:
+    linter: { available: false, command: "" } # planned: eslint
+    type_checker: { available: false, command: "" } # planned: tsc --noEmit
+    formatter: { available: false, command: "" } # planned: prettier (unconfirmed)
+
+rules:
+  proposal:
+    - "Include rollback plan for risky changes"
+    - "Keep domain scope: products, inventory, purchases, suppliers, carts, lists, reports"
+  specs:
+    - "Use Given/When/Then for scenarios"
+    - "Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)"
+  design:
+    - "Document architecture decisions with rationale"
+    - "Confirm Tailwind adoption explicitly before depending on it"
+    - "UI copy in Spanish; code identifiers in English"
+  tasks:
+    - "Group by phase, use hierarchical numbering"
+    - "Keep tasks completable in one session"
+    - "despensa-core task 0 MUST scaffold Vite + React + TypeScript + Vitest + Testing Library before any feature code"
+  apply:
+    - "Follow existing code patterns"
+    - "TDD is disabled until a test runner exists; after despensa-core task 0, treat strict_tdd as true"
+    - "test_command: npm test (valid only after despensa-core task 0 scaffold)"
+  verify:
+    - "test_command: npm test; build_command: npm run build (both valid only after despensa-core task 0 scaffold)"
+    - "coverage_threshold: 0 — raise once coverage tooling is installed"
+  archive:
+    - "Warn before merging destructive deltas"
