@@ -43,10 +43,10 @@ Chain strategy: stacked-to-main
 
 ## Batch 3 — Inventory + Movements (slice 3)
 
-- [ ] 3.1 TDD `src/features/inventory/api.ts` `setStock`: current/min/max non-negative, min ≤ max when both set, min/max nullable, one free-text location. Verify: unit tests per inventory stock scenarios. Implements: inventory-management.
-- [ ] 3.2 TDD `registerMovement`: entrada delta=+qty; salida delta=-qty (qty > current rejected, stock unchanged); ajuste qty=target, delta=target-current; movement record + embedded stock update in one transaction. Verify: unit tests cover all 4 movement scenarios. Implements: inventory-management.
-- [ ] 3.3 Bitácora: `getMovements(productId)` sorted date desc; export no movement update/delete functions (append-only). Verify: unit test ordering; api exports contain no mutation. Implements: inventory-management bitácora.
-- [ ] 3.4 Inventory UI on ProductDetail (`src/features/inventory/`: stock form, Entrada/Salida/Ajuste form, bitácora list with no edit/delete controls). Verify: component test — salida over stock shows Spanish error; bitácora offers no edit/delete. Implements: inventory-management.
+- [x] 3.1 TDD `src/features/inventory/api.ts` `setStock`: current/min/max non-negative, min ≤ max when both set, min/max nullable, one free-text location. Verify: unit tests per inventory stock scenarios. Implements: inventory-management.
+- [x] 3.2 TDD `registerMovement`: entrada delta=+qty; salida delta=-qty (qty > current rejected, stock unchanged); ajuste qty=target, delta=target-current; movement record + embedded stock update in one transaction. Verify: unit tests cover all 4 movement scenarios. Implements: inventory-management.
+- [x] 3.3 Bitácora: `getMovements(productId)` sorted date desc; export no movement update/delete functions (append-only). Verify: unit test ordering; api exports contain no mutation. Implements: inventory-management bitácora.
+- [x] 3.4 Inventory UI on ProductDetail (`src/features/inventory/`: stock form, Entrada/Salida/Ajuste form, bitácora list with no edit/delete controls). Verify: component test — salida over stock shows Spanish error; bitácora offers no edit/delete. Implements: inventory-management.
 
 ## Batch 4 — Purchase Planning (slice 4)
 
