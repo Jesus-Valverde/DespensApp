@@ -27,11 +27,11 @@ Chain strategy: stacked-to-main
 
 ## Batch 1 — Task 0: Scaffold + Shell (slice 1)
 
-- [ ] 0.1 Scaffold Vite React-TS app at repo root; install deps per design Stack table (react 19, react-router 7, dexie 4, dexie-react-hooks, tailwindcss 4 + @tailwindcss/vite, vite-plugin-pwa; dev: vitest, @testing-library/{react,user-event,jest-dom}, happy-dom, fake-indexeddb). Files: `package.json`, `tsconfig.*`, `.gitignore`. Verify: `npm install` clean.
-- [ ] 0.2 Configure `vite.config.ts`: React + Tailwind v4 + PWA (`registerType: 'autoUpdate'`, plugin manifest es/standalone, placeholder `public/pwa-192.png` + `pwa-512.png`, workbox precache + navigateFallback) and Vitest (happy-dom, setup file `src/test/setup.ts`: jest-dom + fake-indexeddb autoimport). Verify: `npm run build` emits service worker.
-- [ ] 0.3 Create `src/db/db.ts` (Dexie v1, name `despensapp`, 5 stores exactly per design) and `src/db/types.ts` (Product, Supplier, Movement, Cart, CartItem, List per design data model). Verify: `src/db/db.test.ts` opens db under fake-indexeddb and asserts the 5 tables.
-- [ ] 0.4 Shell: `src/app/App.tsx` (HashRouter; routes `/`, `/products`, `/carts`, `/lists`, `/settings/suppliers` with placeholders) + `src/app/Layout.tsx` (header, bottom tabs Inicio/Productos/Carritos/Listas/Ajustes, `max-w-md`) + `src/index.css` (`@import "tailwindcss"`). Verify: `src/app/App.test.tsx` renders all 5 Spanish tabs.
-- [ ] 0.5 Gate: `npm test` and `npm run build` green; flip `strict_tdd: true` in `openspec/config.yaml` and Engram testing-capabilities (obs 416); commit `feat: scaffold vite react app with dexie, pwa and vitest`.
+- [x] 0.1 Scaffold Vite React-TS app at repo root; install deps per design Stack table (react 19, react-router 7, dexie 4, dexie-react-hooks, tailwindcss 4 + @tailwindcss/vite, vite-plugin-pwa; dev: vitest, @testing-library/{react,user-event,jest-dom}, happy-dom, fake-indexeddb). Files: `package.json`, `tsconfig.*`, `.gitignore`. Verify: `npm install` clean.
+- [x] 0.2 Configure `vite.config.ts`: React + Tailwind v4 + PWA (`registerType: 'autoUpdate'`, plugin manifest es/standalone, placeholder `public/pwa-192.png` + `pwa-512.png`, workbox precache + navigateFallback) and Vitest (happy-dom, setup file `src/test/setup.ts`: jest-dom + fake-indexeddb autoimport). Verify: `npm run build` emits service worker.
+- [x] 0.3 Create `src/db/db.ts` (Dexie v1, name `despensapp`, 5 stores exactly per design) and `src/db/types.ts` (Product, Supplier, Movement, Cart, CartItem, List per design data model). Verify: `src/db/db.test.ts` opens db under fake-indexeddb and asserts the 5 tables.
+- [x] 0.4 Shell: `src/app/App.tsx` (HashRouter; routes `/`, `/products`, `/carts`, `/lists`, `/settings/suppliers` with placeholders) + `src/app/Layout.tsx` (header, bottom tabs Inicio/Productos/Carritos/Listas/Ajustes, `max-w-md`) + `src/index.css` (`@import "tailwindcss"`). Verify: `src/app/App.test.tsx` renders all 5 Spanish tabs.
+- [x] 0.5 Gate: `npm test` and `npm run build` green; flip `strict_tdd: true` in `openspec/config.yaml` and Engram testing-capabilities (obs 416); commit `feat: scaffold vite react app with dexie, pwa and vitest`.
 
 ## Batch 2 — Suppliers + Products (slice 2)
 

@@ -9,22 +9,22 @@ context: |
   Styling: Tailwind likely — confirm explicitly during sdd-design.
   SDD persistence: hybrid (openspec files + Engram project "despensapp").
 
-strict_tdd: false # NO test runner exists yet (greenfield: no package.json). Flip to true after despensa-core task 0 scaffolds Vitest.
+strict_tdd: true # Active since despensa-core task 0 scaffolded Vitest (2026-09-06). Red-green for src/lib/* and src/features/*/api.ts from batch 2 on.
 
 testing:
-  strict_tdd: false
-  detected: 2026-09-06
+  strict_tdd: true
+  detected: 2026-09-06 # updated by despensa-core batch 1 (task 0.5)
   test_runner:
-    available: false
-    command: "" # planned: npm test (Vitest) — becomes real after despensa-core task 0
-    framework: "planned: Vitest + Testing Library"
+    available: true
+    command: "npm test"
+    framework: "Vitest 5 + Testing Library (happy-dom + fake-indexeddb, setup at src/test/setup.ts)"
   layers:
     unit:
-      available: false
-      tool: "planned: Vitest"
+      available: true
+      tool: "Vitest (+ fake-indexeddb for Dexie)"
     integration:
-      available: false
-      tool: "planned: @testing-library/react (jsdom)"
+      available: true
+      tool: "@testing-library/react (happy-dom)"
     e2e:
       available: false
       tool: null
@@ -33,7 +33,7 @@ testing:
     command: "" # planned: vitest --coverage
   quality:
     linter: { available: false, command: "" } # planned: eslint
-    type_checker: { available: false, command: "" } # planned: tsc --noEmit
+    type_checker: { available: true, command: "npm run typecheck" } # tsc -b (project references)
     formatter: { available: false, command: "" } # planned: prettier (unconfirmed)
 
 rules:
