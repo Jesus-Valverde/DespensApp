@@ -57,11 +57,11 @@ Chain strategy: stacked-to-main
 
 ## Batch 5 — Carts + Buy Cart + Auto-generation (slice 5)
 
-- [ ] 5.1 TDD `src/features/carts/api.ts` lifecycle: `createCart` (manual, active), `cancelCart` (cancelled, history retained), multiple active carts allowed. Verify: unit tests per lifecycle scenarios. Implements: cart-management.
-- [ ] 5.2 TDD cart items: add/update (qty > 0, unitPrice ≥ 0, default supplier = product's primary, editable), remove; items as array in Cart. Verify: unit tests per item-grouping scenarios. Implements: cart-management.
-- [ ] 5.3 TDD `buyCart` atomic in one `db.transaction('rw', ...)`: per item entrada movement + product.purchase{lastPrice, lastPurchaseDate=today, next=addPeriod(...)} + cart.status='purchased'; inject failure → assert full rollback (no partial state). Verify: unit tests cover both buy-cart scenarios. Implements: cart-management.
-- [ ] 5.4 TDD `generateAutoCart`: due = nextPurchaseDate ≤ today AND not in any active cart; group by primary supplier else "Sin proveedor"; defaults qty 1, unitPrice = lastPrice ?? 0; none due → no-op. Verify: unit tests cover all 3 auto-generation scenarios. Implements: cart-management.
-- [ ] 5.5 Wire auto-cart in `src/app/App.tsx` root useEffect (run-once guard) + carts screens (`/carts` list, `/carts/:id` grouped by supplier, "Pagar carrito"/"Cancelar carrito"/"Generar carrito"). Verify: component test — items render under supplier group headings; buy-button smoke. Implements: cart-management.
+- [x] 5.1 TDD `src/features/carts/api.ts` lifecycle: `createCart` (manual, active), `cancelCart` (cancelled, history retained), multiple active carts allowed. Verify: unit tests per lifecycle scenarios. Implements: cart-management.
+- [x] 5.2 TDD cart items: add/update (qty > 0, unitPrice ≥ 0, default supplier = product's primary, editable), remove; items as array in Cart. Verify: unit tests per item-grouping scenarios. Implements: cart-management.
+- [x] 5.3 TDD `buyCart` atomic in one `db.transaction('rw', ...)`: per item entrada movement + product.purchase{lastPrice, lastPurchaseDate=today, next=addPeriod(...)} + cart.status='purchased'; inject failure → assert full rollback (no partial state). Verify: unit tests cover both buy-cart scenarios. Implements: cart-management.
+- [x] 5.4 TDD `generateAutoCart`: due = nextPurchaseDate ≤ today AND not in any active cart; group by primary supplier else "Sin proveedor"; defaults qty 1, unitPrice = lastPrice ?? 0; none due → no-op. Verify: unit tests cover all 3 auto-generation scenarios. Implements: cart-management.
+- [x] 5.5 Wire auto-cart in `src/app/App.tsx` root useEffect (run-once guard) + carts screens (`/carts` list, `/carts/:id` grouped by supplier, "Pagar carrito"/"Cancelar carrito"/"Generar carrito"). Verify: component test — items render under supplier group headings; buy-button smoke. Implements: cart-management.
 
 ## Batch 6 — Lists + Reports + PWA Gate (slice 6)
 
