@@ -8,7 +8,6 @@ import { StockSection } from '../inventory/StockSection'
 import { MovementForm } from '../inventory/MovementForm'
 import { BitacoraList } from '../inventory/BitacoraList'
 import { PurchaseSection } from '../purchase/PurchaseSection'
-import { ListsSection } from '../lists/ListsSection'
 import { deleteProduct, duplicateProduct } from './api'
 
 // Inline stroke glyphs (24x24) standing in for the design's Material Symbols
@@ -304,8 +303,6 @@ export function ProductDetail() {
               Editar propiedades
             </OutlineAction>
           </div>
-
-          <ListsSection productId={current.id!} />
         </div>
 
         <div className={activeTab === 'stock' ? 'space-y-4' : 'hidden'}>
