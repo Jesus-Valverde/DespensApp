@@ -116,9 +116,9 @@ export function PurchaseSection({ product }: { product: Product }) {
 
   return (
     <section aria-label="Info de compra" className="mt-6">
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Info de compra</h2>
+      <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Info de compra</h2>
 
-      <div className="mt-2 rounded-lg border border-slate-200 bg-white p-4 text-sm">
+      <div className="mt-2 rounded-2xl border border-slate-100 bg-white p-5 text-sm shadow-sm">
         {filledSummary.length > 0 ? (
           <dl>
             {filledSummary.map(([label, value]) => (
@@ -133,7 +133,10 @@ export function PurchaseSection({ product }: { product: Product }) {
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-2 space-y-3 rounded-lg border border-slate-200 bg-white p-4 text-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-2 space-y-3 rounded-2xl border border-slate-100 bg-white p-5 text-sm shadow-sm"
+      >
         <div>
           <label htmlFor="purchase-primary" className="font-medium">
             Proveedor principal
@@ -142,7 +145,7 @@ export function PurchaseSection({ product }: { product: Product }) {
             id="purchase-primary"
             value={form.primary}
             onChange={(event) => setForm((current) => ({ ...current, primary: event.target.value }))}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+            className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           >
             <option value="">Sin proveedor</option>
             {sortedSuppliers.map((supplier) => (
@@ -188,7 +191,7 @@ export function PurchaseSection({ product }: { product: Product }) {
                 setForm((current) => ({ ...current, originalPrice: event.target.value }))
               }
               placeholder="MXN"
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+              className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
           <div>
@@ -203,7 +206,7 @@ export function PurchaseSection({ product }: { product: Product }) {
               value={form.lastPrice}
               onChange={(event) => setForm((current) => ({ ...current, lastPrice: event.target.value }))}
               placeholder="MXN"
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+              className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
           <div>
@@ -215,7 +218,7 @@ export function PurchaseSection({ product }: { product: Product }) {
               type="date"
               value={form.lastDate}
               onChange={(event) => setForm((current) => ({ ...current, lastDate: event.target.value }))}
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+              className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             />
           </div>
           <div>
@@ -226,7 +229,7 @@ export function PurchaseSection({ product }: { product: Product }) {
               id="purchase-period"
               value={form.period}
               onChange={(event) => setForm((current) => ({ ...current, period: event.target.value }))}
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+              className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             >
               {PERIOD_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -252,7 +255,7 @@ export function PurchaseSection({ product }: { product: Product }) {
             <button
               type="button"
               onClick={addLink}
-              className="shrink-0 rounded-md border border-slate-300 px-3 py-2"
+              className="shrink-0 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 font-medium transition-all active:scale-95"
             >
               Agregar enlace
             </button>
@@ -269,14 +272,14 @@ export function PurchaseSection({ product }: { product: Product }) {
                     href={link.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="rounded-md border border-slate-300 px-2 py-1"
+                    className="rounded-lg border border-slate-200 px-2.5 py-1 transition-all active:scale-95"
                   >
                     Abrir
                   </a>
                   <button
                     type="button"
                     onClick={() => removeLink(index)}
-                    className="rounded-md border border-red-300 px-2 py-1 text-red-600"
+                    className="rounded-lg border border-red-200 px-2.5 py-1 text-red-600 transition-all active:scale-95"
                   >
                     Quitar
                   </button>
@@ -294,7 +297,7 @@ export function PurchaseSection({ product }: { product: Product }) {
 
         <button
           type="submit"
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-500/30 transition-all hover:bg-blue-700 active:scale-95"
         >
           Guardar info de compra
         </button>

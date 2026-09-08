@@ -34,9 +34,12 @@ export function MovementForm({ productId }: { productId: number }) {
 
   return (
     <section aria-label="Movimientos" className="mt-6">
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Movimientos</h2>
+      <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Movimientos</h2>
 
-      <form onSubmit={handleSubmit} className="mt-2 space-y-3 rounded-lg border border-slate-200 bg-white p-4 text-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-2 space-y-3 rounded-2xl border border-slate-100 bg-white p-5 text-sm shadow-sm"
+      >
         <div>
           <label htmlFor="movement-type" className="font-medium">
             Tipo de movimiento
@@ -45,7 +48,7 @@ export function MovementForm({ productId }: { productId: number }) {
             id="movement-type"
             value={type}
             onChange={(event) => setType(event.target.value as MovementType)}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+            className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           >
             {TYPE_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -65,7 +68,7 @@ export function MovementForm({ productId }: { productId: number }) {
             min="0"
             value={qty}
             onChange={(event) => setQty(event.target.value)}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+            className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
         <div>
@@ -77,7 +80,7 @@ export function MovementForm({ productId }: { productId: number }) {
             value={note}
             onChange={(event) => setNote(event.target.value)}
             placeholder="Opcional"
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+            className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
         {error && (
@@ -87,7 +90,7 @@ export function MovementForm({ productId }: { productId: number }) {
         )}
         <button
           type="submit"
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-500/30 transition-all hover:bg-blue-700 active:scale-95"
         >
           Registrar
         </button>

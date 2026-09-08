@@ -43,14 +43,14 @@ export function ListsSection({ productId }: { productId: number }) {
 
   return (
     <section className="mt-6" aria-label="Listas">
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Listas</h2>
+      <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Listas</h2>
 
       {memberships.length > 0 ? (
         <ul className="mt-2 space-y-2">
           {memberships.map((list) => (
             <li
               key={list.id}
-              className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-white p-3 text-sm"
+              className="flex items-center justify-between gap-2 rounded-xl border border-slate-100 bg-white p-3.5 text-sm shadow-sm"
             >
               <Link to={`/lists/${list.id}`} className="font-medium">
                 {list.title}
@@ -59,7 +59,7 @@ export function ListsSection({ productId }: { productId: number }) {
                 type="button"
                 onClick={() => handleRemove(list.id!)}
                 aria-label={`Quitar de ${list.title}`}
-                className="rounded-md border border-red-300 px-2 py-1 text-red-600"
+                className="rounded-lg border border-red-200 px-2.5 py-1 text-red-600 transition-all active:scale-95"
               >
                 Quitar
               </button>
@@ -71,7 +71,7 @@ export function ListsSection({ productId }: { productId: number }) {
       )}
 
       {others.length > 0 && (
-        <div className="mt-2 rounded-lg border border-slate-200 bg-white p-4 text-sm">
+        <div className="mt-2 rounded-2xl border border-slate-100 bg-white p-5 text-sm shadow-sm">
           <label htmlFor="product-add-list" className="font-medium">
             Agregar a una lista
           </label>
@@ -80,7 +80,7 @@ export function ListsSection({ productId }: { productId: number }) {
               id="product-add-list"
               value={pickedListId}
               onChange={(event) => setPickedListId(event.target.value)}
-              className="grow rounded-md border border-slate-300 px-3 py-2"
+              className="grow rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
             >
               <option value="">Elige una lista</option>
               {others.map((list) => (
@@ -92,7 +92,7 @@ export function ListsSection({ productId }: { productId: number }) {
             <button
               type="button"
               onClick={handleAdd}
-              className="rounded-md border border-slate-300 px-3 py-1.5"
+              className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 font-medium transition-all active:scale-95"
             >
               Agregar
             </button>

@@ -69,16 +69,16 @@ export function StockSection({ product }: { product: Product }) {
 
   return (
     <section aria-label="Stock" className="mt-6">
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Stock</h2>
+      <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Stock</h2>
 
-      <div className="mt-2 rounded-lg border border-slate-200 bg-white p-4 text-sm">
+      <div className="mt-2 rounded-2xl border border-slate-100 bg-white p-5 text-sm shadow-sm">
         <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${TONE_CLASSES[state.tone]}`}>
           {state.label}
         </span>
         <p className="mt-2">{summaryParts.join(' · ')}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-2 grid grid-cols-2 gap-3 rounded-lg border border-slate-200 bg-white p-4 text-sm">
+      <form onSubmit={handleSubmit} className="mt-2 grid grid-cols-2 gap-3 rounded-2xl border border-slate-100 bg-white p-5 text-sm shadow-sm">
         <div>
           <label htmlFor="stock-current" className="font-medium">
             Actual
@@ -90,7 +90,7 @@ export function StockSection({ product }: { product: Product }) {
             min="0"
             value={form.current}
             onChange={setField('current')}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+            className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
         <div>
@@ -102,7 +102,7 @@ export function StockSection({ product }: { product: Product }) {
             value={form.location}
             onChange={setField('location')}
             placeholder="refri, alacena…"
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+            className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
         <div>
@@ -116,7 +116,7 @@ export function StockSection({ product }: { product: Product }) {
             min="0"
             value={form.min}
             onChange={setField('min')}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+            className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
         <div>
@@ -130,7 +130,7 @@ export function StockSection({ product }: { product: Product }) {
             min="0"
             value={form.max}
             onChange={setField('max')}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2"
+            className="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
           />
         </div>
         {error && (
@@ -141,7 +141,7 @@ export function StockSection({ product }: { product: Product }) {
         <div className="col-span-2">
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-500/30 transition-all hover:bg-blue-700 active:scale-95"
           >
             Guardar stock
           </button>

@@ -47,7 +47,8 @@ describe('ProductDetail', () => {
     expect(screen.getByText('Ace')).toBeInTheDocument()
     expect(screen.getByText('1 L')).toBeInTheDocument()
     expect(screen.getByText('Lavandería')).toBeInTheDocument()
-    expect(screen.getByText('Pagar con tarjeta: sí')).toBeInTheDocument()
+    expect(screen.getByText('Pagar con tarjeta')).toBeInTheDocument()
+    expect(screen.getByText('sí')).toBeInTheDocument()
     expect(screen.getByText('Sin imagen')).toBeInTheDocument()
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
   })
@@ -74,7 +75,7 @@ describe('ProductDetail', () => {
 
     renderAt(`/products/${id}`)
 
-    await user.click(await screen.findByRole('button', { name: 'Duplicar' }))
+    await user.click(await screen.findByRole('button', { name: 'Crear copia' }))
 
     const copy = await screen.findByRole('heading', { level: 1, name: 'Detergente (copia)' })
     expect(copy).toBeInTheDocument()

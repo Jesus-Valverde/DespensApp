@@ -22,14 +22,17 @@ export function BitacoraList({ productId }: { productId: number }) {
 
   return (
     <section aria-label="Bitácora" className="mt-6">
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Bitácora</h2>
+      <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Bitácora</h2>
 
       {movements.length === 0 ? (
         <p className="mt-2 text-sm text-slate-500">Sin movimientos todavía.</p>
       ) : (
         <ul className="mt-2 space-y-2">
           {movements.map((movement) => (
-            <li key={movement.id} className="rounded-lg border border-slate-200 bg-white p-3 text-sm">
+            <li
+              key={movement.id}
+              className="rounded-xl border border-slate-100 bg-white p-3.5 text-sm shadow-sm"
+            >
               <p className="font-medium">{describeMovement(movement)}</p>
               <p className="mt-0.5 text-xs text-slate-500">
                 {dateFormatter.format(new Date(movement.date))}
