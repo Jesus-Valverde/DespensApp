@@ -13,23 +13,12 @@ function icon(d: string): IconComponent {
   }
 }
 
-/** Brand mark: 3D box (Stitch design). */
-function LogoIcon(props: SVGProps<SVGSVGElement>) {
+/** Brand mark: white logo silhouette on a gradient chip. */
+function LogoMark() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2.2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="m7.5 4.27 9 5.15" />
-      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-      <path d="m3.3 7 8.7 5 8.7-5" />
-      <path d="M12 22V12" />
-    </svg>
+    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 shadow-sm shadow-blue-500/20">
+      <img src="/logo-white.png" alt="" aria-hidden="true" className="h-5 w-auto" />
+    </div>
   )
 }
 
@@ -97,9 +86,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-20 border-b border-slate-200/50 bg-slate-50/90 px-5 pb-2 pt-[max(env(safe-area-inset-top),12px)] backdrop-blur-md">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-sm shadow-blue-500/20">
-                <LogoIcon className="h-4 w-4" aria-hidden="true" />
-              </div>
+              <LogoMark />
               <span className="text-xl font-bold tracking-tight text-blue-600">DespensApp</span>
             </div>
           </div>

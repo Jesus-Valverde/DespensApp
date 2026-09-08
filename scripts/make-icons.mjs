@@ -32,4 +32,16 @@ await make(192, 0.86, 'pwa-192.png')
 await make(512, 0.7, 'pwa-maskable-512.png') // content inside the 80% safe zone
 await make(180, 0.86, 'apple-touch-icon.png')
 await make(64, 0.86, 'favicon.png')
+
+// Transparent white silhouette for the app header (no background).
+if (TONE) {
+  const h = 256
+  const w = Math.round(h * RATIO)
+  const glyph = await sharp(SRC).resize(w, h).png().toBuffer()
+  await sharp({ create: { width: w, height: h, channels: 4, background: TONE } })
+    .composite([{ input: glyph, blend: 'dest-in' }])
+    .png()
+    .toFile(`${OUT}/logo-white.png`)
+  console.log(`✓ logo-white.png (${w}x${h}, transparent)`)
+}
 console.log('done')
