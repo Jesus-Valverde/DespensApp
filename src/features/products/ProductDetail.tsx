@@ -500,9 +500,7 @@ export function ProductDetail() {
           </div>
         </div>
       )}
-      {movementOpen && (
-        <MovementModal productId={current.id!} onClose={() => setMovementOpen(false)} />
-      )}
+      {movementOpen && <MovementModal product={current} onClose={() => setMovementOpen(false)} />}
     </section>
   )
 }

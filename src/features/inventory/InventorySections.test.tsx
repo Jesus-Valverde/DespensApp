@@ -87,7 +87,7 @@ describe('inventory sections on ProductDetail', () => {
 
     await user.click(screen.getByRole('button', { name: 'Registrar movimiento' }))
     const dialog = screen.getByRole('dialog', { name: 'Registrar movimiento' })
-    await user.type(within(dialog).getByLabelText('Cantidad'), '6')
+    await user.type(within(dialog).getByLabelText(/Cantidad a ingresar/), '6')
     await user.click(within(dialog).getByRole('button', { name: 'Guardar' }))
 
     const stock = screen.getByRole('region', { name: 'Stock' })
@@ -106,8 +106,8 @@ describe('inventory sections on ProductDetail', () => {
 
     await user.click(screen.getByRole('button', { name: 'Registrar movimiento' }))
     const dialog = screen.getByRole('dialog', { name: 'Registrar movimiento' })
-    await user.click(within(dialog).getByLabelText('Ajuste'))
-    await user.type(within(dialog).getByLabelText('Cantidad resultante'), '9')
+    await user.click(within(dialog).getByRole('button', { name: /Ajuste/ }))
+    await user.type(within(dialog).getByLabelText(/Cantidad a dejar/), '9')
     await user.click(within(dialog).getByRole('button', { name: 'Guardar' }))
 
     const stock = screen.getByRole('region', { name: 'Stock' })
@@ -126,8 +126,8 @@ describe('inventory sections on ProductDetail', () => {
 
     await user.click(screen.getByRole('button', { name: 'Registrar movimiento' }))
     const dialog = screen.getByRole('dialog', { name: 'Registrar movimiento' })
-    await user.click(within(dialog).getByLabelText('Salida'))
-    await user.type(within(dialog).getByLabelText('Cantidad'), '5')
+    await user.click(within(dialog).getByRole('button', { name: /Salida/ }))
+    await user.type(within(dialog).getByLabelText(/Cantidad a ingresar/), '5')
     await user.click(within(dialog).getByRole('button', { name: 'Guardar' }))
 
     const alert = await screen.findByRole('alert')
