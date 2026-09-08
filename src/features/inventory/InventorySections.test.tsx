@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, within, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { ProductDetail } from '../products/ProductDetail'
@@ -64,11 +64,13 @@ describe('inventory sections on ProductDetail', () => {
     await screen.findByText(/unidades/)
 
     await user.click(screen.getByRole('button', { name: 'Editar niveles' }))
-    await user.clear(screen.getByLabelText('Mínimo'))
-    await user.type(screen.getByLabelText('Mínimo'), '8')
-    await user.clear(screen.getByLabelText('Máximo'))
-    await user.type(screen.getByLabelText('Máximo'), '5')
-    await user.click(screen.getByRole('button', { name: 'Guardar stock' }))
+    const dialog = screen.getByRole('dialog', { name: 'Editar niveles de stock' })
+    // Labels include the "Alerta reposición"/"Capacidad sugerida" badges.
+    // fireEvent.change because user-event can't refocus the stepper inputs
+    // across the modal re-render in happy-dom.
+    fireEvent.change(within(dialog).getByLabelText(/Stock Mínimo/), { target: { value: '8' } })
+    fireEvent.change(within(dialog).getByLabelText(/Stock Máximo/), { target: { value: '5' } })
+    await user.click(within(dialog).getByRole('button', { name: 'Guardar niveles' }))
 
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent('El mínimo no puede ser mayor que el máximo')

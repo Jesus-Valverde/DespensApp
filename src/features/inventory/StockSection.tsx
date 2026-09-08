@@ -19,13 +19,14 @@ const PILL_CLASSES: Record<StockTone, { pill: string; dot: string }> = {
   over: { pill: 'border-amber-200/80 bg-amber-50 text-amber-700', dot: 'bg-amber-500' },
 }
 
-const PLACE_PATH =
-  'M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0z M12 10h.01'
-
-const EDIT_PATH = 'M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'
-
-const BELL_PATH =
-  'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
+const PATHS = {
+  place:
+    'M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0z M12 10h.01',
+  edit: 'M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z',
+  bell: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
+  tune: 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4',
+  cerrar: 'M6 18L18 6M6 6l12 12',
+}
 
 function Glyph({ d, className = 'h-5 w-5' }: { d: string; className?: string }) {
   return (
@@ -47,7 +48,6 @@ function Glyph({ d, className = 'h-5 w-5' }: { d: string; className?: string }) 
 }
 
 interface StockFormValue {
-  current: string
   min: string
   max: string
   location: string
@@ -55,7 +55,6 @@ interface StockFormValue {
 
 function toFormValue(stock: ProductStock): StockFormValue {
   return {
-    current: String(stock.current),
     min: stock.min == null ? '' : String(stock.min),
     max: stock.max == null ? '' : String(stock.max),
     location: stock.location ?? '',
@@ -63,18 +62,11 @@ function toFormValue(stock: ProductStock): StockFormValue {
 }
 
 const inputClass =
-  'mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20'
+  'w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20'
 
-/** Stock card (Stitch design): status pill + location, big current number with
- * min/max, a collapsible "Editar niveles" form and the register-movement pill. */
-export function StockSection({
-  product,
-  onRegister,
-}: {
-  product: Product
-  onRegister: () => void
-}) {
-  const [editing, setEditing] = useState(false)
+/** Levels editor modal (Stitch design): min/max with steppers plus location.
+ * The current quantity is not edited here — that's what movements are for. */
+function LevelsModal({ product, onClose }: { product: Product; onClose: () => void }) {
   const [form, setForm] = useState<StockFormValue>(() => toFormValue(product.stock))
   const [error, setError] = useState('')
 
@@ -83,22 +75,196 @@ export function StockSection({
       setForm((current) => ({ ...current, [field]: event.target.value }))
   }
 
+  function bump(field: 'min' | 'max', delta: number) {
+    setForm((current) => ({
+      ...current,
+      [field]: String(Math.max(0, (Number(current[field]) || 0) + delta)),
+    }))
+  }
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
     setError('')
     try {
       await setStock(product.id!, {
-        current: Number(form.current),
+        current: product.stock.current, // untouched: adjust stock via movements
         min: form.min.trim() === '' ? null : Number(form.min),
         max: form.max.trim() === '' ? null : Number(form.max),
         location: form.location,
       })
-      setEditing(false)
+      onClose()
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'No se pudo guardar el stock')
     }
   }
 
+  function Stepper({
+    field,
+    id,
+    label,
+    badge,
+    badgeClass,
+    hint,
+    chip,
+  }: {
+    field: 'min' | 'max'
+    id: string
+    label: string
+    badge: string
+    badgeClass: string
+    hint: string
+    chip: string
+  }) {
+    return (
+      <div className="space-y-2.5 rounded-2xl border border-slate-200/70 bg-slate-50/90 p-3.5">
+        <div>
+          <label
+            htmlFor={id}
+            className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-600"
+          >
+            {label}
+            <span className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${badgeClass}`}>{badge}</span>
+          </label>
+          <p className="mt-0.5 text-[11px] text-slate-500">{hint}</p>
+        </div>
+        <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center space-x-2 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+            <button
+              type="button"
+              aria-label={`Disminuir stock ${label.toLowerCase().replace('stock ', '')}`}
+              onClick={() => bump(field, -1)}
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 font-bold text-slate-700 transition-all active:scale-95 hover:bg-slate-200"
+            >
+              −
+            </button>
+            <input
+              id={id}
+              type="number"
+              min="0"
+              value={form[field]}
+              onChange={setField(field)}
+              className="w-12 border-0 p-0 text-center text-base font-extrabold text-slate-900 focus:outline-none"
+            />
+            <button
+              type="button"
+              aria-label={`Aumentar stock ${label.toLowerCase().replace('stock ', '')}`}
+              onClick={() => bump(field, 1)}
+              className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 font-bold text-slate-700 transition-all active:scale-95 hover:bg-slate-200"
+            >
+              +
+            </button>
+          </div>
+          <span className="text-right text-xs font-medium text-slate-600">{chip}</span>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Editar niveles de stock"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/50 p-3 backdrop-blur-sm sm:items-center sm:p-4"
+    >
+      <div className="max-h-full w-full max-w-sm overflow-y-auto rounded-3xl border border-slate-100 bg-white shadow-2xl">
+        <div className="relative flex items-start justify-between border-b border-slate-100 px-5 pb-3 pt-5">
+          <div className="flex items-start space-x-3">
+            <span className="mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-blue-100/70 bg-blue-50 text-blue-600">
+              <Glyph d={PATHS.tune} className="h-6 w-6" />
+            </span>
+            <div>
+              <h3 className="text-lg font-bold leading-tight text-slate-900">Editar niveles de stock</h3>
+              <p className="mt-1 text-xs font-normal text-slate-500">
+                Configura alertas y límites para{' '}
+                <span className="font-medium text-slate-700">{product.title}</span>
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            aria-label="Cerrar modal"
+            onClick={onClose}
+            className="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100/80 text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-600"
+          >
+            <Glyph d={PATHS.cerrar} className="h-4 w-4" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-3.5 p-5">
+          <Stepper
+            field="min"
+            id="stock-min"
+            label="Stock Mínimo"
+            badge="Alerta reposición"
+            badgeClass="bg-amber-100 text-amber-800"
+            hint="Notificar cuando queden pocas existencias"
+            chip={`Alerta ≤ ${Number(form.min) || 0} uds.`}
+          />
+          <Stepper
+            field="max"
+            id="stock-max"
+            label="Stock Máximo"
+            badge="Capacidad sugerida"
+            badgeClass="bg-blue-100 text-blue-800"
+            hint="Límite ideal para evitar sobrecompra o caducidad"
+            chip={`Capacidad: ${Number(form.max) || 0} uds.`}
+          />
+
+          <div className="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3">
+            <label htmlFor="stock-location" className="text-xs font-bold text-slate-800">
+              Ubicación asignada
+            </label>
+            <input
+              id="stock-location"
+              value={form.location}
+              onChange={setField('location')}
+              placeholder="refri, alacena…"
+              className={`${inputClass} mt-1.5`}
+            />
+          </div>
+
+          <p className="px-1 text-center text-[11px] text-slate-400">
+            Los cambios afectan el cálculo del estado de inventario en tiempo real.
+          </p>
+
+          {error && (
+            <p role="alert" className="text-sm text-red-600">
+              {error}
+            </p>
+          )}
+
+          <div className="grid grid-cols-2 gap-2.5 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-semibold tracking-wide text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              className="w-full rounded-2xl bg-blue-600 px-4 py-3 text-xs font-semibold tracking-wide text-white shadow-md shadow-blue-500/25 transition-all hover:bg-blue-700 active:scale-95"
+            >
+              Guardar niveles
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+/** Stock card (Stitch design): status + reminder pills, location, big current
+ * number with min/max, the levels editor modal and the register-movement pill. */
+export function StockSection({
+  product,
+  onRegister,
+}: {
+  product: Product
+  onRegister: () => void
+}) {
+  const [levelsOpen, setLevelsOpen] = useState(false)
   const state = stockState(product.stock)
   const tone = PILL_CLASSES[state.tone]
   // Reminder status rides on the purchase period configured in the Compra tab.
@@ -122,26 +288,13 @@ export function StockSection({
                 : 'border-slate-200 bg-slate-50 text-slate-500'
             }`}
           >
-            <Glyph d={BELL_PATH} className="h-3 w-3" />
+            <Glyph d={PATHS.bell} className="h-3 w-3" />
             {reminder ? 'Recordatorio activo' : 'Sin recordatorio'}
           </span>
         </div>
         {product.stock.location && (
           <span className="flex items-center gap-1 text-xs font-medium text-slate-500">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-3.5 w-3.5 text-slate-400"
-              aria-hidden="true"
-            >
-              {PLACE_PATH.split(' M').map((segment, index) => (
-                <path key={index} d={index === 0 ? segment : `M${segment}`} />
-              ))}
-            </svg>
+            <Glyph d={PATHS.place} className="h-3.5 w-3.5 text-slate-400" />
             {product.stock.location}
           </span>
         )}
@@ -152,12 +305,12 @@ export function StockSection({
           <span className="text-xs font-semibold text-slate-500">Existencias actuales</span>
           <button
             type="button"
-            aria-expanded={editing}
-            onClick={() => setEditing((value) => !value)}
+            aria-haspopup="dialog"
+            onClick={() => setLevelsOpen(true)}
             className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
           >
-            <Glyph d={EDIT_PATH} className="h-3 w-3" />
-            {editing ? 'Cerrar niveles' : 'Editar niveles'}
+            <Glyph d={PATHS.edit} className="h-3 w-3" />
+            Editar niveles
           </button>
         </div>
         <div className="flex items-end justify-between">
@@ -181,81 +334,11 @@ export function StockSection({
         onClick={onRegister}
         className="flex w-full items-center justify-center gap-2 rounded-full border-2 border-blue-600 px-4 py-3 text-sm font-semibold text-blue-600 shadow-sm transition hover:bg-blue-50/50 active:scale-95"
       >
-        <Glyph d={EDIT_PATH} className="h-4 w-4" />
+        <Glyph d={PATHS.edit} className="h-4 w-4" />
         Registrar movimiento
       </button>
 
-      {editing && (
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3 border-t border-slate-100 pt-4 text-sm">
-          <div>
-            <label htmlFor="stock-current" className="font-medium">
-              Actual
-            </label>
-            <input
-              id="stock-current"
-              type="number"
-              inputMode="numeric"
-              min="0"
-              value={form.current}
-              onChange={setField('current')}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="stock-location" className="font-medium">
-              Ubicación
-            </label>
-            <input
-              id="stock-location"
-              value={form.location}
-              onChange={setField('location')}
-              placeholder="refri, alacena…"
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="stock-min" className="font-medium">
-              Mínimo
-            </label>
-            <input
-              id="stock-min"
-              type="number"
-              inputMode="numeric"
-              min="0"
-              value={form.min}
-              onChange={setField('min')}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="stock-max" className="font-medium">
-              Máximo
-            </label>
-            <input
-              id="stock-max"
-              type="number"
-              inputMode="numeric"
-              min="0"
-              value={form.max}
-              onChange={setField('max')}
-              className={inputClass}
-            />
-          </div>
-          {error && (
-            <p role="alert" className="col-span-2 text-sm text-red-600">
-              {error}
-            </p>
-          )}
-          <div className="col-span-2">
-            <button
-              type="submit"
-              className="w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-blue-500/30 transition-all hover:bg-blue-700 active:scale-95"
-            >
-              Guardar stock
-            </button>
-          </div>
-        </form>
-      )}
+      {levelsOpen && <LevelsModal product={product} onClose={() => setLevelsOpen(false)} />}
     </section>
   )
 }
