@@ -188,6 +188,7 @@ export function ProductDetail() {
         area: current.area,
         family: current.family,
         model: current.model,
+        description: current.description,
         image: current.image,
         iconKey: current.iconKey,
         iconTone: current.iconTone,
@@ -206,6 +207,7 @@ export function ProductDetail() {
         #{current.id}
       </span>,
     ],
+    ['Nombre', current.title || '—'],
     ['Familia', current.family],
     ['Marca', current.brand],
     ['Contenido', current.contentSize],
@@ -219,6 +221,14 @@ export function ProductDetail() {
       ),
     ],
     ['Modelo / Variante', current.model],
+    [
+      'Descripción',
+      current.description ?? (
+        <span key="desc-empty" className="font-medium text-slate-400">
+          —
+        </span>
+      ),
+    ],
   ]
   const filledDatos = datos.filter((row): row is [string, ReactNode] => Boolean(row[1]))
   const customRows = current.customProps.map((prop) => [prop.key, prop.value] as [string, string])
@@ -377,7 +387,7 @@ export function ProductDetail() {
           role="dialog"
           aria-modal="true"
           aria-label="Editar propiedades"
-          className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/60 p-4 backdrop-blur-sm sm:items-center"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm"
         >
           <div className="w-full max-w-sm space-y-4 rounded-3xl border border-slate-100 bg-white p-5 shadow-2xl">
             <div className="flex items-start justify-between border-b border-slate-100 pb-3">

@@ -43,6 +43,8 @@ describe('inventory sections on ProductDetail', () => {
 
     expect(await screen.findByText('Bajo mínimo')).toBeInTheDocument()
     expect(screen.getByText('refri')).toBeInTheDocument()
+    // No purchase period configured yet → reminder off.
+    expect(screen.getByText('Sin recordatorio')).toBeInTheDocument()
 
     const bitacora = screen.getByRole('region', { name: 'Bitácora' })
     const rows = await within(bitacora).findAllByRole('listitem')
@@ -142,7 +144,7 @@ describe('inventory sections on ProductDetail', () => {
     ])
 
     renderDetail(id)
-    await screen.findByText('Leche entera')
+    await screen.findByRole('heading', { name: 'Leche entera' })
 
     const rows = await within(screen.getByRole('region', { name: 'Bitácora' })).findAllByRole('listitem')
     expect(rows).toHaveLength(2)

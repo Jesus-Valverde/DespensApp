@@ -13,6 +13,7 @@ export interface ProductDatos {
   area?: string
   family?: string
   model?: string
+  description?: string
   image?: Blob
   iconKey?: string
   iconTone?: string
@@ -38,11 +39,13 @@ function validateCustomProps(props: CustomProp[]): CustomProp[] {
 
 function validateDatos(datos: ProductDatos): ProductDatos {
   const family = datos.family?.trim()
+  const description = datos.description?.trim()
   const iconKey = datos.iconKey?.trim()
   return {
     ...datos,
     title: requireTitle(datos.title),
     family: family || undefined,
+    description: description || undefined,
     iconKey: iconKey || undefined,
     // A tone without an icon is meaningless — drop it.
     iconTone: iconKey ? datos.iconTone?.trim() || undefined : undefined,
@@ -60,6 +63,7 @@ export async function createProduct(datos: ProductDatos): Promise<number> {
     area: valid.area,
     family: valid.family,
     model: valid.model,
+    description: valid.description,
     image: valid.image,
     iconKey: valid.iconKey,
     iconTone: valid.iconTone,

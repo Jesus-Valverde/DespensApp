@@ -15,9 +15,10 @@ interface TextFieldState {
   area: string
   family: string
   model: string
+  description: string
 }
 
-const EMPTY_FIELDS: TextFieldState = { title: '', brand: '', contentSize: '', area: '', family: '', model: '' }
+const EMPTY_FIELDS: TextFieldState = { title: '', brand: '', contentSize: '', area: '', family: '', model: '', description: '' }
 
 const labelClass = 'font-semibold text-slate-800 text-sm mb-1.5 block'
 const inputClass =
@@ -263,6 +264,7 @@ export function ProductForm({ product }: { product?: Product }) {
           area: product.area ?? '',
           family: product.family ?? '',
           model: product.model ?? '',
+          description: product.description ?? '',
         }
       : EMPTY_FIELDS,
   )
@@ -318,6 +320,7 @@ export function ProductForm({ product }: { product?: Product }) {
       area: fields.area.trim() || undefined,
       family: fields.family.trim() || undefined,
       model: fields.model.trim() || undefined,
+      description: fields.description.trim() || undefined,
       customProps: customProps
         .map((prop) => ({ key: prop.key.trim(), value: prop.value.trim() }))
         .filter((prop) => prop.key.length > 0 || prop.value.length > 0),
@@ -382,6 +385,19 @@ export function ProductForm({ product }: { product?: Product }) {
             onChange={setField('model')}
             placeholder="Descripción o presentación…"
             className={inputClass}
+          />
+        </div>
+        <div>
+          <label htmlFor="product-description" className={labelClass}>
+            Descripción
+          </label>
+          <textarea
+            id="product-description"
+            value={fields.description}
+            onChange={setField('description')}
+            placeholder="Descripción del producto…"
+            rows={3}
+            className={`${inputClass} resize-y`}
           />
         </div>
         <div>

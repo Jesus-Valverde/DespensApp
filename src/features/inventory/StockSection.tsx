@@ -22,6 +22,30 @@ const PILL_CLASSES: Record<StockTone, { pill: string; dot: string }> = {
 const PLACE_PATH =
   'M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0z M12 10h.01'
 
+const EDIT_PATH = 'M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'
+
+const BELL_PATH =
+  'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'
+
+function Glyph({ d, className = 'h-5 w-5' }: { d: string; className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      {d.split(' M').map((segment, index) => (
+        <path key={index} d={index === 0 ? segment : `M${segment}`} />
+      ))}
+    </svg>
+  )
+}
+
 interface StockFormValue {
   current: string
   min: string
@@ -77,17 +101,31 @@ export function StockSection({
 
   const state = stockState(product.stock)
   const tone = PILL_CLASSES[state.tone]
+  // Reminder status rides on the purchase period configured in the Compra tab.
+  const reminder = product.purchase.period != null
 
   return (
     <section
       aria-label="Stock"
       className="space-y-4 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm"
     >
-      <div className="flex items-center justify-between">
-        <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${tone.pill}`}>
-          <span className={`inline-block h-2 w-2 rounded-full ${tone.dot}`} />
-          {state.label}
-        </span>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${tone.pill}`}>
+            <span className={`inline-block h-2 w-2 rounded-full ${tone.dot}`} />
+            {state.label}
+          </span>
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${
+              reminder
+                ? 'border-blue-200/80 bg-blue-50 text-blue-700'
+                : 'border-slate-200 bg-slate-50 text-slate-500'
+            }`}
+          >
+            <Glyph d={BELL_PATH} className="h-3 w-3" />
+            {reminder ? 'Recordatorio activo' : 'Sin recordatorio'}
+          </span>
+        </div>
         {product.stock.location && (
           <span className="flex items-center gap-1 text-xs font-medium text-slate-500">
             <svg
@@ -118,6 +156,7 @@ export function StockSection({
             onClick={() => setEditing((value) => !value)}
             className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
           >
+            <Glyph d={EDIT_PATH} className="h-3 w-3" />
             {editing ? 'Cerrar niveles' : 'Editar niveles'}
           </button>
         </div>
@@ -142,6 +181,7 @@ export function StockSection({
         onClick={onRegister}
         className="flex w-full items-center justify-center gap-2 rounded-full border-2 border-blue-600 px-4 py-3 text-sm font-semibold text-blue-600 shadow-sm transition hover:bg-blue-50/50 active:scale-95"
       >
+        <Glyph d={EDIT_PATH} className="h-4 w-4" />
         Registrar movimiento
       </button>
 

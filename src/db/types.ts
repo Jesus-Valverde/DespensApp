@@ -40,6 +40,7 @@ export interface Product {
   /** Variant family, e.g. "Leche" groups Lala/Nutri/Alpura products. */
   family?: string
   model?: string
+  description?: string
   image?: Blob
   /** Chosen visual: pantry icon key (see lib/icons) and its background tone. */
   iconKey?: string
