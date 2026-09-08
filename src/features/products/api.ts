@@ -14,6 +14,8 @@ export interface ProductDatos {
   family?: string
   model?: string
   image?: Blob
+  iconKey?: string
+  iconTone?: string
   customProps: CustomProp[]
 }
 
@@ -36,10 +38,14 @@ function validateCustomProps(props: CustomProp[]): CustomProp[] {
 
 function validateDatos(datos: ProductDatos): ProductDatos {
   const family = datos.family?.trim()
+  const iconKey = datos.iconKey?.trim()
   return {
     ...datos,
     title: requireTitle(datos.title),
     family: family || undefined,
+    iconKey: iconKey || undefined,
+    // A tone without an icon is meaningless — drop it.
+    iconTone: iconKey ? datos.iconTone?.trim() || undefined : undefined,
     customProps: validateCustomProps(datos.customProps),
   }
 }
@@ -55,6 +61,8 @@ export async function createProduct(datos: ProductDatos): Promise<number> {
     family: valid.family,
     model: valid.model,
     image: valid.image,
+    iconKey: valid.iconKey,
+    iconTone: valid.iconTone,
     customProps: valid.customProps,
     stock: { current: 0, min: null, max: null },
     purchase: { secondarySupplierIds: [], links: [], period: null },

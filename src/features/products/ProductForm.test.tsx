@@ -92,12 +92,49 @@ describe('ProductForm', () => {
     )
 
     const file = new File(['huge-photo'], 'foto.png', { type: 'image/png' })
-    await user.upload(screen.getByLabelText('Imagen'), file)
+    await user.upload(screen.getByLabelText(/Toca para agregar imagen/), file)
 
     const img = await screen.findByRole('img')
     expect(img).toHaveAttribute('src', 'blob:preview-1')
     const { downscaleImage } = await import('../../lib/image')
     expect(downscaleImage).toHaveBeenCalledWith(expect.any(Blob))
     expect(screen.getByRole('button', { name: 'Quitar imagen' })).toBeInTheDocument()
+  })
+
+  it('saves a picked icon and tone from the icon picker', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <ProductForm />
+      </MemoryRouter>,
+    )
+
+    await user.type(screen.getByLabelText('Nombre'), 'Leche entera')
+    await user.click(screen.getByRole('button', { name: 'Ícono' }))
+    await user.type(screen.getByLabelText('Buscar ícono'), 'láct')
+    await user.click(screen.getByRole('button', { name: 'Lácteos' }))
+    await user.click(screen.getByRole('button', { name: 'Verde menta' }))
+    await user.click(screen.getByRole('button', { name: 'Guardar' }))
+
+    await waitFor(async () => expect(await db.products.count()).toBe(1))
+    expect(await db.products.toCollection().first()).toMatchObject({
+      title: 'Leche entera',
+      iconKey: 'lacteos',
+      iconTone: 'menta',
+    })
+  })
+
+  it('filters the icon grid by search text', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter>
+        <ProductForm />
+      </MemoryRouter>,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Ícono' }))
+    await user.type(screen.getByLabelText('Buscar ícono'), 'pan')
+    expect(screen.getByRole('button', { name: 'Pan' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Lácteos' })).not.toBeInTheDocument()
   })
 })

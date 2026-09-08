@@ -4,6 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
 import type { Product } from '../../db/types'
 import { useObjectUrl } from '../../lib/useObjectUrl'
+import { iconPath, toneClasses } from '../../lib/icons'
 
 // Deterministic soft tones so catalog rows feel varied like the Stitch design.
 const ICON_TONES = [
@@ -32,6 +33,14 @@ function CatalogCard({ product }: { product: Product }) {
       <Link to={`/products/${product.id}`} className="flex min-w-0 flex-1 items-center">
         {imageUrl ? (
           <img src={imageUrl} alt="" className="h-12 w-12 flex-shrink-0 rounded-xl object-cover" />
+        ) : product.iconKey ? (
+          <span
+            className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${toneClasses(product.iconTone)}`}
+          >
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d={iconPath(product.iconKey)} />
+            </svg>
+          </span>
         ) : (
           <span
             className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${toneFor(product.title)}`}

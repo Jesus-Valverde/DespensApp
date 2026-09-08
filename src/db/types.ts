@@ -41,6 +41,9 @@ export interface Product {
   family?: string
   model?: string
   image?: Blob
+  /** Chosen visual: pantry icon key (see lib/icons) and its background tone. */
+  iconKey?: string
+  iconTone?: string
   customProps: CustomProp[]
   stock: ProductStock
   purchase: ProductPurchase

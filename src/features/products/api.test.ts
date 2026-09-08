@@ -278,3 +278,30 @@ describe('family (variant grouping, e.g. "Leche" for Lala/Nutri)', () => {
     expect(distinctFamilies(products)).toEqual(['Aguas', 'Leche'])
   })
 })
+
+describe('product icon', () => {
+  it('persists iconKey and iconTone on create', async () => {
+    const id = await createProduct({ title: 'Leche Lala', iconKey: 'lacteos', iconTone: 'menta', customProps: [] })
+    expect(await getProduct(id)).toMatchObject({ iconKey: 'lacteos', iconTone: 'menta' })
+  })
+
+  it('blank icon fields are normalized to undefined', async () => {
+    const id = await createProduct({ title: 'Atún', iconKey: '   ', customProps: [] })
+    expect(await getProduct(id)).toMatchObject({ iconKey: undefined, iconTone: undefined })
+  })
+
+  it('update can set and clear the icon', async () => {
+    const id = await createProduct({ title: 'Café', customProps: [] })
+    await updateProduct(id, { title: 'Café', iconKey: 'cafe', iconTone: 'ambar', customProps: [] })
+    expect(await getProduct(id)).toMatchObject({ iconKey: 'cafe', iconTone: 'ambar' })
+
+    await updateProduct(id, { title: 'Café', customProps: [] })
+    expect(await getProduct(id)).toMatchObject({ iconKey: undefined, iconTone: undefined })
+  })
+
+  it('duplicate copies the icon', async () => {
+    const id = await createProduct({ title: 'Leche', iconKey: 'lacteos', iconTone: 'azul', customProps: [] })
+    const copyId = await duplicateProduct(id)
+    expect(await getProduct(copyId)).toMatchObject({ iconKey: 'lacteos', iconTone: 'azul' })
+  })
+})

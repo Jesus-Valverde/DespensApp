@@ -4,6 +4,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
 import type { Product } from '../../db/types'
 import { useObjectUrl } from '../../lib/useObjectUrl'
+import { iconPath, toneClasses } from '../../lib/icons'
 import { stockState } from '../inventory/StockSection'
 import { distinctAreas } from '../products/api'
 
@@ -30,6 +31,12 @@ function PantryCard({ product }: { product: Product }) {
           alt=""
           className="h-12 w-12 flex-shrink-0 rounded-xl object-cover"
         />
+      ) : product.iconKey ? (
+        <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${toneClasses(product.iconTone)}`}>
+          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d={iconPath(product.iconKey)} />
+          </svg>
+        </div>
       ) : (
         <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50 text-slate-300">
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
