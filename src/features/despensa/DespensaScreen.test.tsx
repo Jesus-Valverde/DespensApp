@@ -47,7 +47,7 @@ describe('DespensaScreen', () => {
     expect(await screen.findByText('Leche Lala')).toBeInTheDocument()
     expect(screen.getByText('Arroz')).toBeInTheDocument()
     expect(screen.getByText('Sin stock')).toBeInTheDocument()
-    expect(screen.getByText('En rango')).toBeInTheDocument()
+    expect(screen.getByText('En inventario')).toBeInTheDocument()
     expect(screen.getByText(/2 Artículos/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Catálogo/ })).toHaveAttribute('href', '/products')
   })

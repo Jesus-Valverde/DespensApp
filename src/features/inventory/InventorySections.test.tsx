@@ -28,13 +28,13 @@ describe('stockState (pure)', () => {
     expect(stockState({ current: 1, min: 2, max: 12 }).label).toBe('Bajo mínimo')
     expect(stockState({ current: 2, min: 2, max: 12 }).label).toBe('Bajo mínimo')
     expect(stockState({ current: 13, min: 2, max: 12 }).label).toBe('Sobre máximo')
-    expect(stockState({ current: 6, min: 2, max: 12 }).label).toBe('En rango')
-    expect(stockState({ current: 3, min: null, max: null }).label).toBe('En rango')
+    expect(stockState({ current: 6, min: 2, max: 12 }).label).toBe('En inventario')
+    expect(stockState({ current: 3, min: null, max: null }).label).toBe('En inventario')
   })
 })
 
 describe('inventory sections on ProductDetail', () => {
-  it('shows stock levels, location and a low-stock state, and the bitácora without edit/delete controls', async () => {
+  it('shows the stock state, location and the bitácora without edit/delete controls', async () => {
     const id = await createProduct({ title: 'Leche entera', customProps: [] })
     await setStock(id, { current: 1, min: 2, max: 12, location: 'refri' })
     await registerMovement(id, { type: 'entrada', qty: 1 })
@@ -42,7 +42,7 @@ describe('inventory sections on ProductDetail', () => {
     renderDetail(id)
 
     expect(await screen.findByText('Bajo mínimo')).toBeInTheDocument()
-    expect(screen.getByText('Existencias: 2 · Mínimo: 2 · Máximo: 12 · refri')).toBeInTheDocument()
+    expect(screen.getByText('refri')).toBeInTheDocument()
 
     const bitacora = screen.getByRole('region', { name: 'Bitácora' })
     const rows = await within(bitacora).findAllByRole('listitem')
@@ -59,8 +59,9 @@ describe('inventory sections on ProductDetail', () => {
     await setStock(id, { current: 6, min: null, max: null })
 
     renderDetail(id)
-    await screen.findByText(/Existencias: 6/)
+    await screen.findByText(/unidades/)
 
+    await user.click(screen.getByRole('button', { name: 'Editar niveles' }))
     await user.clear(screen.getByLabelText('Mínimo'))
     await user.type(screen.getByLabelText('Mínimo'), '8')
     await user.clear(screen.getByLabelText('Máximo'))
@@ -72,18 +73,21 @@ describe('inventory sections on ProductDetail', () => {
     expect((await db.products.get(id))?.stock.min).toBeNull()
   })
 
-  it('registers an entrada and updates the displayed stock', async () => {
+  it('registers an entrada from the movement modal and updates the displayed stock', async () => {
     const user = userEvent.setup()
     const id = await createProduct({ title: 'Leche entera', customProps: [] })
     await setStock(id, { current: 4, min: null, max: null })
 
     renderDetail(id)
-    await screen.findByText(/Existencias: 4/)
+    await screen.findByText(/unidades/)
 
-    await user.type(screen.getByLabelText('Cantidad'), '6')
-    await user.click(screen.getByRole('button', { name: 'Registrar' }))
+    await user.click(screen.getByRole('button', { name: 'Registrar movimiento' }))
+    const dialog = screen.getByRole('dialog', { name: 'Registrar movimiento' })
+    await user.type(within(dialog).getByLabelText('Cantidad'), '6')
+    await user.click(within(dialog).getByRole('button', { name: 'Guardar' }))
 
-    expect(await screen.findByText(/Existencias: 10/)).toBeInTheDocument()
+    const stock = screen.getByRole('region', { name: 'Stock' })
+    expect(await within(stock).findByText('10')).toBeInTheDocument()
     const bitacora = screen.getByRole('region', { name: 'Bitácora' })
     expect(within(bitacora).getByText('Entrada +6 → 10')).toBeInTheDocument()
   })
@@ -94,13 +98,16 @@ describe('inventory sections on ProductDetail', () => {
     await setStock(id, { current: 4, min: null, max: null })
 
     renderDetail(id)
-    await screen.findByText(/Existencias: 4/)
+    await screen.findByText(/unidades/)
 
-    await user.selectOptions(screen.getByLabelText('Tipo de movimiento'), 'ajuste')
-    await user.type(screen.getByLabelText('Cantidad resultante'), '9')
-    await user.click(screen.getByRole('button', { name: 'Registrar' }))
+    await user.click(screen.getByRole('button', { name: 'Registrar movimiento' }))
+    const dialog = screen.getByRole('dialog', { name: 'Registrar movimiento' })
+    await user.click(within(dialog).getByLabelText('Ajuste'))
+    await user.type(within(dialog).getByLabelText('Cantidad resultante'), '9')
+    await user.click(within(dialog).getByRole('button', { name: 'Guardar' }))
 
-    expect(await screen.findByText(/Existencias: 9/)).toBeInTheDocument()
+    const stock = screen.getByRole('region', { name: 'Stock' })
+    expect(await within(stock).findByText('9')).toBeInTheDocument()
     const bitacora = screen.getByRole('region', { name: 'Bitácora' })
     expect(within(bitacora).getByText('Ajuste +5 → 9')).toBeInTheDocument()
   })
@@ -111,15 +118,18 @@ describe('inventory sections on ProductDetail', () => {
     await setStock(id, { current: 2, min: null, max: null })
 
     renderDetail(id)
-    await screen.findByText(/Existencias: 2/)
+    await screen.findByText(/unidades/)
 
-    await user.selectOptions(screen.getByLabelText('Tipo de movimiento'), 'salida')
-    await user.type(screen.getByLabelText('Cantidad'), '5')
-    await user.click(screen.getByRole('button', { name: 'Registrar' }))
+    await user.click(screen.getByRole('button', { name: 'Registrar movimiento' }))
+    const dialog = screen.getByRole('dialog', { name: 'Registrar movimiento' })
+    await user.click(within(dialog).getByLabelText('Salida'))
+    await user.type(within(dialog).getByLabelText('Cantidad'), '5')
+    await user.click(within(dialog).getByRole('button', { name: 'Guardar' }))
 
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent('La salida no puede ser mayor que el stock actual')
-    expect(screen.getByText(/Existencias: 2/)).toBeInTheDocument()
+    const stock = screen.getByRole('region', { name: 'Stock' })
+    expect(within(stock).getByText('2')).toBeInTheDocument()
     expect(await db.movements.where('productId').equals(id).count()).toBe(0)
   })
 
@@ -132,7 +142,7 @@ describe('inventory sections on ProductDetail', () => {
     ])
 
     renderDetail(id)
-    await screen.findByText(/Existencias: 4/)
+    await screen.findByText('Leche entera')
 
     const rows = await within(screen.getByRole('region', { name: 'Bitácora' })).findAllByRole('listitem')
     expect(rows).toHaveLength(2)

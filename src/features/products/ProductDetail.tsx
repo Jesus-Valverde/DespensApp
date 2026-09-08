@@ -6,8 +6,9 @@ import type { CustomProp } from '../../db/types'
 import { iconPath, toneClasses } from '../../lib/icons'
 import { useObjectUrl } from '../../lib/useObjectUrl'
 import { StockSection } from '../inventory/StockSection'
-import { MovementForm } from '../inventory/MovementForm'
-import { BitacoraList } from '../inventory/BitacoraList'
+import { MovementModal } from '../inventory/MovementForm'
+import { BitacoraList, describeMovement } from '../inventory/BitacoraList'
+import { getMovements } from '../inventory/api'
 import { PurchaseSection } from '../purchase/PurchaseSection'
 import { deleteProduct, duplicateProduct, updateProduct } from './api'
 
@@ -132,6 +133,7 @@ export function ProductDetail() {
   // custom props being edited (saved in one shot via updateProduct).
   const [propsDraft, setPropsDraft] = useState<CustomProp[] | null>(null)
   const [propsError, setPropsError] = useState('')
+  const [movementOpen, setMovementOpen] = useState(false)
 
   if (!product) return <p className="mt-4 text-sm text-slate-500">Cargando…</p>
 
@@ -357,8 +359,8 @@ export function ProductDetail() {
         </div>
 
         <div className={activeTab === 'stock' ? 'space-y-4' : 'hidden'}>
-          <StockSection product={current} />
-          <MovementForm productId={current.id!} />
+          <StockSection product={current} onRegister={() => setMovementOpen(true)} />
+          <RecentMovements productId={current.id!} onSeeAll={() => setActiveTab('historial')} />
         </div>
 
         <div className={activeTab === 'historial' ? 'space-y-4' : 'hidden'}>
@@ -488,6 +490,72 @@ export function ProductDetail() {
           </div>
         </div>
       )}
+      {movementOpen && (
+        <MovementModal productId={current.id!} onClose={() => setMovementOpen(false)} />
+      )}
     </section>
+  )
+}
+
+const recentDateFormatter = new Intl.DateTimeFormat('es-MX', { day: 'numeric', month: 'short' })
+
+/** Compact "Últimos movimientos" card for the Stock tab; the full log lives in
+ * the Historial tab ("Ver todos"). */
+function RecentMovements({
+  productId,
+  onSeeAll,
+}: {
+  productId: number
+  onSeeAll: () => void
+}) {
+  const movements = useLiveQuery(() => getMovements(productId), [productId]) ?? []
+  const latest = movements.slice(0, 3)
+
+  return (
+    <div className="space-y-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+        <div className="flex items-center gap-2">
+          <Glyph d={GLYPHS.historial} className="h-5 w-5 text-emerald-600" />
+          <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">
+            Últimos movimientos
+          </h4>
+        </div>
+        <button type="button" onClick={onSeeAll} className="text-[11px] font-semibold text-blue-600">
+          Ver todos
+        </button>
+      </div>
+      {latest.length === 0 ? (
+        <p className="pt-1 text-xs text-slate-400">Sin movimientos todavía.</p>
+      ) : (
+        <div className="space-y-2.5 pt-1">
+          {latest.map((movement) => (
+            <div
+              key={movement.id}
+              className="flex items-center justify-between border-b border-slate-50 py-1 text-xs last:border-0"
+            >
+              <div className="flex items-center gap-2">
+                <span
+                  className={`flex h-6 w-6 items-center justify-center rounded-lg text-xs font-bold ${
+                    movement.delta >= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'
+                  }`}
+                >
+                  {movement.delta >= 0 ? '+' : '−'}
+                </span>
+                <div>
+                  <p className="font-semibold text-slate-800">{describeMovement(movement)}</p>
+                  <p className="text-[10px] text-slate-400">
+                    {recentDateFormatter.format(new Date(movement.date))}
+                    {movement.note ? ` · ${movement.note}` : ''}
+                  </p>
+                </div>
+              </div>
+              <span className="font-mono text-xs font-bold text-slate-700">
+                {movement.resultingQty} disp.
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
