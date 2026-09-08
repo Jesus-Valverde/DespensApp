@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { ProductDetail } from './ProductDetail'
@@ -104,5 +104,42 @@ describe('ProductDetail', () => {
     await screen.findByText(/Sin productos/i)
     expect(await db.products.count()).toBe(0)
     expect(await db.movements.count()).toBe(0)
+  })
+
+  it('edits custom properties from the modal and persists them', async () => {
+    const user = userEvent.setup()
+    const id = await createProduct({
+      title: 'Detergente',
+      customProps: [{ key: 'Pagar con tarjeta', value: 'sí' }],
+    })
+
+    renderAt(`/products/${id}`)
+    await user.click(await screen.findByRole('button', { name: 'Editar propiedades' }))
+
+    const dialog = screen.getByRole('dialog', { name: 'Editar propiedades' })
+    await user.clear(within(dialog).getByLabelText('Valor'))
+    await user.type(within(dialog).getByLabelText('Valor'), 'no')
+    await user.click(within(dialog).getByRole('button', { name: 'Guardar cambios' }))
+
+    await waitFor(async () => {
+      const stored = await db.products.get(id)
+      expect(stored?.customProps[0]).toEqual({ key: 'Pagar con tarjeta', value: 'no' })
+    })
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('shows a Spanish error when saving a property without a name', async () => {
+    const user = userEvent.setup()
+    const id = await createProduct({ title: 'Detergente', customProps: [] })
+
+    renderAt(`/products/${id}`)
+    await user.click(await screen.findByRole('button', { name: 'Editar propiedades' }))
+
+    const dialog = screen.getByRole('dialog', { name: 'Editar propiedades' })
+    await user.click(within(dialog).getByRole('button', { name: 'Agregar propiedad' }))
+    await user.click(within(dialog).getByRole('button', { name: 'Guardar cambios' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('La propiedad debe tener un nombre')
+    expect((await db.products.get(id))?.customProps).toHaveLength(0)
   })
 })

@@ -1,14 +1,15 @@
-import { useState, type ReactNode } from 'react'
+import { useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
+import type { CustomProp } from '../../db/types'
 import { iconPath, toneClasses } from '../../lib/icons'
 import { useObjectUrl } from '../../lib/useObjectUrl'
 import { StockSection } from '../inventory/StockSection'
 import { MovementForm } from '../inventory/MovementForm'
 import { BitacoraList } from '../inventory/BitacoraList'
 import { PurchaseSection } from '../purchase/PurchaseSection'
-import { deleteProduct, duplicateProduct } from './api'
+import { deleteProduct, duplicateProduct, updateProduct } from './api'
 
 // Inline stroke glyphs (24x24) standing in for the design's Material Symbols
 // font, which the app does not load.
@@ -25,6 +26,8 @@ const GLYPHS = {
   copiar: 'M8 8h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2',
   eliminar: 'M3 6h18 M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6 M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2',
   lugar: 'M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0z M12 10h.01',
+  cerrar: 'M18 6 6 18 M6 6l12 12',
+  mas: 'M5 12h14 M12 5v14',
 }
 
 function Glyph({ d, className = 'h-5 w-5' }: { d: string; className?: string }) {
@@ -125,6 +128,10 @@ export function ProductDetail() {
   const imageUrl = useObjectUrl(product?.image)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState<TabKey>('datos')
+  // "Editar propiedades" modal: null = closed; otherwise a working copy of the
+  // custom props being edited (saved in one shot via updateProduct).
+  const [propsDraft, setPropsDraft] = useState<CustomProp[] | null>(null)
+  const [propsError, setPropsError] = useState('')
 
   if (!product) return <p className="mt-4 text-sm text-slate-500">Cargando…</p>
 
@@ -148,6 +155,45 @@ export function ProductDetail() {
       navigate('/products')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo eliminar el producto')
+    }
+  }
+
+  function openPropsModal() {
+    setPropsDraft(current.customProps.map((prop) => ({ ...prop })))
+    setPropsError('')
+  }
+
+  function setPropField(index: number, field: keyof CustomProp) {
+    return (event: { target: { value: string } }) =>
+      setPropsDraft((draft) =>
+        draft?.map((prop, i) => (i === index ? { ...prop, [field]: event.target.value } : prop)) ?? null,
+      )
+  }
+
+  function removePropRow(index: number) {
+    setPropsDraft((draft) => draft?.filter((_, i) => i !== index) ?? null)
+  }
+
+  async function handleSaveProps(event: FormEvent) {
+    event.preventDefault()
+    setPropsError('')
+    try {
+      // The modal only owns customProps; the rest is passed through untouched.
+      await updateProduct(current.id!, {
+        title: current.title,
+        brand: current.brand,
+        contentSize: current.contentSize,
+        area: current.area,
+        family: current.family,
+        model: current.model,
+        image: current.image,
+        iconKey: current.iconKey,
+        iconTone: current.iconTone,
+        customProps: (propsDraft ?? []).map((prop) => ({ key: prop.key.trim(), value: prop.value.trim() })),
+      })
+      setPropsDraft(null)
+    } catch (err) {
+      setPropsError(err instanceof Error ? err.message : 'No se pudieron guardar las propiedades')
     }
   }
 
@@ -299,9 +345,14 @@ export function ProductDetail() {
           <div className="space-y-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
             <CardHeader title="Propiedades personalizadas" glyph={GLYPHS.tune} />
             {customRows.length > 0 && <KeyValueRows rows={customRows} />}
-            <OutlineAction glyph={GLYPHS.editar} to={`/products/${current.id}/edit`}>
+            <button
+              type="button"
+              onClick={openPropsModal}
+              className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-blue-600 px-3 py-2.5 text-xs font-semibold text-blue-600 transition hover:bg-blue-50 active:scale-95"
+            >
+              <Glyph d={GLYPHS.editar} className="h-3.5 w-3.5" />
               Editar propiedades
-            </OutlineAction>
+            </button>
           </div>
         </div>
 
@@ -318,6 +369,125 @@ export function ProductDetail() {
           <PurchaseSection product={current} />
         </div>
       </div>
+
+      {propsDraft !== null && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Editar propiedades"
+          className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/60 p-4 backdrop-blur-sm sm:items-center"
+        >
+          <div className="w-full max-w-sm space-y-4 rounded-3xl border border-slate-100 bg-white p-5 shadow-2xl">
+            <div className="flex items-start justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-start gap-2.5">
+                <span className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm">
+                  <Glyph d={GLYPHS.tune} className="h-5 w-5" />
+                </span>
+                <div>
+                  <h3 className="text-base font-bold leading-snug text-slate-800">Editar propiedades</h3>
+                  <p className="mt-0.5 text-[11px] font-medium leading-tight text-slate-500">
+                    Personaliza campos adicionales para {current.title}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                aria-label="Cerrar"
+                onClick={() => setPropsDraft(null)}
+                className="flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200"
+              >
+                <Glyph d={GLYPHS.cerrar} className="h-4 w-4" />
+              </button>
+            </div>
+
+            <form className="space-y-3.5" onSubmit={handleSaveProps}>
+              <div className="max-h-[50vh] space-y-2.5 overflow-y-auto pr-0.5">
+                {propsDraft.map((prop, index) => (
+                  <div
+                    key={index}
+                    className="space-y-2 rounded-2xl border border-slate-200 bg-slate-50 p-3"
+                  >
+                    <div className="flex items-end justify-between gap-2">
+                      <div className="flex-1">
+                        <label
+                          htmlFor={`prop-key-${index}`}
+                          className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500"
+                        >
+                          Nombre de la propiedad
+                        </label>
+                        <input
+                          id={`prop-key-${index}`}
+                          type="text"
+                          value={prop.key}
+                          onChange={setPropField(index, 'key')}
+                          className="w-full rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-semibold text-slate-800 outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        title="Eliminar propiedad"
+                        aria-label={`Eliminar propiedad ${prop.key || index + 1}`}
+                        onClick={() => removePropRow(index)}
+                        className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-red-200/80 bg-red-50 text-red-500 transition hover:bg-red-100"
+                      >
+                        <Glyph d={GLYPHS.eliminar} className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`prop-value-${index}`}
+                        className="mb-1 block text-[10px] font-bold uppercase tracking-wider text-slate-500"
+                      >
+                        Valor
+                      </label>
+                      <input
+                        id={`prop-value-${index}`}
+                        type="text"
+                        value={prop.value}
+                        onChange={setPropField(index, 'value')}
+                        className="w-full rounded-xl border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-800 outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setPropsDraft((draft) => [...(draft ?? []), { key: '', value: '' }])
+                }
+                className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-blue-600 bg-blue-50/50 px-3 py-2.5 text-xs font-semibold text-blue-600 transition hover:bg-blue-50"
+              >
+                <Glyph d={GLYPHS.mas} className="h-4 w-4" />
+                Agregar propiedad
+              </button>
+
+              {propsError && (
+                <p role="alert" className="text-sm text-red-600">
+                  {propsError}
+                </p>
+              )}
+
+              <div className="flex items-center gap-2.5 border-t border-slate-100 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setPropsDraft(null)}
+                  className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 rounded-xl bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-700 active:scale-95"
+                >
+                  Guardar cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
