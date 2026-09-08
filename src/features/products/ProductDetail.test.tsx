@@ -44,7 +44,8 @@ describe('ProductDetail', () => {
     renderAt(`/products/${id}`)
 
     expect(await screen.findByRole('heading', { level: 1, name: 'Detergente' })).toBeInTheDocument()
-    expect(screen.getByText('Ace')).toBeInTheDocument()
+    // The design shows the brand in the hero subtitle and again in the Marca row.
+    expect(screen.getAllByText('Ace').length).toBeGreaterThan(0)
     expect(screen.getByText('1 L')).toBeInTheDocument()
     expect(screen.getByText('Lavandería')).toBeInTheDocument()
     expect(screen.getByText('Pagar con tarjeta')).toBeInTheDocument()

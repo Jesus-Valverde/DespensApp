@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
@@ -15,17 +15,17 @@ import { deleteProduct, duplicateProduct } from './api'
 // font, which the app does not load.
 const GLYPHS = {
   datos: 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4',
+  tune: 'M6 4v6m0 4v6m6-16v10m0 4v2m6-16v2m0 4v10 M4 10h4 M10 14h4 M16 6h4',
   stock:
     'M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z M22 17.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65 M22 12.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65',
   historial: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8 M3 3v5h5 M12 7v5l4 2',
   compra:
-    'M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12 M9 21a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm10 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z',
-  propiedades: 'M3 17l2 2 4-4 M3 7l2 2 4-4 M13 6h8 M13 12h8 M13 18h8',
+    'M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z M3 6h18 M16 10a4 4 0 0 1-8 0',
   tag: 'M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z M7.5 7.5h.01',
   editar: 'M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z',
   copiar: 'M8 8h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2z M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2',
   eliminar: 'M3 6h18 M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6 M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2',
-  mas: 'M5 12h14 M12 5v14',
+  lugar: 'M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0z M12 10h.01',
 }
 
 function Glyph({ d, className = 'h-5 w-5' }: { d: string; className?: string }) {
@@ -49,50 +49,72 @@ function Glyph({ d, className = 'h-5 w-5' }: { d: string; className?: string }) 
 
 type TabKey = 'datos' | 'stock' | 'historial' | 'compra'
 
-const TAB_TINTS = {
-  blue: { on: 'bg-blue-600 text-white shadow-md shadow-blue-500/30', off: 'bg-blue-50 text-blue-600' },
-  emerald: {
-    on: 'bg-emerald-600 text-white shadow-md shadow-emerald-500/30',
-    off: 'bg-emerald-50 text-emerald-600',
+const TAB_STYLES: Record<TabKey, { on: string; off: string; iconOff: string }> = {
+  datos: {
+    on: 'bg-blue-600 border-2 border-white text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-600 ring-offset-2 ring-offset-blue-100',
+    off: 'bg-blue-50 border border-blue-100',
+    iconOff: 'text-blue-600',
   },
-  violet: {
-    on: 'bg-violet-600 text-white shadow-md shadow-violet-500/30',
-    off: 'bg-violet-50 text-violet-600',
+  stock: {
+    on: 'bg-emerald-600 border-2 border-white text-white shadow-md shadow-emerald-500/25 ring-2 ring-emerald-600 ring-offset-2 ring-offset-emerald-100',
+    off: 'bg-emerald-50 border border-emerald-100',
+    iconOff: 'text-emerald-600',
   },
-  amber: { on: 'bg-amber-500 text-white shadow-md shadow-amber-500/30', off: 'bg-amber-50 text-amber-600' },
-} as const
+  historial: {
+    on: 'bg-violet-600 border-2 border-white text-white shadow-md shadow-violet-500/25 ring-2 ring-violet-600 ring-offset-2 ring-offset-violet-100',
+    off: 'bg-violet-50 border border-violet-100',
+    iconOff: 'text-violet-600',
+  },
+  compra: {
+    on: 'bg-amber-500 border-2 border-white text-white shadow-md shadow-amber-500/25 ring-2 ring-amber-500 ring-offset-2 ring-offset-amber-100',
+    off: 'bg-amber-50 border border-amber-100',
+    iconOff: 'text-amber-600',
+  },
+}
 
-const TABS: { key: TabKey; label: string; glyph: string; tint: keyof typeof TAB_TINTS }[] = [
-  { key: 'datos', label: 'Datos', glyph: GLYPHS.datos, tint: 'blue' },
-  { key: 'stock', label: 'Stock', glyph: GLYPHS.stock, tint: 'emerald' },
-  { key: 'historial', label: 'Historial', glyph: GLYPHS.historial, tint: 'violet' },
-  { key: 'compra', label: 'Compra', glyph: GLYPHS.compra, tint: 'amber' },
+const TABS: { key: TabKey; label: string; glyph: string; subtitle: string }[] = [
+  { key: 'datos', label: 'Datos', glyph: GLYPHS.tune, subtitle: 'Ficha' },
+  { key: 'stock', label: 'Stock', glyph: GLYPHS.stock, subtitle: 'disp.' },
+  { key: 'compra', label: 'Compra', glyph: GLYPHS.compra, subtitle: 'Precios' },
+  // The Stitch design omits it, but the bitácora is core: keep a Historial tab.
+  { key: 'historial', label: 'Historial', glyph: GLYPHS.historial, subtitle: 'Bitácora' },
 ]
 
-function CardHeader({ title, glyph, chipClass }: { title: string; glyph: string; chipClass: string }) {
+function CardHeader({ title, glyph }: { title: string; glyph: string }) {
   return (
-    <h2 className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-      <span className={`flex h-7 w-7 items-center justify-center rounded-lg ${chipClass}`}>
-        <Glyph d={glyph} className="h-4 w-4" />
-      </span>
-      {title}
-    </h2>
+    <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+      <Glyph d={glyph} className="h-5 w-5 text-blue-600" />
+      <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">{title}</h4>
+    </div>
   )
 }
 
-function KeyValueRows({ rows }: { rows: [string, string][] }) {
+function KeyValueRows({ rows }: { rows: [string, ReactNode][] }) {
   return (
-    <dl className="mt-2">
+    <div className="space-y-3 pt-3">
       {rows.map(([label, value]) => (
         <div
           key={label}
-          className="flex items-center justify-between gap-4 border-b border-slate-100 py-2.5 last:border-0"
+          className="flex items-center justify-between gap-4 border-b border-slate-100 py-1 last:border-0"
         >
-          <dt className="text-sm text-slate-500">{label}</dt>
-          <dd className="text-right text-sm font-semibold text-slate-800">{value}</dd>
+          <span className="text-sm text-slate-500">{label}</span>
+          <span className="text-right text-sm font-semibold text-slate-800">{value}</span>
         </div>
       ))}
-    </dl>
+    </div>
+  )
+}
+
+/** Full-width outline-blue button styled like the design's card footer actions. */
+function OutlineAction({ glyph, children, to }: { glyph: string; children: ReactNode; to: string }) {
+  return (
+    <Link
+      to={to}
+      className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-blue-600 px-3 py-2.5 text-xs font-semibold text-blue-600 transition hover:bg-blue-50 active:scale-95"
+    >
+      <Glyph d={glyph} className="h-3.5 w-3.5" />
+      {children}
+    </Link>
   )
 }
 
@@ -130,166 +152,172 @@ export function ProductDetail() {
     }
   }
 
-  const datos: [string, string | undefined][] = [
+  const datos: [string, ReactNode | undefined][] = [
+    [
+      'Código / ID',
+      <span key="id" className="rounded-md bg-slate-100 px-2 py-0.5 font-mono text-xs font-semibold">
+        #{current.id}
+      </span>,
+    ],
+    ['Familia', current.family],
     ['Marca', current.brand],
     ['Contenido', current.contentSize],
-    ['Área', current.area],
-    ['Familia', current.family],
-    ['Modelo', current.model],
+    [
+      'Área asignada',
+      current.area && (
+        <span className="flex items-center justify-end gap-1">
+          <Glyph d={GLYPHS.lugar} className="h-3.5 w-3.5 text-slate-400" />
+          {current.area}
+        </span>
+      ),
+    ],
+    ['Modelo / Variante', current.model],
   ]
-  const filledDatos = datos.filter((row): row is [string, string] => Boolean(row[1]))
+  const filledDatos = datos.filter((row): row is [string, ReactNode] => Boolean(row[1]))
   const customRows = current.customProps.map((prop) => [prop.key, prop.value] as [string, string])
 
+  const heroButtonClass =
+    'inline-flex items-center justify-center gap-1.5 rounded-xl bg-slate-50 px-2 py-2.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-100 active:scale-95 border border-slate-200'
+
   return (
-    <section>
+    <section className="space-y-5">
       {error && (
-        <p role="alert" className="mb-3 rounded-xl border border-red-100 bg-red-50 p-3 text-sm text-red-700">
+        <p role="alert" className="rounded-xl border border-red-100 bg-red-50 p-3 text-sm text-red-700">
           {error}
         </p>
       )}
 
-      <div className="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
-        <div className="flex items-start gap-4">
-          {imageUrl ? (
-            <img src={imageUrl} alt={current.title} className="h-24 w-24 shrink-0 rounded-2xl object-cover" />
-          ) : (
-            <div
-              className={`flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl ${
-                current.iconKey ? toneClasses(current.iconTone) : 'bg-gradient-to-tr from-blue-500 to-indigo-600 text-white'
-              }`}
+      <div className="relative flex flex-col items-center rounded-3xl border border-slate-100 bg-white p-5 text-center shadow-sm">
+        {imageUrl ? (
+          <img src={imageUrl} alt={current.title} className="mb-3 h-24 w-24 rounded-3xl object-cover" />
+        ) : (
+          <div
+            className={`mb-3 flex h-24 w-24 items-center justify-center rounded-3xl shadow-lg shadow-blue-500/25 ${
+              current.iconKey ? toneClasses(current.iconTone) : 'bg-gradient-to-tr from-blue-500 to-indigo-600 text-white'
+            }`}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.8}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="h-12 w-12"
+              aria-hidden="true"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.8}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-10 w-10"
-                aria-hidden="true"
-              >
-                <path d={iconPath(current.iconKey)} />
-              </svg>
-              {!current.iconKey && <span className="sr-only">Sin imagen</span>}
-            </div>
-          )}
-          <div className="min-w-0 flex-1">
-            {current.family && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-600">
-                <Glyph d={GLYPHS.tag} className="h-3 w-3" />
-                {current.family}
-              </span>
-            )}
-            <h1 className="mt-1.5 text-2xl font-black tracking-tight text-slate-900">{current.title}</h1>
-            <p className="mt-1 text-xs text-slate-500">
-              {current.brand ? `Marca: ${current.brand} · ` : ''}ID: #{current.id}
-            </p>
+              <path d={iconPath(current.iconKey)} />
+            </svg>
+            {!current.iconKey && <span className="sr-only">Sin imagen</span>}
           </div>
-        </div>
+        )}
 
-        <div className="mt-4 flex gap-2">
-          <Link
-            to={`/products/${current.id}/edit`}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700 transition-all active:scale-95"
-          >
-            <Glyph d={GLYPHS.editar} className="h-3.5 w-3.5" />
-            Editar datos
+        {current.family && (
+          <span className="mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-blue-100/80 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-700">
+            <Glyph d={GLYPHS.tag} className="h-3 w-3" />
+            {current.family}
+          </span>
+        )}
+        <h1 className="text-2xl font-black leading-snug tracking-tight text-slate-900">{current.title}</h1>
+        <p className="mt-1 text-xs font-medium text-slate-400">
+          {current.brand && (
+            <>
+              Marca: <span className="font-semibold text-slate-700">{current.brand}</span> ·{' '}
+            </>
+          )}
+          ID: #{current.id}
+        </p>
+
+        <div className="mt-4 grid w-full grid-cols-3 gap-2 border-t border-slate-100 pt-4">
+          <Link to={`/products/${current.id}/edit`} className={heroButtonClass}>
+            <Glyph d={GLYPHS.editar} className="h-4 w-4 text-slate-500" />
+            Editar
           </Link>
-          <button
-            type="button"
-            onClick={handleDuplicate}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700 transition-all active:scale-95"
-          >
-            <Glyph d={GLYPHS.copiar} className="h-3.5 w-3.5" />
+          <button type="button" onClick={handleDuplicate} className={heroButtonClass}>
+            <Glyph d={GLYPHS.copiar} className="h-4 w-4 text-slate-500" />
             Crear copia
           </button>
           <button
             type="button"
             onClick={handleDelete}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-xs font-semibold text-red-600 transition-all active:scale-95"
+            className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-red-200/80 bg-red-50 px-2 py-2.5 text-xs font-semibold text-red-600 shadow-sm transition hover:bg-red-100/70 active:scale-95"
           >
-            <Glyph d={GLYPHS.eliminar} className="h-3.5 w-3.5" />
+            <Glyph d={GLYPHS.eliminar} className="h-4 w-4 text-red-500" />
             Eliminar
           </button>
         </div>
       </div>
 
-      <nav aria-label="Secciones del producto" className="mt-4 grid grid-cols-4 gap-2.5">
-        {TABS.map((tab) => {
-          const active = tab.key === activeTab
-          const subtitle =
-            tab.key === 'stock'
-              ? `${current.stock.current} disp.`
-              : tab.key === 'compra'
-                ? 'Precios'
-                : tab.key === 'historial'
-                  ? 'Bitácora'
-                  : 'General'
-          return (
-            <button
-              key={tab.key}
-              type="button"
-              aria-pressed={active}
-              onClick={() => setActiveTab(tab.key)}
-              className={`flex flex-col items-center gap-1 rounded-2xl border border-slate-100 p-3 text-center transition-all active:scale-95 ${
-                active ? TAB_TINTS[tab.tint].on : TAB_TINTS[tab.tint].off
-              }`}
-            >
-              <Glyph d={tab.glyph} />
-              <span className="text-xs font-bold">{tab.label}</span>
-              <span className={`text-[10px] ${active ? 'text-white/70' : 'opacity-60'}`}>{subtitle}</span>
-            </button>
-          )
-        })}
-      </nav>
-
-      <div className="mt-2">
-        <div className={activeTab === 'datos' ? '' : 'hidden'}>
-          <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-            <div className="flex items-center justify-between">
-              <CardHeader title="Datos del producto" glyph={GLYPHS.datos} chipClass="bg-blue-50 text-blue-600" />
-              <Link
-                to={`/products/${current.id}/edit`}
-                className="rounded-lg border border-blue-200 px-3 py-1.5 text-xs font-semibold text-blue-600 transition-all active:scale-95"
+      <div>
+        <div className="mb-2.5 flex items-center justify-between px-1">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Secciones</h3>
+          <span className="text-[11px] font-medium text-slate-400">Toca para alternar</span>
+        </div>
+        <nav aria-label="Secciones del producto" className="grid grid-cols-4 gap-2.5">
+          {TABS.map((tab) => {
+            const active = tab.key === activeTab
+            const styles = TAB_STYLES[tab.key]
+            const subtitle = tab.key === 'stock' ? `${current.stock.current} disp.` : tab.subtitle
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                aria-pressed={active}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex flex-col items-center justify-center rounded-2xl p-3 transition active:scale-95 ${
+                  active ? styles.on : styles.off
+                }`}
               >
-                Editar
-              </Link>
-            </div>
+                <Glyph d={tab.glyph} className={`mb-1 h-6 w-6 ${active ? 'text-white' : styles.iconOff}`} />
+                <span
+                  className={`text-xs tracking-tight ${active ? 'font-bold text-white' : 'font-semibold text-slate-800'}`}
+                >
+                  {tab.label}
+                </span>
+                <span className={`mt-0.5 text-[10px] font-medium ${active ? 'text-white/90' : 'text-slate-400'}`}>
+                  {subtitle}
+                </span>
+              </button>
+            )
+          })}
+        </nav>
+      </div>
+
+      <div className="space-y-4">
+        <div className={activeTab === 'datos' ? 'space-y-4' : 'hidden'}>
+          <div className="space-y-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+            <CardHeader title="Datos del producto" glyph={GLYPHS.datos} />
             {filledDatos.length > 0 ? (
               <KeyValueRows rows={filledDatos} />
             ) : (
-              <p className="mt-3 text-sm text-slate-500">Sin datos adicionales.</p>
+              <p className="pt-3 text-sm text-slate-500">Sin datos adicionales.</p>
             )}
+            <OutlineAction glyph={GLYPHS.editar} to={`/products/${current.id}/edit`}>
+              Editar datos
+            </OutlineAction>
           </div>
 
-          <div className="mt-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-            <CardHeader title="Propiedades" glyph={GLYPHS.propiedades} chipClass="bg-emerald-50 text-emerald-600" />
-            {customRows.length > 0 ? (
-              <KeyValueRows rows={customRows} />
-            ) : (
-              <Link
-                to={`/products/${current.id}/edit`}
-                className="mt-3 flex items-center justify-center gap-1.5 rounded-xl border border-dashed border-slate-200 py-3 text-xs font-semibold text-slate-500 transition-all active:scale-95"
-              >
-                <Glyph d={GLYPHS.mas} className="h-4 w-4" />
-                Agregar propiedad
-              </Link>
-            )}
+          <div className="space-y-3 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+            <CardHeader title="Propiedades personalizadas" glyph={GLYPHS.tune} />
+            {customRows.length > 0 && <KeyValueRows rows={customRows} />}
+            <OutlineAction glyph={GLYPHS.editar} to={`/products/${current.id}/edit`}>
+              Editar propiedades
+            </OutlineAction>
           </div>
 
           <ListsSection productId={current.id!} />
         </div>
 
-        <div className={activeTab === 'stock' ? '' : 'hidden'}>
+        <div className={activeTab === 'stock' ? 'space-y-4' : 'hidden'}>
           <StockSection product={current} />
           <MovementForm productId={current.id!} />
         </div>
 
-        <div className={activeTab === 'historial' ? '' : 'hidden'}>
+        <div className={activeTab === 'historial' ? 'space-y-4' : 'hidden'}>
           <BitacoraList productId={current.id!} />
         </div>
 
-        <div className={activeTab === 'compra' ? '' : 'hidden'}>
+        <div className={activeTab === 'compra' ? 'space-y-4' : 'hidden'}>
           <PurchaseSection product={current} />
         </div>
       </div>
