@@ -875,7 +875,7 @@ export function PurchaseSection({ product }: { product: Product }) {
       <div className="space-y-4 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
           <div className="flex items-center gap-2">
-            <Glyph d={GLYPHS.bag} className="text-lg text-amber-600" />
+            <Glyph d={GLYPHS.bag} className="h-5 w-5 text-amber-600" />
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">Información de compra</h4>
           </div>
           <button
@@ -1006,7 +1006,7 @@ export function PurchaseSection({ product }: { product: Product }) {
       <div className="space-y-3.5 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center gap-2">
-            <Glyph d={GLYPHS.bag} className="text-lg text-blue-600" />
+            <Glyph d={GLYPHS.bag} className="h-5 w-5 text-blue-600" />
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700">Listas asignadas (compra)</h4>
           </div>
           <button
