@@ -5,6 +5,7 @@ import { db } from '../../db/db'
 import type { Period, Product, ProductPurchase, Supplier, SupplierLink } from '../../db/types'
 import { savePurchaseInfo, type PurchaseLinkInput } from './api'
 import { addMember, removeMember, createList } from '../lists/api'
+import { AddToCartModal } from '../carts/AddToCartModal'
 import { formatDate } from '../../lib/dates'
 import { formatMoney, parseMoney } from '../../lib/money'
 import { iconPath, toneClasses } from '../../lib/icons'
@@ -1069,6 +1070,7 @@ export function PurchaseSection({ product }: { product: Product }) {
   const [vincularLink, setVincularLink] = useState<SupplierLink | null>(null)
   const [vincularOpen, setVincularOpen] = useState(false)
   const [listsOpen, setListsOpen] = useState(false)
+  const [cartModalOpen, setCartModalOpen] = useState(false)
   const [pickedListId, setPickedListId] = useState('')
   const [listPickerOpen, setListPickerOpen] = useState(false)
   const [listError, setListError] = useState('')
@@ -1222,13 +1224,14 @@ export function PurchaseSection({ product }: { product: Product }) {
           </a>
         )}
 
-        <Link
-          to="/carts/new"
+        <button
+          type="button"
+          onClick={() => setCartModalOpen(true)}
           className="flex w-full items-center justify-center gap-2 rounded-full border-2 border-blue-600 px-4 py-3 text-sm font-semibold text-blue-600 shadow-sm transition hover:bg-blue-50/50 active:scale-95"
         >
           <Glyph d={GLYPHS.cart} className="h-4 w-4" />
           Agregar al carrito
-        </Link>
+        </button>
       </div>
 
       <div className="space-y-3.5 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
@@ -1332,6 +1335,9 @@ export function PurchaseSection({ product }: { product: Product }) {
         />
       )}
       {listsOpen && <ListsModal product={product} onClose={() => setListsOpen(false)} />}
+      {cartModalOpen && (
+        <AddToCartModal product={product} onClose={() => setCartModalOpen(false)} />
+      )}
     </section>
   )
 }

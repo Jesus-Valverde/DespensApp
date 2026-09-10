@@ -5,6 +5,7 @@ import { MemoryRouter, Route, Routes } from 'react-router'
 import { ProductDetail } from '../products/ProductDetail'
 import { db } from '../../db/db'
 import { createProduct } from '../products/api'
+import { createCart } from '../carts/api'
 
 function renderDetail(id: number) {
   render(
@@ -23,7 +24,7 @@ async function seedSuppliers(): Promise<Record<string, number>> {
 }
 
 beforeEach(async () => {
-  await Promise.all([db.products.clear(), db.suppliers.clear()])
+  await Promise.all([db.products.clear(), db.suppliers.clear(), db.carts.clear()])
 })
 
 async function openPurchaseForm(section: HTMLElement) {
@@ -152,6 +153,26 @@ describe('purchase section on ProductDetail', () => {
     })
     expect(purchase?.supplierLinks).toEqual([
       { supplierId: ids.Soriana, price: 2650, frequency: 'mensual', url: undefined, notes: undefined },
+    ])
+  })
+
+  it('adds the product to a chosen active cart from the modal', async () => {
+    const user = userEvent.setup()
+    const id = await createProduct({ title: 'Detergente', customProps: [] })
+    await createCart({ name: 'Carrito Soriana' })
+
+    renderDetail(id)
+    await screen.findByRole('heading', { level: 1, name: 'Detergente' })
+    await user.click(await screen.findByRole('button', { name: 'Agregar al carrito' }))
+
+    const dialog = screen.getByRole('dialog', { name: 'Agregar a carrito' })
+    // The first active cart comes preselected; bump the quantity to 2.
+    await user.click(within(dialog).getByRole('button', { name: 'Aumentar cantidad' }))
+    await user.click(within(dialog).getByRole('button', { name: /Agregar al carrito/ }))
+
+    const cart = (await db.carts.toArray()).find((candidate) => candidate.name === 'Carrito Soriana')
+    expect(cart?.items).toEqual([
+      expect.objectContaining({ productId: id, qty: 2, title: 'Detergente' }),
     ])
   })
 })
