@@ -83,10 +83,8 @@ describe('ProductDetail', () => {
     expect(await db.products.count()).toBe(2)
   })
 
-  it('deletes the product after Spanish confirmation and returns to the list', async () => {
+  it('deletes the product after the confirmation modal and returns to the list', async () => {
     const user = userEvent.setup()
-    const confirmSpy = vi.fn().mockReturnValue(true)
-    vi.stubGlobal('confirm', confirmSpy)
     const id = await createProduct({ title: 'Detergente', customProps: [] })
     await db.movements.add({
       productId: id,
@@ -100,7 +98,10 @@ describe('ProductDetail', () => {
     renderAt(`/products/${id}`)
     await user.click(await screen.findByRole('button', { name: 'Eliminar' }))
 
-    expect(confirmSpy).toHaveBeenCalledWith(expect.stringContaining('Detergente'))
+    const dialog = await screen.findByRole('dialog', { name: 'Eliminar producto' })
+    expect(within(dialog).getByText('Detergente')).toBeInTheDocument()
+    await user.click(within(dialog).getByRole('button', { name: 'Sí, eliminar' }))
+
     await screen.findByText(/Sin productos/i)
     expect(await db.products.count()).toBe(0)
     expect(await db.movements.count()).toBe(0)

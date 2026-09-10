@@ -44,10 +44,10 @@ describe('purchase section on ProductDetail', () => {
     await within(section).findAllByText('Soriana') // wait for the suppliers liveQuery
 
     await user.selectOptions(within(section).getByLabelText('Proveedor principal'), String(ids.Soriana))
-    await user.type(within(section).getByLabelText('Precio original'), '25.50')
-    await user.type(within(section).getByLabelText('Nuevo enlace'), 'https://soriana.com/detergente')
+    await user.type(within(section).getByLabelText('Precio referencia'), '25.50')
+    await user.type(within(section).getByLabelText(/Enlace web/), 'https://soriana.com/detergente')
     await user.click(within(section).getByRole('button', { name: 'Agregar enlace' }))
-    await user.click(within(section).getByRole('button', { name: 'Guardar info de compra' }))
+    await user.click(within(section).getByRole('button', { name: 'Guardar cambios' }))
 
     const purchase = (await db.products.get(id))?.purchase
     expect(purchase).toMatchObject({
@@ -56,7 +56,8 @@ describe('purchase section on ProductDetail', () => {
       links: [{ id: 1, url: 'https://soriana.com/detergente' }],
     })
     expect(await within(section).findByText('$25.50')).toBeInTheDocument()
-    const open = within(section).getByRole('link', { name: 'Abrir' })
+    // The saved link shows on the read-only card once the modal closes.
+    const open = within(section).getByRole('link', { name: 'Abrir tienda en línea' })
     expect(open).toHaveAttribute('href', 'https://soriana.com/detergente')
   })
 
@@ -70,8 +71,8 @@ describe('purchase section on ProductDetail', () => {
     await openPurchaseForm(section)
 
     // happy-dom drops the minus sign when typing into number inputs, so set the value directly.
-    fireEvent.change(within(section).getByLabelText('Precio original'), { target: { value: '-1' } })
-    await user.click(within(section).getByRole('button', { name: 'Guardar info de compra' }))
+    fireEvent.change(within(section).getByLabelText('Precio referencia'), { target: { value: '-1' } })
+    await user.click(within(section).getByRole('button', { name: 'Guardar cambios' }))
 
     const alert = await within(section).findByRole('alert')
     expect(alert).toHaveTextContent('El precio no puede ser negativo')
@@ -91,8 +92,8 @@ describe('purchase section on ProductDetail', () => {
     fireEvent.change(within(section).getByLabelText('Fecha de última compra'), {
       target: { value: '2026-09-01' },
     })
-    await user.selectOptions(within(section).getByLabelText('Período'), 'semanal')
-    await user.click(within(section).getByRole('button', { name: 'Guardar info de compra' }))
+    await user.selectOptions(within(section).getByLabelText('Frecuencia de compra'), 'semanal')
+    await user.click(within(section).getByRole('button', { name: 'Guardar cambios' }))
 
     expect((await db.products.get(id))?.purchase.nextPurchaseDate).toBe('2026-09-08')
     expect(await within(section).findByText('8 de septiembre de 2026')).toBeInTheDocument()
@@ -119,7 +120,7 @@ describe('purchase section on ProductDetail', () => {
 
     await user.click(within(section).getByRole('checkbox', { name: 'Mercado Libre' }))
     await user.click(within(section).getAllByRole('button', { name: 'Quitar' })[0])
-    await user.click(within(section).getByRole('button', { name: 'Guardar info de compra' }))
+    await user.click(within(section).getByRole('button', { name: 'Guardar cambios' }))
 
     expect((await db.products.get(id))?.purchase).toMatchObject({
       secondarySupplierIds: [ids['Mercado Libre']],

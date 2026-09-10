@@ -2,7 +2,7 @@ import { useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
-import type { CustomProp } from '../../db/types'
+import type { CustomProp, Product } from '../../db/types'
 import { iconPath, toneClasses } from '../../lib/icons'
 import { useObjectUrl } from '../../lib/useObjectUrl'
 import { StockSection } from '../inventory/StockSection'
@@ -128,6 +128,8 @@ export function ProductDetail() {
   const [propsError, setPropsError] = useState('')
   const [movementOpen, setMovementOpen] = useState(false)
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const lists = useLiveQuery(() => db.lists.toArray(), []) ?? []
 
   if (!product) return <p className="mt-4 text-sm text-slate-500">Cargando…</p>
 
@@ -144,8 +146,6 @@ export function ProductDetail() {
   }
 
   async function handleDelete() {
-    const message = `¿Eliminar "${current.title}"? Se borrarán su historial de movimientos y sus referencias en carritos y listas.`
-    if (!window.confirm(message)) return
     try {
       await deleteProduct(current.id!)
       navigate('/products')
@@ -290,7 +290,7 @@ export function ProductDetail() {
           </button>
           <button
             type="button"
-            onClick={handleDelete}
+            onClick={() => setDeleteOpen(true)}
             className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-red-200/80 bg-red-50 px-2 py-2.5 text-xs font-semibold text-red-600 shadow-sm transition hover:bg-red-100/70 active:scale-95"
           >
             <Glyph d={GLYPHS.eliminar} className="h-4 w-4 text-red-500" />
@@ -494,7 +494,158 @@ export function ProductDetail() {
       {historyOpen && (
         <HistoryModal productId={current.id!} productTitle={current.title} onClose={() => setHistoryOpen(false)} />
       )}
+      {deleteOpen && (
+        <DeleteModal
+          product={current}
+          linkedLists={lists.filter((list) => list.productIds.includes(current.id!)).length}
+          linkedSuppliers={
+            (current.purchase.primarySupplierId != null ? 1 : 0) +
+            current.purchase.secondarySupplierIds.length
+          }
+          onConfirm={handleDelete}
+          onClose={() => setDeleteOpen(false)}
+        />
+      )}
     </section>
+  )
+}
+
+/** Delete confirmation (Stitch design): centered danger icon, product summary
+ * card and a warning with the linked lists/suppliers counts. */
+function DeleteModal({
+  product,
+  linkedLists,
+  linkedSuppliers,
+  onConfirm,
+  onClose,
+}: {
+  product: Product
+  linkedLists: number
+  linkedSuppliers: number
+  onConfirm: () => void
+  onClose: () => void
+}) {
+  const imageUrl = useObjectUrl(product.image)
+  const [error, setError] = useState('')
+  const [deleting, setDeleting] = useState(false)
+
+  async function handleConfirm() {
+    setDeleting(true)
+    try {
+      await onConfirm()
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No se pudo eliminar el producto')
+    } finally {
+      setDeleting(false)
+    }
+  }
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Eliminar producto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
+    >
+      <div className="w-full max-w-sm rounded-3xl border border-slate-100 bg-white p-5 text-center shadow-2xl">
+        <div className="flex justify-end">
+          <button
+            type="button"
+            aria-label="Cerrar"
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200"
+          >
+            <Glyph d={GLYPHS.cerrar} className="h-4 w-4" />
+          </button>
+        </div>
+        <span className="mx-auto -mt-2 flex h-14 w-14 items-center justify-center rounded-2xl border border-red-100 bg-red-50 text-red-600">
+          <Glyph d={GLYPHS.eliminar} className="h-6 w-6" />
+        </span>
+        <h3 className="mt-3 text-lg font-bold text-slate-900">¿Eliminar producto?</h3>
+        <p className="mt-1.5 text-sm text-slate-500">
+          Esta acción no se puede deshacer. Se eliminará del catálogo y de todas tus listas de
+          despensa.
+        </p>
+
+        <div className="mt-4 flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3 text-left">
+          {imageUrl ? (
+            <img src={imageUrl} alt="" className="h-11 w-11 rounded-xl object-cover" />
+          ) : (
+            <span
+              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
+                product.iconKey ? toneClasses(product.iconTone) : 'bg-gradient-to-tr from-blue-500 to-indigo-600 text-white'
+              }`}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-5 w-5"
+                aria-hidden="true"
+              >
+                <path d={iconPath(product.iconKey)} />
+              </svg>
+            </span>
+          )}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-bold text-slate-900">{product.title}</p>
+            <p className="truncate text-xs text-slate-500">
+              {[product.brand, product.family].filter(Boolean).join(' · ') || 'Sin marca'}
+            </p>
+          </div>
+          <span className="rounded-full border border-emerald-200/80 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
+            {product.stock.current} disp.
+          </span>
+        </div>
+
+        {(linkedLists > 0 || linkedSuppliers > 0) && (
+          <p className="mt-3 flex items-start justify-center gap-1.5 rounded-xl border border-amber-200/70 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            <Glyph d={GLYPHS.tag} className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
+            <span>
+              {[
+                linkedLists > 0 &&
+                  `También se desvinculará de ${linkedLists} ${linkedLists === 1 ? 'lista activa' : 'listas activas'}`,
+                linkedSuppliers > 0 &&
+                  `${linkedLists > 0 ? 'y' : 'También se desvinculará de'} ${linkedSuppliers} ${
+                    linkedSuppliers === 1 ? 'proveedor asociado' : 'proveedores asociados'
+                  }`,
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              .
+            </span>
+          </p>
+        )}
+
+        {error && (
+          <p role="alert" className="mt-3 text-sm text-red-600">
+            {error}
+          </p>
+        )}
+
+        <div className="mt-4 grid grid-cols-2 gap-2.5">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={handleConfirm}
+            disabled={deleting}
+            className="flex items-center justify-center gap-1.5 rounded-2xl bg-red-600 px-3 py-2.5 text-xs font-semibold text-white shadow-md shadow-red-500/25 transition hover:bg-red-700 active:scale-95"
+          >
+            <Glyph d={GLYPHS.eliminar} className="h-3.5 w-3.5" />
+            Sí, eliminar
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
 
