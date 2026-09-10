@@ -26,6 +26,11 @@ beforeEach(async () => {
   await Promise.all([db.products.clear(), db.suppliers.clear()])
 })
 
+async function openPurchaseForm(section: HTMLElement) {
+  // The design shows the read-only card; the form opens behind "Ver todos".
+  await fireEvent.click(within(section).getByRole('button', { name: /Ver todos/ }))
+}
+
 describe('purchase section on ProductDetail', () => {
   it('records supplier, prices and a link from the form (spec: record purchase info)', async () => {
     const user = userEvent.setup()
@@ -35,6 +40,7 @@ describe('purchase section on ProductDetail', () => {
     renderDetail(id)
     await screen.findByRole('heading', { level: 1, name: 'Detergente' })
     const section = await screen.findByRole('region', { name: 'Info de compra' })
+    await openPurchaseForm(section)
     await within(section).findAllByText('Soriana') // wait for the suppliers liveQuery
 
     await user.selectOptions(within(section).getByLabelText('Proveedor principal'), String(ids.Soriana))
@@ -61,6 +67,7 @@ describe('purchase section on ProductDetail', () => {
     renderDetail(id)
     await screen.findByRole('heading', { level: 1, name: 'Detergente' })
     const section = await screen.findByRole('region', { name: 'Info de compra' })
+    await openPurchaseForm(section)
 
     // happy-dom drops the minus sign when typing into number inputs, so set the value directly.
     fireEvent.change(within(section).getByLabelText('Precio original'), { target: { value: '-1' } })
@@ -78,6 +85,7 @@ describe('purchase section on ProductDetail', () => {
     renderDetail(id)
     await screen.findByRole('heading', { level: 1, name: 'Leche entera' })
     const section = await screen.findByRole('region', { name: 'Info de compra' })
+    await openPurchaseForm(section)
 
     // happy-dom does not accept typed date input values, so set the value directly.
     fireEvent.change(within(section).getByLabelText('Fecha de última compra'), {
@@ -106,6 +114,7 @@ describe('purchase section on ProductDetail', () => {
     renderDetail(id)
     await screen.findByRole('heading', { level: 1, name: 'Detergente' })
     const section = await screen.findByRole('region', { name: 'Info de compra' })
+    await openPurchaseForm(section)
     await within(section).findAllByText('Mercado Libre') // wait for the suppliers liveQuery
 
     await user.click(within(section).getByRole('checkbox', { name: 'Mercado Libre' }))

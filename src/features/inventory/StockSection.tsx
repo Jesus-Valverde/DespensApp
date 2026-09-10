@@ -50,27 +50,24 @@ function Glyph({ d, className = 'h-5 w-5' }: { d: string; className?: string }) 
 interface StockFormValue {
   min: string
   max: string
-  location: string
+  alerts: boolean
 }
 
 function toFormValue(stock: ProductStock): StockFormValue {
   return {
     min: stock.min == null ? '' : String(stock.min),
     max: stock.max == null ? '' : String(stock.max),
-    location: stock.location ?? '',
+    alerts: stock.alerts ?? false,
   }
 }
 
-const inputClass =
-  'w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20'
-
-/** Levels editor modal (Stitch design): min/max with steppers plus location.
+/** Levels editor modal (Stitch design): min/max with steppers plus alerts switch.
  * The current quantity is not edited here — that's what movements are for. */
 function LevelsModal({ product, onClose }: { product: Product; onClose: () => void }) {
   const [form, setForm] = useState<StockFormValue>(() => toFormValue(product.stock))
   const [error, setError] = useState('')
 
-  function setField(field: keyof StockFormValue) {
+  function setField(field: 'min' | 'max') {
     return (event: { target: { value: string } }) =>
       setForm((current) => ({ ...current, [field]: event.target.value }))
   }
@@ -90,7 +87,8 @@ function LevelsModal({ product, onClose }: { product: Product; onClose: () => vo
         current: product.stock.current, // untouched: adjust stock via movements
         min: form.min.trim() === '' ? null : Number(form.min),
         max: form.max.trim() === '' ? null : Number(form.max),
-        location: form.location,
+        location: product.stock.location,
+        alerts: form.alerts,
       })
       onClose()
     } catch (submitError) {
@@ -165,7 +163,7 @@ function LevelsModal({ product, onClose }: { product: Product; onClose: () => vo
       role="dialog"
       aria-modal="true"
       aria-label="Editar niveles de stock"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/50 p-3 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-3 backdrop-blur-sm sm:p-4"
     >
       <div className="max-h-full w-full max-w-sm overflow-y-auto rounded-3xl border border-slate-100 bg-white shadow-2xl">
         <div className="relative flex items-start justify-between border-b border-slate-100 px-5 pb-3 pt-5">
@@ -211,17 +209,29 @@ function LevelsModal({ product, onClose }: { product: Product; onClose: () => vo
             chip={`Capacidad: ${Number(form.max) || 0} uds.`}
           />
 
-          <div className="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3">
-            <label htmlFor="stock-location" className="text-xs font-bold text-slate-800">
-              Ubicación asignada
-            </label>
-            <input
-              id="stock-location"
-              value={form.location}
-              onChange={setField('location')}
-              placeholder="refri, alacena…"
-              className={`${inputClass} mt-1.5`}
-            />
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                <Glyph d={PATHS.bell} className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="text-xs font-bold text-slate-800">Recibir alertas</p>
+                <p className="text-[11px] text-slate-500">Avisame cuando esté bajo mínimo</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={form.alerts}
+              aria-label="Recibir alertas"
+              onClick={() => setForm((current) => ({ ...current, alerts: !current.alerts }))}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${form.alerts ? 'bg-blue-600' : 'bg-slate-300'}`}
+            >
+              <span
+                aria-hidden="true"
+                className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all ${form.alerts ? 'left-[22px]' : 'left-0.5'}`}
+              />
+            </button>
           </div>
 
           <p className="px-1 text-center text-[11px] text-slate-400">
@@ -267,8 +277,9 @@ export function StockSection({
   const [levelsOpen, setLevelsOpen] = useState(false)
   const state = stockState(product.stock)
   const tone = PILL_CLASSES[state.tone]
-  // Reminder status rides on the purchase period configured in the Compra tab.
-  const reminder = product.purchase.period != null
+  // Reminder reflects the alerts switch (new source of truth); old products
+  // without alerts fall back to the purchase period from the Compra tab.
+  const reminder = product.stock.alerts ?? (product.purchase.period != null)
 
   return (
     <section
@@ -276,29 +287,27 @@ export function StockSection({
       className="space-y-4 rounded-3xl border border-slate-100 bg-white p-5 shadow-sm"
     >
       <div className="flex items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${tone.pill}`}>
-            <span className={`inline-block h-2 w-2 rounded-full ${tone.dot}`} />
-            {state.label}
-          </span>
-          <span
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${
-              reminder
-                ? 'border-blue-200/80 bg-blue-50 text-blue-700'
-                : 'border-slate-200 bg-slate-50 text-slate-500'
-            }`}
-          >
-            <Glyph d={PATHS.bell} className="h-3 w-3" />
-            {reminder ? 'Recordatorio activo' : 'Sin recordatorio'}
-          </span>
-        </div>
-        {product.stock.location && (
-          <span className="flex items-center gap-1 text-xs font-medium text-slate-500">
-            <Glyph d={PATHS.place} className="h-3.5 w-3.5 text-slate-400" />
-            {product.stock.location}
-          </span>
-        )}
+        <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${tone.pill}`}>
+          <span className={`inline-block h-2 w-2 rounded-full ${tone.dot}`} />
+          {state.label}
+        </span>
+        <span
+          className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${
+            reminder
+              ? 'border-blue-200/80 bg-blue-50 text-blue-700'
+              : 'border-slate-200 bg-slate-50 text-slate-500'
+          }`}
+        >
+          <Glyph d={PATHS.bell} className="h-3 w-3" />
+          {reminder ? 'Recordatorio activo' : 'Sin recordatorio'}
+        </span>
       </div>
+      {product.stock.location && (
+        <p className="flex items-center gap-1 text-xs font-medium text-slate-500">
+          <Glyph d={PATHS.place} className="h-3.5 w-3.5 text-slate-400" />
+          {product.stock.location}
+        </p>
+      )}
 
       <div className="rounded-2xl border border-slate-100 bg-slate-50/80 p-4">
         <div className="mb-2 flex items-center justify-between">

@@ -7,7 +7,7 @@ import { iconPath, toneClasses } from '../../lib/icons'
 import { useObjectUrl } from '../../lib/useObjectUrl'
 import { StockSection } from '../inventory/StockSection'
 import { MovementModal } from '../inventory/MovementForm'
-import { BitacoraList, describeMovement } from '../inventory/BitacoraList'
+import { describeMovement } from '../inventory/BitacoraList'
 import { getMovements } from '../inventory/api'
 import { PurchaseSection } from '../purchase/PurchaseSection'
 import { deleteProduct, duplicateProduct, updateProduct } from './api'
@@ -50,7 +50,7 @@ function Glyph({ d, className = 'h-5 w-5' }: { d: string; className?: string }) 
   )
 }
 
-type TabKey = 'datos' | 'stock' | 'historial' | 'compra'
+type TabKey = 'datos' | 'stock' | 'compra'
 
 const TAB_STYLES: Record<TabKey, { on: string; off: string; iconOff: string }> = {
   datos: {
@@ -63,11 +63,6 @@ const TAB_STYLES: Record<TabKey, { on: string; off: string; iconOff: string }> =
     off: 'bg-emerald-50 border border-emerald-100',
     iconOff: 'text-emerald-600',
   },
-  historial: {
-    on: 'bg-violet-600 border-2 border-white text-white shadow-md shadow-violet-500/25 ring-2 ring-violet-600 ring-offset-2 ring-offset-violet-100',
-    off: 'bg-violet-50 border border-violet-100',
-    iconOff: 'text-violet-600',
-  },
   compra: {
     on: 'bg-amber-500 border-2 border-white text-white shadow-md shadow-amber-500/25 ring-2 ring-amber-500 ring-offset-2 ring-offset-amber-100',
     off: 'bg-amber-50 border border-amber-100',
@@ -79,8 +74,6 @@ const TABS: { key: TabKey; label: string; glyph: string; subtitle: string }[] = 
   { key: 'datos', label: 'Datos', glyph: GLYPHS.tune, subtitle: 'Ficha' },
   { key: 'stock', label: 'Stock', glyph: GLYPHS.stock, subtitle: 'disp.' },
   { key: 'compra', label: 'Compra', glyph: GLYPHS.compra, subtitle: 'Precios' },
-  // The Stitch design omits it, but the bitácora is core: keep a Historial tab.
-  { key: 'historial', label: 'Historial', glyph: GLYPHS.historial, subtitle: 'Bitácora' },
 ]
 
 function CardHeader({ title, glyph }: { title: string; glyph: string }) {
@@ -134,6 +127,7 @@ export function ProductDetail() {
   const [propsDraft, setPropsDraft] = useState<CustomProp[] | null>(null)
   const [propsError, setPropsError] = useState('')
   const [movementOpen, setMovementOpen] = useState(false)
+  const [historyOpen, setHistoryOpen] = useState(false)
 
   if (!product) return <p className="mt-4 text-sm text-slate-500">Cargando…</p>
 
@@ -310,7 +304,7 @@ export function ProductDetail() {
           <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Secciones</h3>
           <span className="text-[11px] font-medium text-slate-400">Toca para alternar</span>
         </div>
-        <nav aria-label="Secciones del producto" className="grid grid-cols-4 gap-2.5">
+        <nav aria-label="Secciones del producto" className="grid grid-cols-3 gap-2.5">
           {TABS.map((tab) => {
             const active = tab.key === activeTab
             const styles = TAB_STYLES[tab.key]
@@ -370,11 +364,7 @@ export function ProductDetail() {
 
         <div className={activeTab === 'stock' ? 'space-y-4' : 'hidden'}>
           <StockSection product={current} onRegister={() => setMovementOpen(true)} />
-          <RecentMovements productId={current.id!} onSeeAll={() => setActiveTab('historial')} />
-        </div>
-
-        <div className={activeTab === 'historial' ? 'space-y-4' : 'hidden'}>
-          <BitacoraList productId={current.id!} />
+          <RecentMovements productId={current.id!} onSeeAll={() => setHistoryOpen(true)} />
         </div>
 
         <div className={activeTab === 'compra' ? 'space-y-4' : 'hidden'}>
@@ -501,14 +491,156 @@ export function ProductDetail() {
         </div>
       )}
       {movementOpen && <MovementModal product={current} onClose={() => setMovementOpen(false)} />}
+      {historyOpen && (
+        <HistoryModal productId={current.id!} productTitle={current.title} onClose={() => setHistoryOpen(false)} />
+      )}
     </section>
+  )
+}
+
+const historyDateFormatter = new Intl.DateTimeFormat('es-MX', { dateStyle: 'medium', timeStyle: 'short' })
+
+type HistoryFilter = 'todos' | 'entrada' | 'salida' | 'ajuste'
+
+/** Full movement log modal opened from "Ver todos" (mock historial-modal). */
+function HistoryModal({
+  productId,
+  productTitle,
+  onClose,
+}: {
+  productId: number
+  productTitle: string
+  onClose: () => void
+}) {
+  const movements = useLiveQuery(() => getMovements(productId), [productId]) ?? []
+  const [filter, setFilter] = useState<HistoryFilter>('todos')
+  const visible = filter === 'todos' ? movements : movements.filter((m) => m.type === filter)
+  const count = (f: HistoryFilter) => (f === 'todos' ? movements.length : movements.filter((m) => m.type === f).length)
+
+  const filters: { key: HistoryFilter; label: string }[] = [
+    { key: 'todos', label: `Todos (${count('todos')})` },
+    { key: 'entrada', label: 'Entradas' },
+    { key: 'salida', label: 'Salidas' },
+    { key: 'ajuste', label: 'Ajustes' },
+  ]
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Historial de movimientos"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-2 backdrop-blur-sm sm:p-4"
+    >
+      <section className="flex max-h-[90vh] w-full max-w-sm flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-2xl">
+        <div className="flex w-full justify-center pb-1 pt-3">
+          <div className="h-1 w-10 rounded-full bg-slate-200" />
+        </div>
+        <div className="flex items-start justify-between border-b border-slate-100 px-5 pb-3 pt-1">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm">
+              <Glyph d={GLYPHS.historial} className="h-5 w-5" />
+            </span>
+            <div>
+              <h2 className="text-base font-bold leading-tight text-slate-900">Historial de movimientos</h2>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Registro de entradas, salidas y ajustes de{' '}
+                <span className="font-medium text-slate-700">{productTitle}</span>
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            aria-label="Cerrar"
+            onClick={onClose}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200"
+          >
+            <Glyph d={GLYPHS.cerrar} className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="border-b border-slate-100 bg-slate-50/50 px-5 pb-2 pt-3">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+            {filters.map((f) => (
+              <button
+                key={f.key}
+                type="button"
+                onClick={() => setFilter(f.key)}
+                aria-pressed={filter === f.key}
+                className={
+                  filter === f.key
+                    ? 'shrink-0 rounded-xl bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm'
+                    : 'shrink-0 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50'
+                }
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="max-h-[50vh] space-y-2.5 overflow-y-auto px-5 py-3">
+          {visible.length === 0 ? (
+            <p className="py-4 text-center text-sm text-slate-500">Sin movimientos todavía.</p>
+          ) : (
+            visible.map((m) => (
+              <div
+                key={m.id}
+                className="flex items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50 p-3"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border text-xs font-bold ${
+                      m.type === 'entrada'
+                        ? 'border-emerald-200/80 bg-emerald-50 text-emerald-600'
+                        : m.type === 'salida'
+                          ? 'border-red-200/80 bg-red-50 text-red-600'
+                          : 'border-blue-100 bg-blue-50 text-blue-600'
+                    }`}
+                  >
+                    {m.delta > 0 ? `+${m.delta}` : m.delta === 0 ? '=' : m.delta}
+                  </span>
+                  <div>
+                    <p className="text-xs font-bold text-slate-800">{m.note || describeMovement(m)}</p>
+                    <p className="mt-0.5 text-[11px] text-slate-400">{historyDateFormatter.format(new Date(m.date))}</p>
+                  </div>
+                </div>
+                <div className="shrink-0 text-right">
+                  <span
+                    className={`inline-block rounded-lg border px-2 py-0.5 text-[11px] font-bold ${
+                      m.delta > 0
+                        ? 'border-emerald-200/80 bg-emerald-50 text-emerald-700'
+                        : m.delta < 0
+                          ? 'border-red-200/80 bg-red-50 text-red-600'
+                          : 'border-blue-100 bg-blue-50 text-blue-700'
+                    }`}
+                  >
+                    {m.delta > 0 ? `+${m.delta} ud.` : m.delta < 0 ? `${m.delta} ud.` : 'Ajuste'}
+                  </span>
+                  <p className="mt-0.5 text-[10px] font-medium text-slate-500">{m.resultingQty} disp.</p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="flex items-center gap-3 border-t border-slate-100 bg-white p-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-center text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 active:scale-95"
+          >
+            Cerrar
+          </button>
+        </div>
+      </section>
+    </div>
   )
 }
 
 const recentDateFormatter = new Intl.DateTimeFormat('es-MX', { day: 'numeric', month: 'short' })
 
-/** Compact "Últimos movimientos" card for the Stock tab; the full log lives in
- * the Historial tab ("Ver todos"). */
+/** Compact "Últimos movimientos" card for the Stock tab; the full log opens in
+ * the history modal ("Ver todos"). */
 function RecentMovements({
   productId,
   onSeeAll,

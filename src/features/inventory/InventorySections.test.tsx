@@ -34,7 +34,8 @@ describe('stockState (pure)', () => {
 })
 
 describe('inventory sections on ProductDetail', () => {
-  it('shows the stock state, location and the bitácora without edit/delete controls', async () => {
+  it('shows the stock state, location and recent movements without a Historial tab', async () => {
+    const user = userEvent.setup()
     const id = await createProduct({ title: 'Leche entera', customProps: [] })
     await setStock(id, { current: 1, min: 2, max: 12, location: 'refri' })
     await registerMovement(id, { type: 'entrada', qty: 1 })
@@ -45,14 +46,16 @@ describe('inventory sections on ProductDetail', () => {
     expect(screen.getByText('refri')).toBeInTheDocument()
     // No purchase period configured yet → reminder off.
     expect(screen.getByText('Sin recordatorio')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Historial/ })).not.toBeInTheDocument()
 
-    const bitacora = screen.getByRole('region', { name: 'Bitácora' })
-    const rows = await within(bitacora).findAllByRole('listitem')
-    expect(rows).toHaveLength(1)
-    expect(rows[0]).toHaveTextContent('Entrada +1 → 2')
-    expect(within(bitacora).queryByRole('button')).not.toBeInTheDocument()
-    expect(within(bitacora).queryByText('Editar')).not.toBeInTheDocument()
-    expect(within(bitacora).queryByText('Eliminar')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /Stock/ }))
+    // The stock tab renders before the purchase tab, so its "Ver todos" is first.
+    const verTodos = screen.getAllByRole('button', { name: 'Ver todos' })[0]
+    await user.click(verTodos)
+    const history = await screen.findByRole('dialog', { name: 'Historial de movimientos' })
+    expect(within(history).getByText('Entrada +1 → 2')).toBeInTheDocument()
+    expect(within(history).queryByText('Editar')).not.toBeInTheDocument()
+    expect(within(history).queryByText('Eliminar')).not.toBeInTheDocument()
   })
 
   it('rejects saving min greater than max with a Spanish error', async () => {
@@ -92,8 +95,7 @@ describe('inventory sections on ProductDetail', () => {
 
     const stock = screen.getByRole('region', { name: 'Stock' })
     expect(await within(stock).findByText('10')).toBeInTheDocument()
-    const bitacora = screen.getByRole('region', { name: 'Bitácora' })
-    expect(within(bitacora).getByText('Entrada +6 → 10')).toBeInTheDocument()
+    expect(screen.getByText('Entrada +6 → 10')).toBeInTheDocument()
   })
 
   it('registers an ajuste to an absolute quantity', async () => {
@@ -112,8 +114,7 @@ describe('inventory sections on ProductDetail', () => {
 
     const stock = screen.getByRole('region', { name: 'Stock' })
     expect(await within(stock).findByText('9')).toBeInTheDocument()
-    const bitacora = screen.getByRole('region', { name: 'Bitácora' })
-    expect(within(bitacora).getByText('Ajuste +5 → 9')).toBeInTheDocument()
+    expect(screen.getByText('Ajuste +5 → 9')).toBeInTheDocument()
   })
 
   it('shows a Spanish error for a salida over the stock and keeps everything unchanged', async () => {
@@ -137,7 +138,8 @@ describe('inventory sections on ProductDetail', () => {
     expect(await db.movements.where('productId').equals(id).count()).toBe(0)
   })
 
-  it('lists bitácora entries newest first', async () => {
+  it('lists history modal entries newest first', async () => {
+    const user = userEvent.setup()
     const id = await createProduct({ title: 'Leche entera', customProps: [] })
     await setStock(id, { current: 4, min: null, max: null })
     await db.movements.bulkAdd([
@@ -148,9 +150,12 @@ describe('inventory sections on ProductDetail', () => {
     renderDetail(id)
     await screen.findByRole('heading', { name: 'Leche entera' })
 
-    const rows = await within(screen.getByRole('region', { name: 'Bitácora' })).findAllByRole('listitem')
-    expect(rows).toHaveLength(2)
-    expect(rows[0]).toHaveTextContent('Salida -1 → 3')
-    expect(rows[1]).toHaveTextContent('Entrada +4 → 4')
+    await user.click(screen.getByRole('button', { name: /Stock/ }))
+    const verTodos = screen.getAllByRole('button', { name: 'Ver todos' })[0]
+    await user.click(verTodos)
+    const dialog = await screen.findByRole('dialog', { name: 'Historial de movimientos' })
+    const salida = within(dialog).getByText('Salida -1 → 3')
+    const entrada = within(dialog).getByText('Entrada +4 → 4')
+    expect(salida.compareDocumentPosition(entrada) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 })

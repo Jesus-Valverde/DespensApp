@@ -11,6 +11,7 @@ export interface StockInput {
   min: number | null
   max: number | null
   location?: string
+  alerts?: boolean
 }
 
 function validateStock(stock: StockInput): ProductStock {
@@ -23,9 +24,9 @@ function validateStock(stock: StockInput): ProductStock {
     throw new Error('El mínimo no puede ser mayor que el máximo')
   }
   const location = stock.location?.trim()
-  return location
-    ? { current, min, max, location }
-    : { current, min, max }
+  const base = location ? { current, min, max, location } : { current, min, max }
+  // ponytail: alerts only persisted when explicitly sent; undefined keeps old fallback (period)
+  return stock.alerts === undefined ? base : { ...base, alerts: stock.alerts }
 }
 
 /** Sets the product's stock record (current, min, max, one free-text location). */

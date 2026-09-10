@@ -13,6 +13,7 @@ export interface ProductStock {
   min: number | null
   max: number | null
   location?: string
+  alerts?: boolean
 }
 
 export interface PurchaseLink {

@@ -115,7 +115,7 @@ export function MovementModal({ product, onClose }: { product: Product; onClose:
       role="dialog"
       aria-modal="true"
       aria-label="Registrar movimiento"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 p-2 backdrop-blur-sm sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-2 backdrop-blur-sm sm:p-4"
     >
       <section className="flex max-h-[92%] w-full max-w-sm flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-2xl">
         <div className="flex w-full justify-center pb-1 pt-3">
