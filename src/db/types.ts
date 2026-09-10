@@ -21,6 +21,15 @@ export interface PurchaseLink {
   url: string
 }
 
+/** Per-supplier purchase metadata for a product (price in centavos). */
+export interface SupplierLink {
+  supplierId: number
+  price?: number
+  frequency?: Period
+  url?: string
+  notes?: string
+}
+
 export interface ProductPurchase {
   primarySupplierId?: number
   secondarySupplierIds: number[]
@@ -30,6 +39,8 @@ export interface ProductPurchase {
   nextPurchaseDate?: string
   period: Period
   links: PurchaseLink[]
+  /** Optional so pre-existing records without it stay valid. */
+  supplierLinks?: SupplierLink[]
 }
 
 export interface Product {

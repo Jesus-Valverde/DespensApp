@@ -132,6 +132,7 @@ export async function duplicateProduct(id: number): Promise<number> {
       ...source.purchase,
       secondarySupplierIds: [...source.purchase.secondarySupplierIds],
       links: source.purchase.links.map((link) => ({ ...link })),
+      supplierLinks: source.purchase.supplierLinks?.map((link) => ({ ...link })),
     },
     createdAt: now,
     updatedAt: now,

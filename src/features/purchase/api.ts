@@ -5,7 +5,7 @@
 // throws Spanish Errors; forms catch and display them.
 
 import { db } from '../../db/db'
-import type { Period, ProductPurchase, PurchaseLink } from '../../db/types'
+import type { Period, ProductPurchase, PurchaseLink, SupplierLink } from '../../db/types'
 import { addPeriod } from '../../lib/dates'
 import { nextId } from '../../lib/id'
 
@@ -25,6 +25,9 @@ export interface PurchaseInfoInput {
    * from the period (or cleared when the product is unscheduled). */
   nextPurchaseDate?: string
   links: PurchaseLinkInput[]
+  /** Full replacement of the per-supplier metadata; when omitted the stored
+   * supplierLinks are kept untouched. */
+  supplierLinks?: SupplierLink[]
 }
 
 function isValidLinkUrl(url: string): boolean {
@@ -67,6 +70,40 @@ function withLinkIds(links: PurchaseLinkInput[]): PurchaseLink[] {
   return assigned
 }
 
+const VALID_FREQUENCIES: Exclude<Period, null>[] = ['semanal', 'quincenal', 'mensual']
+
+function normalizeSupplierLink(link: SupplierLink): SupplierLink {
+  if (link.price != null && (Number.isNaN(link.price) || link.price < 0)) {
+    throw new Error('El precio no puede ser negativo')
+  }
+  const url = link.url?.trim()
+  const notes = link.notes?.trim()
+  return {
+    supplierId: link.supplierId,
+    price: link.price,
+    frequency: link.frequency != null && VALID_FREQUENCIES.includes(link.frequency) ? link.frequency : undefined,
+    url: url || undefined,
+    notes: notes || undefined,
+  }
+}
+
+/** Upserts the per-supplier metadata for one supplier of a product. */
+export async function saveSupplierLink(productId: number, link: SupplierLink): Promise<void> {
+  const normalized = normalizeSupplierLink(link)
+  await db.transaction('rw', db.products, async () => {
+    const existing = await db.products.get(productId)
+    if (!existing) throw new Error('Producto no encontrado')
+    const supplierLinks = [...(existing.purchase.supplierLinks ?? [])]
+    const index = supplierLinks.findIndex((entry) => entry.supplierId === normalized.supplierId)
+    if (index >= 0) supplierLinks[index] = normalized
+    else supplierLinks.push(normalized)
+    await db.products.update(productId, {
+      purchase: { ...existing.purchase, supplierLinks },
+      updatedAt: new Date().toISOString(),
+    })
+  })
+}
+
 /** Saves the product's purchase info in one write. The stored next purchase
  * date is computed here — never trusted from the form. */
 export async function savePurchaseInfo(productId: number, input: PurchaseInfoInput): Promise<void> {
@@ -86,6 +123,8 @@ export async function savePurchaseInfo(productId: number, input: PurchaseInfoInp
         : undefined,
     period: input.period,
     links: withLinkIds(input.links),
+    // Full replacement when provided; otherwise keep what is already stored.
+    supplierLinks: input.supplierLinks ?? existing.purchase.supplierLinks,
   }
 
   await db.products.update(productId, { purchase, updatedAt: new Date().toISOString() })

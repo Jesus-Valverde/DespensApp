@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { db } from '../../db/db'
 import { createProduct, getProduct } from '../products/api'
-import { savePurchaseInfo, type PurchaseInfoInput } from './api'
+import { savePurchaseInfo, saveSupplierLink, type PurchaseInfoInput } from './api'
 
 beforeEach(async () => {
   await db.products.clear()
@@ -200,5 +200,76 @@ describe('savePurchaseInfo', () => {
     await expect(
       savePurchaseInfo(9999, { secondarySupplierIds: [], period: null, links: [] }),
     ).rejects.toThrow('encontrado')
+  })
+})
+
+describe('saveSupplierLink', () => {
+  it('adds a supplier link and then replaces it by supplier id (upsert)', async () => {
+    const id = await createProduct({ title: 'Detergente', customProps: [] })
+
+    await saveSupplierLink(id, { supplierId: 3, price: 2500, url: ' https://soriana.com/detergente ' })
+    await saveSupplierLink(id, { supplierId: 5, frequency: 'semanal' })
+
+    expect((await getProduct(id))?.purchase.supplierLinks).toEqual([
+      { supplierId: 3, price: 2500, url: 'https://soriana.com/detergente' },
+      { supplierId: 5, frequency: 'semanal' },
+    ])
+
+    await saveSupplierLink(id, { supplierId: 3, price: 2700, notes: 'oferta de mes' })
+
+    expect((await getProduct(id))?.purchase.supplierLinks).toEqual([
+      { supplierId: 3, price: 2700, notes: 'oferta de mes' },
+      { supplierId: 5, frequency: 'semanal' },
+    ])
+  })
+
+  it('trims strings and turns empty ones into undefined', async () => {
+    const id = await createProduct({ title: 'Detergente', customProps: [] })
+
+    await saveSupplierLink(id, { supplierId: 2, url: '  ', notes: ' ' })
+
+    expect((await getProduct(id))?.purchase.supplierLinks).toEqual([{ supplierId: 2 }])
+  })
+
+  it('rejects a negative or NaN price with the Spanish error and keeps the product unchanged', async () => {
+    const id = await createProduct({ title: 'Detergente', customProps: [] })
+
+    await expect(saveSupplierLink(id, { supplierId: 2, price: -1 })).rejects.toThrow(
+      'El precio no puede ser negativo',
+    )
+    await expect(saveSupplierLink(id, { supplierId: 2, price: Number.NaN })).rejects.toThrow(
+      'El precio no puede ser negativo',
+    )
+
+    expect((await getProduct(id))?.purchase.supplierLinks).toBeUndefined()
+  })
+
+  it('persists supplierLinks when saving purchase info with them', async () => {
+    const id = await createProduct({ title: 'Detergente', customProps: [] })
+
+    await savePurchaseInfo(id, {
+      secondarySupplierIds: [],
+      period: null,
+      links: [],
+      supplierLinks: [{ supplierId: 4, price: 1900, url: 'https://bodega.com/x' }],
+    })
+
+    expect((await getProduct(id))?.purchase.supplierLinks).toEqual([
+      { supplierId: 4, price: 1900, url: 'https://bodega.com/x' },
+    ])
+  })
+
+  it('keeps existing supplierLinks when purchase info is saved without them', async () => {
+    const id = await createProduct({ title: 'Detergente', customProps: [] })
+    await saveSupplierLink(id, { supplierId: 4, price: 1900 })
+
+    await savePurchaseInfo(id, {
+      secondarySupplierIds: [],
+      lastPrice: 2100,
+      period: null,
+      links: [],
+    })
+
+    expect((await getProduct(id))?.purchase.supplierLinks).toEqual([{ supplierId: 4, price: 1900 }])
   })
 })
