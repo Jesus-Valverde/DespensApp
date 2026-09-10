@@ -4,9 +4,11 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
 import type { Period, Product, ProductPurchase, Supplier, SupplierLink } from '../../db/types'
 import { savePurchaseInfo, type PurchaseLinkInput } from './api'
-import { addMember, removeMember } from '../lists/api'
+import { addMember, removeMember, createList } from '../lists/api'
 import { formatDate } from '../../lib/dates'
 import { formatMoney, parseMoney } from '../../lib/money'
+import { iconPath, toneClasses } from '../../lib/icons'
+import { useObjectUrl } from '../../lib/useObjectUrl'
 
 const PERIOD_OPTIONS: { value: string; label: string }[] = [
   { value: '', label: 'Sin período' },
@@ -35,6 +37,7 @@ const GLYPHS = {
   check: 'M5 13l4 4L19 7',
   ojo: 'M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0 M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z',
   edit: 'M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z',
+  buscar: 'M21 21l-4.35-4.35 M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z',
   business:
     'M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2 M4 16v6 M8 16v6 M12 16v6 M16 16v6 M20 16v6 M2 16h20 M3 10.5 12 3l9 7.5 M5 9v7 M9 9v7 M11 9v7 M13 9v7 M15 9v7 M19 9v7',
   lista: 'M3 5h.01 M3 12h.01 M3 19h.01 M8 5h13 M8 12h13 M8 19h13',
@@ -125,14 +128,39 @@ function ModalHeader({
   )
 }
 
-/** Product reference chip shared by the supplier/list modals. */
+/** Product reference chip shared by the supplier/list modals: avatar + name +
+ * brand, with the family highlighted like in the designs. */
 function ProductChip({ product }: { product: Product }) {
+  const imageUrl = useObjectUrl(product.image)
   return (
     <div className="mt-3 flex shrink-0 items-center gap-3 rounded-2xl border border-slate-200/80 bg-slate-50 p-2.5 shadow-sm">
+      {imageUrl ? (
+        <img src={imageUrl} alt="" className="h-10 w-10 shrink-0 rounded-xl object-cover" />
+      ) : (
+        <span
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+            product.iconKey ? toneClasses(product.iconTone) : 'bg-gradient-to-tr from-blue-500 to-indigo-600 text-white'
+          }`}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={1.8}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <path d={iconPath(product.iconKey)} />
+          </svg>
+        </span>
+      )}
       <div className="min-w-0 flex-1">
         <p className="truncate text-xs font-bold leading-tight text-slate-900">{product.title}</p>
-        <p className="mt-0.5 text-[11px] font-medium text-slate-400">
-          {[product.brand, product.family].filter(Boolean).join(' · ')}
+        <p className="mt-0.5 truncate text-[11px] font-medium text-slate-400">
+          {product.brand && <>Marca: {product.brand} · </>}
+          {product.family && <span className="font-semibold text-blue-600">{product.family}</span>}
         </p>
       </div>
     </div>
@@ -833,6 +861,21 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
   const [removed, setRemoved] = useState<number[]>([])
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
+  const [search, setSearch] = useState('')
+  const [creating, setCreating] = useState(false)
+  const [newListTitle, setNewListTitle] = useState('')
+  const [createError, setCreateError] = useState('')
+
+  async function handleCreateList() {
+    setCreateError('')
+    try {
+      await createList({ title: newListTitle })
+      setNewListTitle('')
+      setCreating(false)
+    } catch (cause) {
+      setCreateError(cause instanceof Error ? cause.message : 'No se pudo crear la lista')
+    }
+  }
 
   const baseMembership = (listId: number) =>
     product.id != null && lists.some((list) => list.id === listId && list.productIds.includes(product.id!))
@@ -885,52 +928,111 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
         </span>
       </div>
 
+      <div className="relative shrink-0">
+        <Glyph d={GLYPHS.buscar} className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <input
+          type="search"
+          aria-label="Buscar lista"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Buscar lista…"
+          className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-xs font-medium text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20"
+        />
+      </div>
+
       <div className="flex-1 space-y-2.5 overflow-y-auto py-2">
-        {lists.length === 0 && (
-          <p className="py-4 text-center text-sm text-slate-400">
-            Aún no tienes listas. Créalas desde la pestaña Listas.
-          </p>
-        )}
-        {lists.map((list) => {
-          const checked = isChecked(list.id!)
-          return (
-            <label
-              key={list.id}
-              className={`flex cursor-pointer items-center gap-3 rounded-2xl border-2 p-3 transition ${
-                checked ? 'border-blue-600 bg-blue-50/50' : 'border-slate-200 bg-white hover:bg-slate-50'
-              }`}
-            >
-              <input
-                type="checkbox"
-                className="sr-only"
-                checked={checked}
-                onChange={() => toggle(list.id!)}
-              />
-              <span
-                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 ${
-                  checked ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 bg-white'
+        {(() => {
+          const query = search.trim().toLowerCase()
+          const visible = query ? lists.filter((list) => list.title.toLowerCase().includes(query)) : lists
+          if (visible.length === 0) {
+            return (
+              <p className="py-4 text-center text-sm text-slate-400">
+                {query ? 'Ninguna lista coincide con la búsqueda.' : 'Aún no tienes listas. Créalas abajo.'}
+              </p>
+            )
+          }
+          return visible.map((list) => {
+            const checked = isChecked(list.id!)
+            return (
+              <label
+                key={list.id}
+                className={`flex cursor-pointer items-center gap-3 rounded-2xl border-2 p-3 transition ${
+                  checked ? 'border-blue-600 bg-blue-50/50' : 'border-slate-200 bg-white hover:bg-slate-50'
                 }`}
               >
-                {checked && <Glyph d={GLYPHS.check} className="h-3 w-3" strokeWidth={3} />}
-              </span>
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200/80 bg-slate-50 text-blue-600">
-                <Glyph d={GLYPHS.cart} className="h-4 w-4" />
-              </span>
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-xs font-bold text-slate-900">{list.title}</span>
-                <span className="block text-[11px] text-slate-400">
-                  {list.productIds.length} {list.productIds.length === 1 ? 'artículo' : 'artículos'}
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={checked}
+                  onChange={() => toggle(list.id!)}
+                />
+                <span
+                  className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 ${
+                    checked ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 bg-white'
+                  }`}
+                >
+                  {checked && <Glyph d={GLYPHS.check} className="h-3 w-3" strokeWidth={3} />}
                 </span>
-              </span>
-              {checked && (
-                <span className="shrink-0 rounded-lg bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white">
-                  {list.productIds.length} uds.
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200/80 bg-slate-50 text-blue-600">
+                  <Glyph d={GLYPHS.cart} className="h-4 w-4" />
                 </span>
-              )}
-            </label>
-          )
-        })}
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-xs font-bold text-slate-900">{list.title}</span>
+                  <span className="block text-[11px] text-slate-400">
+                    {list.productIds.length} {list.productIds.length === 1 ? 'artículo' : 'artículos'}
+                  </span>
+                </span>
+                {checked && (
+                  <span className="shrink-0 rounded-lg bg-blue-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                    {list.productIds.length} uds.
+                  </span>
+                )}
+              </label>
+            )
+          })
+        })()}
       </div>
+
+      {creating ? (
+        <div className="shrink-0 space-y-1.5">
+          <div className="flex gap-2">
+            <input
+              value={newListTitle}
+              onChange={(event) => setNewListTitle(event.target.value)}
+              placeholder="Ej. Despensa Mensual, Frutas y Verduras…"
+              aria-label="Nombre de la lista"
+              className="flex-1 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-medium text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20"
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault()
+                  handleCreateList()
+                }
+              }}
+            />
+            <button
+              type="button"
+              onClick={handleCreateList}
+              className="rounded-2xl bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95"
+            >
+              Crear
+            </button>
+          </div>
+          {createError && (
+            <p role="alert" className="text-xs text-red-600">
+              {createError}
+            </p>
+          )}
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setCreating(true)}
+          className="flex w-full shrink-0 items-center justify-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2.5 text-xs font-semibold text-slate-600 transition active:scale-95 hover:bg-slate-50"
+        >
+          <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-400" />
+          Crear nueva lista
+        </button>
+      )}
 
       {error && (
         <p role="alert" className="text-sm text-red-600">
