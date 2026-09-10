@@ -44,6 +44,7 @@ describe('purchase section on ProductDetail', () => {
     // The visible label reads "Principal"; the DOM text is lowercase (CSS capitalize).
     await user.click(within(dialog).getByLabelText(/principal/i))
     await user.type(within(dialog).getByLabelText('Precio referencia'), '25.50')
+    await user.selectOptions(within(dialog).getByLabelText('Frecuencia estimada'), 'mensual')
     await user.type(within(dialog).getByLabelText(/Enlace web/), 'https://soriana.com/detergente')
     await user.click(within(dialog).getByRole('button', { name: 'Vincular proveedor' }))
 
@@ -56,7 +57,7 @@ describe('purchase section on ProductDetail', () => {
       {
         supplierId: ids.Soriana,
         price: 2550,
-        frequency: undefined,
+        frequency: 'mensual',
         url: 'https://soriana.com/detergente',
         notes: undefined,
       },
@@ -66,6 +67,8 @@ describe('purchase section on ProductDetail', () => {
     // fields are empty (last = primary's price, reference = highest linked).
     const section = screen.getByRole('region', { name: 'Info de compra' })
     expect(await within(section).findAllByText('$25.50')).toHaveLength(2)
+    // Frecuencia falls back to the supplier's frequency too.
+    expect(await within(section).findByText('Mensual')).toBeInTheDocument()
   })
 
   it('rejects a negative price with a Spanish message and saves nothing', async () => {

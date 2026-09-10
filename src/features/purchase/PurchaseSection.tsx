@@ -795,6 +795,10 @@ export function PurchaseSection({ product }: { product: Product }) {
   const effectiveOriginal = purchase.originalPrice ?? (supplierLinks.length > 0
     ? Math.max(...supplierLinks.map((link) => link.price ?? 0))
     : undefined)
+  const effectiveFrequency =
+    purchase.period ??
+    (supplierLinks.find((link) => link.supplierId === purchase.primarySupplierId)?.frequency ??
+      supplierLinks[0]?.frequency)
   const primaryName = suppliers.find((supplier) => supplier.id === purchase.primarySupplierId)?.name
   const trend =
     effectiveLast != null && effectiveOriginal != null && effectiveOriginal > 0
@@ -913,7 +917,7 @@ export function PurchaseSection({ product }: { product: Product }) {
           <div>
             <dt className="text-[11px] font-medium text-slate-400">Frecuencia</dt>
             <dd className="mt-0.5 text-xs font-bold text-slate-800">
-              {purchase.period ? PERIOD_LABEL[purchase.period] : '—'}
+              {effectiveFrequency ? PERIOD_LABEL[effectiveFrequency] : '—'}
             </dd>
           </div>
           {purchase.nextPurchaseDate && (
