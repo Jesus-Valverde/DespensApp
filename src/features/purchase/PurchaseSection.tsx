@@ -301,16 +301,14 @@ function SuppliersModal({
           )
         })}
 
-        {suppliers.length > cards.length && (
-          <button
-            type="button"
-            onClick={onLink}
-            className="flex w-full items-center justify-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2.5 text-xs font-semibold text-slate-600 transition active:scale-95 hover:bg-slate-50"
-          >
-            <Glyph d={GLYPHS.business} className="h-4 w-4 text-slate-400" />
-            + Vincular nuevo proveedor
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={onLink}
+          className="flex w-full items-center justify-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2.5 text-xs font-semibold text-slate-600 transition active:scale-95 hover:bg-slate-50"
+        >
+          <Glyph d={GLYPHS.business} className="h-4 w-4 text-slate-400" />
+          + Vincular nuevo proveedor
+        </button>
       </div>
 
       <div className="shrink-0 border-t border-slate-100 pt-3">
@@ -342,13 +340,13 @@ function VincularModal({
 }) {
   const purchase = product.purchase
   const editing = link != null
-  const available = editing
-    ? suppliers
-    : suppliers.filter(
-        (supplier) =>
-          supplier.id !== purchase.primarySupplierId &&
-          !purchase.secondarySupplierIds.includes(supplier.id!),
-      )
+  // Prefer not-yet-linked suppliers; fall back to all of them (re-linking acts
+  // as an edit) so the vincular action always has options.
+  const unlinked = suppliers.filter(
+    (supplier) =>
+      supplier.id !== purchase.primarySupplierId && !purchase.secondarySupplierIds.includes(supplier.id!),
+  )
+  const available = editing ? suppliers : unlinked.length > 0 ? unlinked : suppliers
   const supplierName = (id: number) => suppliers.find((supplier) => supplier.id === id)?.name
   const [pickedId, setPickedId] = useState(link ? String(link.supplierId) : '')
   const [rol, setRol] = useState<'principal' | 'secundario'>(
@@ -429,19 +427,26 @@ function VincularModal({
           <label htmlFor="vincular-proveedor" className="font-medium">
             Seleccionar proveedor
           </label>
-          <select
-            id="vincular-proveedor"
-            value={pickedId}
-            onChange={(event) => setPickedId(event.target.value)}
-            className={inputClass}
-          >
-            <option value="">Elegir proveedor registrado…</option>
-            {available.map((supplier) => (
-              <option key={supplier.id} value={String(supplier.id)}>
-                {supplier.name}
-              </option>
-            ))}
-          </select>
+          {suppliers.length === 0 ? (
+            <p className="mt-1.5 text-xs text-slate-400">
+              Aún no hay proveedores. Créalos en la pestaña Proveedores.
+            </p>
+          ) : (
+            <select
+              id="vincular-proveedor"
+              value={pickedId}
+              onChange={(event) => setPickedId(event.target.value)}
+              className={inputClass}
+            >
+              <option value="">Elegir proveedor registrado…</option>
+              {available.map((supplier) => (
+                <option key={supplier.id} value={String(supplier.id)}>
+                  {supplier.name}
+                  {unlinked.length === 0 ? ' (ya vinculado)' : ''}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
 
         <div>
@@ -780,10 +785,20 @@ export function PurchaseSection({ product }: { product: Product }) {
   const [listError, setListError] = useState('')
 
   const purchase = product.purchase
+  // Fall back to per-supplier prices when the product-level fields are empty:
+  // last price from the primary's link, reference as the highest linked price.
+  const supplierLinks = purchase.supplierLinks ?? []
+  const effectiveLast =
+    purchase.lastPrice ??
+    (supplierLinks.find((link) => link.supplierId === purchase.primarySupplierId)?.price ??
+      supplierLinks[0]?.price)
+  const effectiveOriginal = purchase.originalPrice ?? (supplierLinks.length > 0
+    ? Math.max(...supplierLinks.map((link) => link.price ?? 0))
+    : undefined)
   const primaryName = suppliers.find((supplier) => supplier.id === purchase.primarySupplierId)?.name
   const trend =
-    purchase.lastPrice != null && purchase.originalPrice != null && purchase.originalPrice > 0
-      ? Math.round(((purchase.lastPrice - purchase.originalPrice) / purchase.originalPrice) * 100)
+    effectiveLast != null && effectiveOriginal != null && effectiveOriginal > 0
+      ? Math.round(((effectiveLast - effectiveOriginal) / effectiveOriginal) * 100)
       : null
   const firstLink = purchase.links[0]
   const memberships = lists.filter((list) => product.id != null && list.productIds.includes(product.id))
@@ -817,8 +832,7 @@ export function PurchaseSection({ product }: { product: Product }) {
             onClick={() => setSuppliersOpen(true)}
             className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
           >
-            <Glyph d={GLYPHS.edit} className="h-3 w-3" />
-            Editar
+            Ver todos
           </button>
         </div>
 
@@ -847,10 +861,10 @@ export function PurchaseSection({ product }: { product: Product }) {
           <div className="flex flex-col justify-between rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
             <span className="mb-1 text-sm font-medium text-slate-500">Último precio</span>
             <div className="my-0.5 flex items-baseline gap-1">
-              {purchase.lastPrice != null ? (
+              {effectiveLast != null ? (
                 <>
                   <span className="text-2xl font-black tracking-tight text-slate-900">
-                    {formatMoney(purchase.lastPrice).replace(' MXN', '')}
+                    {formatMoney(effectiveLast).replace(' MXN', '')}
                   </span>
                   <span className="text-xs font-semibold text-slate-500">MXN</span>
                 </>
@@ -876,9 +890,9 @@ export function PurchaseSection({ product }: { product: Product }) {
           <div className="flex flex-col justify-between rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
             <span className="mb-1 text-sm font-medium text-slate-500">Precio referencia</span>
             <div className="my-0.5 flex items-baseline gap-1 text-2xl font-bold tracking-tight text-slate-400">
-              {purchase.originalPrice != null ? (
+              {effectiveOriginal != null ? (
                 <>
-                  <span className="line-through">{formatMoney(purchase.originalPrice).replace(' MXN', '')}</span>
+                  <span className="line-through">{formatMoney(effectiveOriginal).replace(' MXN', '')}</span>
                   <span className="text-xs font-semibold text-slate-400 no-underline">MXN</span>
                 </>
               ) : (

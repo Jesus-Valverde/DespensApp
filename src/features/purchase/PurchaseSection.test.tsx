@@ -61,6 +61,11 @@ describe('purchase section on ProductDetail', () => {
         notes: undefined,
       },
     ])
+
+    // The price cards fall back to the supplier's price when the product-level
+    // fields are empty (last = primary's price, reference = highest linked).
+    const section = screen.getByRole('region', { name: 'Info de compra' })
+    expect(await within(section).findAllByText('$25.50')).toHaveLength(2)
   })
 
   it('rejects a negative price with a Spanish message and saves nothing', async () => {
