@@ -123,8 +123,9 @@ export async function savePurchaseInfo(productId: number, input: PurchaseInfoInp
         : undefined,
     period: input.period,
     links: withLinkIds(input.links),
-    // Full replacement when provided; otherwise keep what is already stored.
-    supplierLinks: input.supplierLinks ?? existing.purchase.supplierLinks,
+    // Full replacement when provided (normalized: negatives throw, blanks drop);
+    // otherwise keep what is already stored.
+    supplierLinks: input.supplierLinks?.map(normalizeSupplierLink) ?? existing.purchase.supplierLinks,
   }
 
   await db.products.update(productId, { purchase, updatedAt: new Date().toISOString() })

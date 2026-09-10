@@ -2,21 +2,14 @@ import { useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
-import type { Period, Product, ProductPurchase, Supplier, SupplierLink } from '../../db/types'
-import { savePurchaseInfo, type PurchaseLinkInput } from './api'
+import type { Period, Product, Supplier, SupplierLink } from '../../db/types'
+import { savePurchaseInfo } from './api'
 import { addMember, removeMember, createList } from '../lists/api'
 import { AddToCartModal } from '../carts/AddToCartModal'
 import { formatDate } from '../../lib/dates'
 import { formatMoney, parseMoney } from '../../lib/money'
 import { iconPath, toneClasses } from '../../lib/icons'
 import { useObjectUrl } from '../../lib/useObjectUrl'
-
-const PERIOD_OPTIONS: { value: string; label: string }[] = [
-  { value: '', label: 'Sin período' },
-  { value: 'semanal', label: 'Semanal' },
-  { value: 'quincenal', label: 'Quincenal' },
-  { value: 'mensual', label: 'Mensual' },
-]
 
 const PERIOD_LABEL: Record<Exclude<Period, null>, string> = {
   semanal: 'Semanal',
@@ -168,297 +161,9 @@ function ProductChip({ product }: { product: Product }) {
   )
 }
 
-interface PurchaseFormValue {
-  primary: string // supplier id as a string, '' = none
-  secondary: number[]
-  originalPrice: string
-  lastPrice: string
-  lastDate: string // 'YYYY-MM-DD' or ''
-  period: string // '', 'semanal', 'quincenal', 'mensual'
-  links: PurchaseLinkInput[]
-}
-
-function toFormValue(purchase: ProductPurchase): PurchaseFormValue {
-  return {
-    primary: purchase.primarySupplierId != null ? String(purchase.primarySupplierId) : '',
-    secondary: [...purchase.secondarySupplierIds],
-    originalPrice: purchase.originalPrice != null ? (purchase.originalPrice / 100).toFixed(2) : '',
-    lastPrice: purchase.lastPrice != null ? (purchase.lastPrice / 100).toFixed(2) : '',
-    lastDate: purchase.lastPurchaseDate ?? '',
-    period: purchase.period ?? '',
-    links: purchase.links.map((link) => ({ ...link })),
-  }
-}
-
-/** Parses a price field: empty → undefined (unset), invalid → null (form error),
- * anything else (including negatives) flows to the api for its message. */
-function parsePriceField(value: string): number | null | undefined {
-  if (value.trim() === '') return undefined
-  return parseMoney(value)
-}
-
 const inputClass =
   'mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20'
 
-/** "Editar información de compra" modal (Stitch design): the purchase form
- * lives behind the card's "Ver todos" action. */
-function EditPurchaseModal({
-  product,
-  suppliers,
-  onClose,
-}: {
-  product: Product
-  suppliers: Supplier[]
-  onClose: () => void
-}) {
-  const [form, setForm] = useState<PurchaseFormValue>(() => toFormValue(product.purchase))
-  const [newLinkUrl, setNewLinkUrl] = useState('')
-  const [error, setError] = useState('')
-
-  const sortedSuppliers = [...suppliers].sort((a, b) => a.name.localeCompare(b.name, 'es'))
-
-  function setField(field: keyof PurchaseFormValue, value: string) {
-    setForm((current) => ({ ...current, [field]: value }))
-  }
-
-  function toggleSecondary(supplierId: number) {
-    setForm((current) => ({
-      ...current,
-      secondary: current.secondary.includes(supplierId)
-        ? current.secondary.filter((id) => id !== supplierId)
-        : [...current.secondary, supplierId],
-    }))
-  }
-
-  function addLink() {
-    const url = newLinkUrl.trim()
-    if (!url) return
-    setForm((current) => ({ ...current, links: [...current.links, { url }] }))
-    setNewLinkUrl('')
-  }
-
-  function removeLink(index: number) {
-    setForm((current) => ({ ...current, links: current.links.filter((_, i) => i !== index) }))
-  }
-
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault()
-    setError('')
-    const originalPrice = parsePriceField(form.originalPrice)
-    const lastPrice = parsePriceField(form.lastPrice)
-    if (originalPrice === null || lastPrice === null) {
-      setError('Ingresa un precio válido')
-      return
-    }
-    const primarySupplierId = form.primary === '' ? undefined : Number(form.primary)
-    try {
-      await savePurchaseInfo(product.id!, {
-        primarySupplierId,
-        secondarySupplierIds: form.secondary.filter((id) => id !== primarySupplierId),
-        originalPrice,
-        lastPrice,
-        lastPurchaseDate: form.lastDate || undefined,
-        period: (form.period || null) as Period,
-        links: form.links,
-      })
-      onClose()
-    } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : 'No se pudo guardar la info de compra')
-    }
-  }
-
-  return (
-    <ModalShell label="Editar información de compra">
-      <ModalHeader
-        icon={GLYPHS.bag}
-        iconClass="border-amber-100 bg-amber-50 text-amber-600"
-        title="Editar información de compra"
-        subtitle={`Ajusta los precios y detalles de adquisición de ${product.title}`}
-        onClose={onClose}
-      />
-
-      <form id="purchase-edit-form" onSubmit={handleSubmit} className="flex-1 space-y-3.5 overflow-y-auto py-3">
-        <div>
-          <label htmlFor="purchase-primary" className="font-medium">
-            Proveedor principal
-          </label>
-          <select
-            id="purchase-primary"
-            value={form.primary}
-            onChange={(event) => setField('primary', event.target.value)}
-            className={inputClass}
-          >
-            <option value="">Sin proveedor</option>
-            {sortedSuppliers.map((supplier) => (
-              <option key={supplier.id} value={String(supplier.id)}>
-                {supplier.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {sortedSuppliers.length > 0 && (
-          <fieldset>
-            <legend className="font-medium">Proveedores secundarios</legend>
-            <div className="mt-1 space-y-1">
-              {sortedSuppliers
-                .filter((supplier) => String(supplier.id) !== form.primary)
-                .map((supplier) => (
-                  <label key={supplier.id} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={form.secondary.includes(supplier.id!)}
-                      onChange={() => toggleSecondary(supplier.id!)}
-                    />
-                    {supplier.name}
-                  </label>
-                ))}
-            </div>
-          </fieldset>
-        )}
-
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label htmlFor="purchase-last-price" className="font-medium">
-              Último precio
-            </label>
-            <input
-              id="purchase-last-price"
-              type="number"
-              inputMode="decimal"
-              step="any"
-              value={form.lastPrice}
-              onChange={(event) => setField('lastPrice', event.target.value)}
-              placeholder="0.00"
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="purchase-original-price" className="font-medium">
-              Precio referencia
-            </label>
-            <input
-              id="purchase-original-price"
-              type="number"
-              inputMode="decimal"
-              step="any"
-              value={form.originalPrice}
-              onChange={(event) => setField('originalPrice', event.target.value)}
-              placeholder="0.00"
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="purchase-last-date" className="font-medium">
-              Fecha de última compra
-            </label>
-            <input
-              id="purchase-last-date"
-              type="date"
-              value={form.lastDate}
-              onChange={(event) => setField('lastDate', event.target.value)}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="purchase-period" className="font-medium">
-              Frecuencia de compra
-            </label>
-            <select
-              id="purchase-period"
-              value={form.period}
-              onChange={(event) => setField('period', event.target.value)}
-              className={inputClass}
-            >
-              {PERIOD_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="purchase-link-url" className="font-medium">
-            Enlace web / URL producto <span className="font-normal text-slate-400">(opcional)</span>
-          </label>
-          <div className="mt-1 flex gap-2">
-            <input
-              id="purchase-link-url"
-              type="url"
-              value={newLinkUrl}
-              onChange={(event) => setNewLinkUrl(event.target.value)}
-              placeholder="https://tienda.com/producto…"
-              className={inputClass}
-            />
-            <button
-              type="button"
-              onClick={addLink}
-              className="shrink-0 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 font-medium transition-all active:scale-95"
-            >
-              Agregar enlace
-            </button>
-          </div>
-        </div>
-
-        {form.links.length > 0 && (
-          <ul className="space-y-1">
-            {form.links.map((link, index) => (
-              <li key={link.id ?? `new-${index}`} className="flex items-center justify-between gap-2">
-                <span className="truncate">{link.url}</span>
-                <span className="flex shrink-0 gap-2">
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-lg border border-slate-200 px-2.5 py-1 transition-all active:scale-95"
-                  >
-                    Abrir
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => removeLink(index)}
-                    className="rounded-lg border border-red-200 px-2.5 py-1 text-red-600 transition-all active:scale-95"
-                  >
-                    Quitar
-                  </button>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {error && (
-          <p role="alert" className="text-sm text-red-600">
-            {error}
-          </p>
-        )}
-      </form>
-
-      <div className="flex shrink-0 items-center gap-2 border-t border-slate-100 pt-3">
-        <button
-          type="button"
-          onClick={onClose}
-          className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 active:scale-95"
-        >
-          Cancelar
-        </button>
-        <button
-          type="submit"
-          form="purchase-edit-form"
-          className="flex-1 rounded-xl bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95"
-        >
-          Guardar cambios
-        </button>
-      </div>
-    </ModalShell>
-  )
-}
-
-/** "Proveedores del producto" modal (Stitch design): one card per linked
- * supplier. Per-supplier price/frequency/link are not in the schema yet — the
- * card shows the product's own price for the primary supplier only. */
 function SuppliersModal({
   product,
   suppliers,
@@ -1065,7 +770,6 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
 export function PurchaseSection({ product }: { product: Product }) {
   const suppliers = useLiveQuery(() => db.suppliers.toArray(), []) ?? []
   const lists = useLiveQuery(() => db.lists.toArray(), []) ?? []
-  const [editOpen, setEditOpen] = useState(false)
   const [suppliersOpen, setSuppliersOpen] = useState(false)
   const [vincularLink, setVincularLink] = useState<SupplierLink | null>(null)
   const [vincularOpen, setVincularOpen] = useState(false)
@@ -1110,11 +814,11 @@ export function PurchaseSection({ product }: { product: Product }) {
           </div>
           <button
             type="button"
-            onClick={() => setEditOpen(true)}
+            onClick={() => setSuppliersOpen(true)}
             className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700"
           >
-            Ver todos
-            <Glyph d={GLYPHS.chevron} className="h-3.5 w-3.5" />
+            <Glyph d={GLYPHS.edit} className="h-3 w-3" />
+            Editar
           </button>
         </div>
 
@@ -1301,14 +1005,6 @@ export function PurchaseSection({ product }: { product: Product }) {
           </p>
         )}
       </div>
-
-      {editOpen && (
-        <EditPurchaseModal
-          product={product}
-          suppliers={suppliers}
-          onClose={() => setEditOpen(false)}
-        />
-      )}
       {suppliersOpen && (
         <SuppliersModal
           product={product}

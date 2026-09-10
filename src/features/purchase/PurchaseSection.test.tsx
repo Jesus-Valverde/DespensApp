@@ -27,106 +27,82 @@ beforeEach(async () => {
   await Promise.all([db.products.clear(), db.suppliers.clear(), db.carts.clear()])
 })
 
-async function openPurchaseForm(section: HTMLElement) {
-  // The design shows the read-only card; the form opens behind "Ver todos".
-  await fireEvent.click(within(section).getByRole('button', { name: /Ver todos/ }))
-}
-
 describe('purchase section on ProductDetail', () => {
-  it('records supplier, prices and a link from the form (spec: record purchase info)', async () => {
+  it('records the primary supplier with price and link from the vincular modal', async () => {
     const user = userEvent.setup()
     const ids = await seedSuppliers()
     const id = await createProduct({ title: 'Detergente', customProps: [] })
 
     renderDetail(id)
     await screen.findByRole('heading', { level: 1, name: 'Detergente' })
-    const section = await screen.findByRole('region', { name: 'Info de compra' })
-    await openPurchaseForm(section)
-    await within(section).findAllByText('Soriana') // wait for the suppliers liveQuery
+    // The provider row opens the "Proveedores del producto" modal.
+    await user.click(await screen.findByRole('button', { name: /Sin proveedor/ }))
+    await user.click(screen.getByRole('button', { name: /Vincular nuevo proveedor/ }))
 
-    await user.selectOptions(within(section).getByLabelText('Proveedor principal'), String(ids.Soriana))
-    await user.type(within(section).getByLabelText('Precio referencia'), '25.50')
-    await user.type(within(section).getByLabelText(/Enlace web/), 'https://soriana.com/detergente')
-    await user.click(within(section).getByRole('button', { name: 'Agregar enlace' }))
-    await user.click(within(section).getByRole('button', { name: 'Guardar cambios' }))
+    const dialog = screen.getByRole('dialog', { name: 'Vincular nuevo proveedor' })
+    await user.selectOptions(within(dialog).getByLabelText('Seleccionar proveedor'), String(ids.Soriana))
+    // The visible label reads "Principal"; the DOM text is lowercase (CSS capitalize).
+    await user.click(within(dialog).getByLabelText(/principal/i))
+    await user.type(within(dialog).getByLabelText('Precio referencia'), '25.50')
+    await user.type(within(dialog).getByLabelText(/Enlace web/), 'https://soriana.com/detergente')
+    await user.click(within(dialog).getByRole('button', { name: 'Vincular proveedor' }))
 
-    const purchase = (await db.products.get(id))?.purchase
-    expect(purchase).toMatchObject({
-      primarySupplierId: ids.Soriana,
-      originalPrice: 2550,
-      links: [{ id: 1, url: 'https://soriana.com/detergente' }],
+    const purchase = await waitFor(async () => {
+      const stored = (await db.products.get(id))?.purchase
+      expect(stored?.primarySupplierId).toEqual(ids.Soriana)
+      return stored
     })
-    expect(await within(section).findByText('$25.50')).toBeInTheDocument()
-    // The saved link shows on the read-only card once the modal closes.
-    const open = within(section).getByRole('link', { name: 'Abrir tienda en línea' })
-    expect(open).toHaveAttribute('href', 'https://soriana.com/detergente')
+    expect(purchase?.supplierLinks).toEqual([
+      {
+        supplierId: ids.Soriana,
+        price: 2550,
+        frequency: undefined,
+        url: 'https://soriana.com/detergente',
+        notes: undefined,
+      },
+    ])
   })
 
   it('rejects a negative price with a Spanish message and saves nothing', async () => {
     const user = userEvent.setup()
+    const ids = await seedSuppliers()
     const id = await createProduct({ title: 'Detergente', customProps: [] })
 
     renderDetail(id)
     await screen.findByRole('heading', { level: 1, name: 'Detergente' })
-    const section = await screen.findByRole('region', { name: 'Info de compra' })
-    await openPurchaseForm(section)
+    await user.click(await screen.findByRole('button', { name: /Sin proveedor/ }))
+    await user.click(screen.getByRole('button', { name: /Vincular nuevo proveedor/ }))
 
+    const dialog = screen.getByRole('dialog', { name: 'Vincular nuevo proveedor' })
+    await within(dialog).findAllByText('Soriana') // wait for the suppliers liveQuery
+    await user.selectOptions(within(dialog).getByLabelText('Seleccionar proveedor'), String(ids.Soriana))
     // happy-dom drops the minus sign when typing into number inputs, so set the value directly.
-    fireEvent.change(within(section).getByLabelText('Precio referencia'), { target: { value: '-1' } })
-    await user.click(within(section).getByRole('button', { name: 'Guardar cambios' }))
+    fireEvent.change(within(dialog).getByLabelText('Precio referencia'), { target: { value: '-1' } })
+    await user.click(within(dialog).getByRole('button', { name: 'Vincular proveedor' }))
 
-    const alert = await within(section).findByRole('alert')
+    const alert = await within(dialog).findByRole('alert')
     expect(alert).toHaveTextContent('El precio no puede ser negativo')
-    expect((await db.products.get(id))?.purchase.originalPrice).toBeUndefined()
+    expect((await db.products.get(id))?.purchase.supplierLinks).toBeUndefined()
   })
 
-  it('schedules the next purchase from the last date and weekly period', async () => {
-    const user = userEvent.setup()
+  it('shows the scheduled next purchase date on the card', async () => {
     const id = await createProduct({ title: 'Leche entera', customProps: [] })
-
-    renderDetail(id)
-    await screen.findByRole('heading', { level: 1, name: 'Leche entera' })
-    const section = await screen.findByRole('region', { name: 'Info de compra' })
-    await openPurchaseForm(section)
-
-    // happy-dom does not accept typed date input values, so set the value directly.
-    fireEvent.change(within(section).getByLabelText('Fecha de última compra'), {
-      target: { value: '2026-09-01' },
-    })
-    await user.selectOptions(within(section).getByLabelText('Frecuencia de compra'), 'semanal')
-    await user.click(within(section).getByRole('button', { name: 'Guardar cambios' }))
-
-    expect((await db.products.get(id))?.purchase.nextPurchaseDate).toBe('2026-09-08')
-    expect(await within(section).findByText('8 de septiembre de 2026')).toBeInTheDocument()
-    expect(within(section).getByText('Próxima compra')).toBeInTheDocument()
-  })
-
-  it('stores secondary suppliers and removes a link before saving', async () => {
-    const user = userEvent.setup()
-    const ids = await seedSuppliers()
-    const id = await createProduct({ title: 'Detergente', customProps: [] })
     await db.products.update(id, {
       purchase: {
         secondarySupplierIds: [],
-        links: [{ id: 1, url: 'https://viejo.com/x' }],
-        period: null,
+        links: [],
+        period: 'semanal',
+        lastPurchaseDate: '2026-09-01',
+        nextPurchaseDate: '2026-09-08',
       },
     })
 
     renderDetail(id)
-    await screen.findByRole('heading', { level: 1, name: 'Detergente' })
+    await screen.findByRole('heading', { level: 1, name: 'Leche entera' })
     const section = await screen.findByRole('region', { name: 'Info de compra' })
-    await openPurchaseForm(section)
-    await within(section).findAllByText('Mercado Libre') // wait for the suppliers liveQuery
 
-    await user.click(within(section).getByRole('checkbox', { name: 'Mercado Libre' }))
-    await user.click(within(section).getAllByRole('button', { name: 'Quitar' })[0])
-    await user.click(within(section).getByRole('button', { name: 'Guardar cambios' }))
-
-    expect((await db.products.get(id))?.purchase).toMatchObject({
-      secondarySupplierIds: [ids['Mercado Libre']],
-      links: [],
-    })
+    expect(await within(section).findByText('8 de septiembre de 2026')).toBeInTheDocument()
+    expect(within(section).getByText('Próxima compra')).toBeInTheDocument()
   })
 
   it('links a supplier with per-supplier metadata from the suppliers modal', async () => {
