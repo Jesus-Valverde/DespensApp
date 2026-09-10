@@ -63,10 +63,12 @@ describe('purchase section on ProductDetail', () => {
       },
     ])
 
-    // The price cards fall back to the supplier's price when the product-level
-    // fields are empty (last = primary's price, reference = highest linked).
+    // The reference card falls back to the supplier's web price when the
+    // product-level field is empty; last price stays empty until a real purchase.
     const section = screen.getByRole('region', { name: 'Info de compra' })
-    expect(await within(section).findAllByText('$25.50')).toHaveLength(2)
+    expect(await within(section).findByText('$25.50')).toBeInTheDocument()
+    expect(within(section).getByText('Precio en página web')).toBeInTheDocument()
+    expect(within(section).getByText('Aún sin compras')).toBeInTheDocument()
     // Frecuencia falls back to the supplier's frequency too.
     expect(await within(section).findByText('Mensual')).toBeInTheDocument()
   })

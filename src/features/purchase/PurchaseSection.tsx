@@ -785,24 +785,24 @@ export function PurchaseSection({ product }: { product: Product }) {
   const [listError, setListError] = useState('')
 
   const purchase = product.purchase
-  // Fall back to per-supplier prices when the product-level fields are empty:
-  // last price from the primary's link, reference as the highest linked price.
+  // "Último precio" only reflects real purchases (buyCart). The supplier's web
+  // price is the reference: product-level field, else the primary's link price
+  // (or the highest linked price as a generic fallback).
   const supplierLinks = purchase.supplierLinks ?? []
-  const effectiveLast =
-    purchase.lastPrice ??
+  const referencePrice =
+    purchase.originalPrice ??
     (supplierLinks.find((link) => link.supplierId === purchase.primarySupplierId)?.price ??
-      supplierLinks[0]?.price)
-  const effectiveOriginal = purchase.originalPrice ?? (supplierLinks.length > 0
-    ? Math.max(...supplierLinks.map((link) => link.price ?? 0))
-    : undefined)
+      (supplierLinks.length > 0
+        ? Math.max(...supplierLinks.map((link) => link.price ?? 0))
+        : undefined))
+  const primaryName = suppliers.find((supplier) => supplier.id === purchase.primarySupplierId)?.name
   const effectiveFrequency =
     purchase.period ??
     (supplierLinks.find((link) => link.supplierId === purchase.primarySupplierId)?.frequency ??
       supplierLinks[0]?.frequency)
-  const primaryName = suppliers.find((supplier) => supplier.id === purchase.primarySupplierId)?.name
   const trend =
-    effectiveLast != null && effectiveOriginal != null && effectiveOriginal > 0
-      ? Math.round(((effectiveLast - effectiveOriginal) / effectiveOriginal) * 100)
+    purchase.lastPrice != null && referencePrice != null && referencePrice > 0
+      ? Math.round(((purchase.lastPrice - referencePrice) / referencePrice) * 100)
       : null
   const firstLink = purchase.links[0]
   const memberships = lists.filter((list) => product.id != null && list.productIds.includes(product.id))
@@ -865,10 +865,10 @@ export function PurchaseSection({ product }: { product: Product }) {
           <div className="flex flex-col justify-between rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
             <span className="mb-1 text-sm font-medium text-slate-500">Último precio</span>
             <div className="my-0.5 flex items-baseline gap-1">
-              {effectiveLast != null ? (
+              {purchase.lastPrice != null ? (
                 <>
                   <span className="text-2xl font-black tracking-tight text-slate-900">
-                    {formatMoney(effectiveLast).replace(' MXN', '')}
+                    {formatMoney(purchase.lastPrice).replace(' MXN', '')}
                   </span>
                   <span className="text-xs font-semibold text-slate-500">MXN</span>
                 </>
@@ -884,26 +884,26 @@ export function PurchaseSection({ product }: { product: Product }) {
               >
                 <Glyph d={trend < 0 ? GLYPHS.trendDown : GLYPHS.trendUp} className="h-3.5 w-3.5" />
                 <span>
-                  {trend > 0 ? `+${trend}%` : `${trend}%`} vs habitual
+                  {trend > 0 ? `+${trend}%` : `${trend}%`} vs referencia
                 </span>
               </div>
             ) : (
-              <span className="mt-1.5 text-xs font-normal text-slate-500">Sin referencia</span>
+              <span className="mt-1.5 text-xs font-normal text-slate-500">Aún sin compras</span>
             )}
           </div>
           <div className="flex flex-col justify-between rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
             <span className="mb-1 text-sm font-medium text-slate-500">Precio referencia</span>
             <div className="my-0.5 flex items-baseline gap-1 text-2xl font-bold tracking-tight text-slate-400">
-              {effectiveOriginal != null ? (
+              {referencePrice != null ? (
                 <>
-                  <span className="line-through">{formatMoney(effectiveOriginal).replace(' MXN', '')}</span>
-                  <span className="text-xs font-semibold text-slate-400 no-underline">MXN</span>
+                  <span>{formatMoney(referencePrice).replace(' MXN', '')}</span>
+                  <span className="text-xs font-semibold text-slate-400">MXN</span>
                 </>
               ) : (
                 <span className="text-slate-300">—</span>
               )}
             </div>
-            <span className="mt-1.5 text-xs font-normal text-slate-500">Máximo sugerido</span>
+            <span className="mt-1.5 text-xs font-normal text-slate-500">Precio en página web</span>
           </div>
         </div>
 
