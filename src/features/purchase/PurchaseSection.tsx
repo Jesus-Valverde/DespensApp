@@ -33,6 +33,8 @@ const GLYPHS = {
   chevron: 'M9 18l6-6-6-6',
   cerrar: 'M6 18L18 6M6 6l12 12',
   check: 'M5 13l4 4L19 7',
+  ojo: 'M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0 M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z',
+  edit: 'M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z',
   business:
     'M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2 M4 16v6 M8 16v6 M12 16v6 M16 16v6 M20 16v6 M2 16h20 M3 10.5 12 3l9 7.5 M5 9v7 M9 9v7 M11 9v7 M13 9v7 M15 9v7 M19 9v7',
   lista: 'M3 5h.01 M3 12h.01 M3 19h.01 M8 5h13 M8 12h13 M8 19h13',
@@ -542,13 +544,24 @@ function SuppliersModal({
                 ) : (
                   <span />
                 )}
-                <button
-                  type="button"
-                  onClick={() => onEditSupplier(meta ?? { supplierId: supplier.id! })}
-                  className="inline-flex items-center gap-1 font-medium text-slate-600 transition hover:text-blue-600"
-                >
-                  Editar
-                </button>
+                {principal ? (
+                  <Link
+                    to="/settings/suppliers"
+                    className="inline-flex items-center gap-1 font-medium text-slate-600 transition hover:text-blue-600"
+                  >
+                    <Glyph d={GLYPHS.ojo} className="h-3.5 w-3.5" />
+                    Ver proveedor
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => onEditSupplier(meta ?? { supplierId: supplier.id! })}
+                    className="inline-flex items-center gap-1 font-medium text-slate-600 transition hover:text-blue-600"
+                  >
+                    <Glyph d={GLYPHS.edit} className="h-3 w-3" />
+                    Editar
+                  </button>
+                )}
               </div>
             </div>
           )
