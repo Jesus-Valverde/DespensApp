@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen, within, fireEvent } from '@testing-library/react'
+import { render, screen, within, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { ProductDetail } from '../products/ProductDetail'
@@ -126,5 +126,32 @@ describe('purchase section on ProductDetail', () => {
       secondarySupplierIds: [ids['Mercado Libre']],
       links: [],
     })
+  })
+
+  it('links a supplier with per-supplier metadata from the suppliers modal', async () => {
+    const user = userEvent.setup()
+    const ids = await seedSuppliers()
+    const id = await createProduct({ title: 'Detergente', customProps: [] })
+
+    renderDetail(id)
+    await screen.findByRole('heading', { level: 1, name: 'Detergente' })
+    // The provider row opens the "Proveedores del producto" modal.
+    await user.click(await screen.findByRole('button', { name: /Sin proveedor/ }))
+    await user.click(screen.getByRole('button', { name: /Vincular nuevo proveedor/ }))
+
+    const dialog = screen.getByRole('dialog', { name: 'Vincular nuevo proveedor' })
+    await user.selectOptions(within(dialog).getByLabelText('Seleccionar proveedor'), String(ids.Soriana))
+    await user.type(within(dialog).getByLabelText('Precio referencia'), '26.50')
+    await user.selectOptions(within(dialog).getByLabelText('Frecuencia estimada'), 'mensual')
+    await user.click(within(dialog).getByRole('button', { name: 'Vincular proveedor' }))
+
+    const purchase = await waitFor(async () => {
+      const stored = (await db.products.get(id))?.purchase
+      expect(stored?.secondarySupplierIds).toEqual([ids.Soriana])
+      return stored
+    })
+    expect(purchase?.supplierLinks).toEqual([
+      { supplierId: ids.Soriana, price: 2650, frequency: 'mensual', url: undefined, notes: undefined },
+    ])
   })
 })

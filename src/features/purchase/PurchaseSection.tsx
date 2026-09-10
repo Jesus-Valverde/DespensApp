@@ -2,7 +2,7 @@ import { useState, type FormEvent, type ReactNode } from 'react'
 import { Link } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
-import type { Period, Product, ProductPurchase, Supplier } from '../../db/types'
+import type { Period, Product, ProductPurchase, Supplier, SupplierLink } from '../../db/types'
 import { savePurchaseInfo, type PurchaseLinkInput } from './api'
 import { addMember, removeMember } from '../lists/api'
 import { formatDate } from '../../lib/dates'
@@ -431,17 +431,19 @@ function EditPurchaseModal({
 function SuppliersModal({
   product,
   suppliers,
-  onEdit,
+  onEditSupplier,
   onLink,
   onClose,
 }: {
   product: Product
   suppliers: Supplier[]
-  onEdit: () => void
+  onEditSupplier: (link: SupplierLink) => void
   onLink: () => void
   onClose: () => void
 }) {
   const purchase = product.purchase
+  const linkFor = (supplierId: number) =>
+    purchase.supplierLinks?.find((link) => link.supplierId === supplierId)
   const cards: { supplier: Supplier; principal: boolean }[] = []
   const primary = suppliers.find((supplier) => supplier.id === purchase.primarySupplierId)
   if (primary) cards.push({ supplier: primary, principal: true })
@@ -450,6 +452,12 @@ function SuppliersModal({
     if (supplier) cards.push({ supplier, principal: false })
   }
   const firstLink = purchase.links[0]
+  // Rotating tints for secondary supplier icon chips, per the design.
+  const SECONDARY_TINTS = [
+    'border-emerald-100 bg-emerald-50 text-emerald-600',
+    'border-amber-100 bg-amber-50 text-amber-600',
+    'border-slate-200 bg-slate-100 text-slate-600',
+  ]
 
   return (
     <ModalShell label="Proveedores del producto">
@@ -466,79 +474,85 @@ function SuppliersModal({
         {cards.length === 0 && (
           <p className="py-4 text-center text-sm text-slate-400">Sin proveedores vinculados.</p>
         )}
-        {cards.map(({ supplier, principal }) => (
-          <div
-            key={supplier.id}
-            className={`flex flex-col gap-2.5 rounded-2xl border p-3.5 ${
-              principal ? 'border-blue-100 bg-blue-50/50' : 'border-slate-200/80 bg-white shadow-sm'
-            }`}
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-2.5">
-                <span
-                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border shadow-sm ${
-                    principal
-                      ? 'border-blue-200 bg-blue-100 text-blue-600'
-                      : 'border-slate-200 bg-slate-100 text-slate-600'
-                  }`}
-                >
-                  <Glyph d={GLYPHS.store} className="h-5 w-5" />
-                </span>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <h4 className="text-xs font-bold text-slate-900">{supplier.name}</h4>
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                        principal
-                          ? 'bg-blue-600 text-white'
-                          : 'border border-slate-200 bg-slate-100 text-slate-600'
-                      }`}
-                    >
-                      {principal ? 'Principal' : 'Secundario'}
-                    </span>
+        {cards.map(({ supplier, principal }, index) => {
+          const meta = linkFor(supplier.id!)
+          const price = meta?.price ?? (principal ? purchase.lastPrice : undefined)
+          const url = meta?.url ?? (principal ? firstLink?.url : undefined)
+          const frequency = meta?.frequency ?? purchase.period
+          return (
+            <div
+              key={supplier.id}
+              className={`flex flex-col gap-2.5 rounded-2xl border p-3.5 ${
+                principal ? 'border-blue-100 bg-blue-50/50' : 'border-slate-200/80 bg-white shadow-sm'
+              }`}
+            >
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border shadow-sm ${
+                      principal
+                        ? 'border-blue-200 bg-blue-100 text-blue-600'
+                        : SECONDARY_TINTS[index % SECONDARY_TINTS.length]
+                    }`}
+                  >
+                    <Glyph d={GLYPHS.store} className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h4 className="text-xs font-bold text-slate-900">{supplier.name}</h4>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                          principal
+                            ? 'bg-blue-600 text-white'
+                            : 'border border-slate-200 bg-slate-100 text-slate-600'
+                        }`}
+                      >
+                        {principal ? 'Principal' : 'Secundario'}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 text-xs font-medium text-slate-500">
+                      Frecuencia: {frequency ? PERIOD_LABEL[frequency] : '—'}
+                    </p>
                   </div>
-                  <p className="mt-0.5 text-xs font-medium text-slate-500">
-                    Frecuencia: {purchase.period ? PERIOD_LABEL[purchase.period] : '—'}
-                  </p>
+                </div>
+                <div className="text-right">
+                  {price != null ? (
+                    <>
+                      <span className="block text-xs font-black text-slate-900">
+                        {formatMoney(price).replace(' MXN', '')}
+                      </span>
+                      <span className="block text-xs font-semibold text-slate-400">MXN</span>
+                    </>
+                  ) : (
+                    <span className="block text-xs font-black text-slate-300">—</span>
+                  )}
                 </div>
               </div>
-              <div className="text-right">
-                {principal && purchase.lastPrice != null ? (
-                  <>
-                    <span className="block text-xs font-black text-slate-900">
-                      {formatMoney(purchase.lastPrice).replace(' MXN', '')}
-                    </span>
-                    <span className="block text-xs font-semibold text-slate-400">MXN</span>
-                  </>
+              <div className="flex items-center justify-between border-t border-slate-100 pt-2 text-xs">
+                {url ? (
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 font-semibold text-blue-600 hover:underline"
+                  >
+                    <Glyph d={GLYPHS.link} className="h-3 w-3" />
+                    {url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]}
+                  </a>
                 ) : (
-                  <span className="block text-xs font-black text-slate-300">—</span>
+                  <span />
                 )}
+                <button
+                  type="button"
+                  onClick={() => onEditSupplier(meta ?? { supplierId: supplier.id! })}
+                  className="inline-flex items-center gap-1 font-medium text-slate-600 transition hover:text-blue-600"
+                >
+                  Editar
+                </button>
               </div>
             </div>
-            <div className="flex items-center justify-between border-t border-slate-100 pt-2 text-xs">
-              {principal && firstLink ? (
-                <a
-                  href={firstLink.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1 font-semibold text-blue-600 hover:underline"
-                >
-                  <Glyph d={GLYPHS.link} className="h-3 w-3" />
-                  {firstLink.url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0]}
-                </a>
-              ) : (
-                <span />
-              )}
-              <button
-                type="button"
-                onClick={onEdit}
-                className="inline-flex items-center gap-1 font-medium text-slate-600 transition hover:text-blue-600"
-              >
-                Editar
-              </button>
-            </div>
-          </div>
-        ))}
+          )
+        })}
 
         {suppliers.length > cards.length && (
           <button
@@ -566,24 +580,37 @@ function SuppliersModal({
   )
 }
 
-/** "Vincular nuevo proveedor" modal. The design's per-supplier price, frequency,
- * link and notes are not in the schema yet — only the relation (rol) is saved. */
+/** "Vincular nuevo proveedor" modal (Stitch design): rol + per-supplier price,
+ * frequency, url and notes. Reused in edit mode by the "Editar" card action. */
 function VincularModal({
   product,
   suppliers,
+  link,
   onClose,
 }: {
   product: Product
   suppliers: Supplier[]
+  link?: SupplierLink
   onClose: () => void
 }) {
   const purchase = product.purchase
-  const available = suppliers.filter(
-    (supplier) =>
-      supplier.id !== purchase.primarySupplierId && !purchase.secondarySupplierIds.includes(supplier.id!),
+  const editing = link != null
+  const available = editing
+    ? suppliers
+    : suppliers.filter(
+        (supplier) =>
+          supplier.id !== purchase.primarySupplierId &&
+          !purchase.secondarySupplierIds.includes(supplier.id!),
+      )
+  const supplierName = (id: number) => suppliers.find((supplier) => supplier.id === id)?.name
+  const [pickedId, setPickedId] = useState(link ? String(link.supplierId) : '')
+  const [rol, setRol] = useState<'principal' | 'secundario'>(
+    link && purchase.primarySupplierId === link.supplierId ? 'principal' : 'secundario',
   )
-  const [pickedId, setPickedId] = useState('')
-  const [rol, setRol] = useState<'principal' | 'secundario'>('secundario')
+  const [price, setPrice] = useState(link?.price != null ? (link.price / 100).toFixed(2) : '')
+  const [frequency, setFrequency] = useState(link?.frequency ?? '')
+  const [url, setUrl] = useState(link?.url ?? '')
+  const [notes, setNotes] = useState(link?.notes ?? '')
   const [error, setError] = useState('')
 
   async function handleSubmit(event: FormEvent) {
@@ -594,20 +621,40 @@ function VincularModal({
       return
     }
     const picked = Number(pickedId)
+    const parsedPrice = price.trim() === '' ? undefined : parseMoney(price)
+    if (parsedPrice === null) {
+      setError('Ingresa un precio válido')
+      return
+    }
     const demotedPrimary =
       rol === 'principal' && purchase.primarySupplierId != null && purchase.primarySupplierId !== picked
+    const nextLink: SupplierLink = {
+      supplierId: picked,
+      price: parsedPrice,
+      frequency: (frequency || undefined) as Period | undefined,
+      url: url.trim() || undefined,
+      notes: notes.trim() || undefined,
+    }
+    const supplierLinks = [
+      ...(purchase.supplierLinks ?? []).filter((candidate) => candidate.supplierId !== picked),
+      nextLink,
+    ]
     try {
       await savePurchaseInfo(product.id!, {
         primarySupplierId: rol === 'principal' ? picked : purchase.primarySupplierId,
-        secondarySupplierIds: [
-          ...purchase.secondarySupplierIds.filter((id) => id !== picked),
-          ...(demotedPrimary ? [purchase.primarySupplierId!] : []),
-        ],
+        secondarySupplierIds:
+          rol === 'principal'
+            ? [
+                ...purchase.secondarySupplierIds.filter((id) => id !== picked),
+                ...(demotedPrimary ? [purchase.primarySupplierId!] : []),
+              ]
+            : [...new Set([...purchase.secondarySupplierIds.filter((id) => id !== picked), picked])],
         originalPrice: purchase.originalPrice,
         lastPrice: purchase.lastPrice,
         lastPurchaseDate: purchase.lastPurchaseDate,
         period: purchase.period,
         links: purchase.links,
+        supplierLinks,
       })
       onClose()
     } catch (cause) {
@@ -616,17 +663,21 @@ function VincularModal({
   }
 
   return (
-    <ModalShell label="Vincular nuevo proveedor">
+    <ModalShell label={editing ? 'Editar proveedor' : 'Vincular nuevo proveedor'}>
       <ModalHeader
         icon={GLYPHS.business}
         iconClass="border-blue-100 bg-blue-50 text-blue-600"
-        title="Vincular nuevo proveedor"
-        subtitle={`Asocia una tienda o comercio a ${product.title}`}
+        title={editing ? 'Editar proveedor' : 'Vincular nuevo proveedor'}
+        subtitle={
+          editing && link
+            ? `Ajusta precio y datos de ${supplierName(link.supplierId) ?? 'este proveedor'}`
+            : `Asocia una tienda o comercio a ${product.title}`
+        }
         onClose={onClose}
       />
       <ProductChip product={product} />
 
-      <form onSubmit={handleSubmit} className="flex-1 space-y-3.5 overflow-y-auto py-3">
+      <form id="vincular-form" onSubmit={handleSubmit} className="flex-1 space-y-3.5 overflow-y-auto py-3">
         <div>
           <label htmlFor="vincular-proveedor" className="font-medium">
             Seleccionar proveedor
@@ -644,6 +695,22 @@ function VincularModal({
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label htmlFor="vincular-price" className="font-medium">
+            Precio referencia
+          </label>
+          <input
+            id="vincular-price"
+            type="number"
+            inputMode="decimal"
+            step="any"
+            value={price}
+            onChange={(event) => setPrice(event.target.value)}
+            placeholder="0.00"
+            className={inputClass}
+          />
         </div>
 
         <div>
@@ -674,6 +741,50 @@ function VincularModal({
           </div>
         </div>
 
+        <div>
+          <label htmlFor="vincular-frequency" className="font-medium">
+            Frecuencia estimada
+          </label>
+          <select
+            id="vincular-frequency"
+            value={frequency}
+            onChange={(event) => setFrequency(event.target.value)}
+            className={inputClass}
+          >
+            <option value="">Sin frecuencia</option>
+            <option value="semanal">Semanal</option>
+            <option value="quincenal">Quincenal</option>
+            <option value="mensual">Mensual</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="vincular-url" className="font-medium">
+            Enlace web / URL producto <span className="font-normal text-slate-400">(opcional)</span>
+          </label>
+          <input
+            id="vincular-url"
+            type="url"
+            value={url}
+            onChange={(event) => setUrl(event.target.value)}
+            placeholder="https://tienda.com/producto…"
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="vincular-notes" className="font-medium">
+            Notas o presentación <span className="font-normal text-slate-400">(opcional)</span>
+          </label>
+          <input
+            id="vincular-notes"
+            value={notes}
+            onChange={(event) => setNotes(event.target.value)}
+            placeholder="Ej. Paquete con 12 piezas, comprar sólo en oferta"
+            className={inputClass}
+          />
+        </div>
+
         {error && (
           <p role="alert" className="text-sm text-red-600">
             {error}
@@ -691,6 +802,7 @@ function VincularModal({
         </button>
         <button
           type="submit"
+          form="vincular-form"
           className="flex-1 rounded-xl bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95"
         >
           Vincular proveedor
@@ -839,6 +951,7 @@ export function PurchaseSection({ product }: { product: Product }) {
   const lists = useLiveQuery(() => db.lists.toArray(), []) ?? []
   const [editOpen, setEditOpen] = useState(false)
   const [suppliersOpen, setSuppliersOpen] = useState(false)
+  const [vincularLink, setVincularLink] = useState<SupplierLink | null>(null)
   const [vincularOpen, setVincularOpen] = useState(false)
   const [listsOpen, setListsOpen] = useState(false)
   const [pickedListId, setPickedListId] = useState('')
@@ -1082,19 +1195,26 @@ export function PurchaseSection({ product }: { product: Product }) {
         <SuppliersModal
           product={product}
           suppliers={suppliers}
-          onEdit={() => {
+          onEditSupplier={(link) => {
             setSuppliersOpen(false)
-            setEditOpen(true)
+            setVincularLink(link)
+            setVincularOpen(true)
           }}
           onLink={() => {
             setSuppliersOpen(false)
+            setVincularLink(null)
             setVincularOpen(true)
           }}
           onClose={() => setSuppliersOpen(false)}
         />
       )}
       {vincularOpen && (
-        <VincularModal product={product} suppliers={suppliers} onClose={() => setVincularOpen(false)} />
+        <VincularModal
+          product={product}
+          suppliers={suppliers}
+          link={vincularLink ?? undefined}
+          onClose={() => setVincularOpen(false)}
+        />
       )}
       {listsOpen && <ListsModal product={product} onClose={() => setListsOpen(false)} />}
     </section>
