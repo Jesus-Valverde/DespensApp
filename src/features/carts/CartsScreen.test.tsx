@@ -48,7 +48,7 @@ describe('CartsScreen', () => {
     const productId = await makeDueProduct('Detergente', supplierId)
 
     renderScreen()
-    await user.click(screen.getByRole('button', { name: 'Generar carrito' }))
+    await user.click(screen.getByRole('button', { name: 'Generar desde compras programadas' }))
 
     expect(await screen.findByText(/^Carrito generado/)).toBeInTheDocument()
     const [cart] = await db.carts.toArray()
@@ -70,7 +70,7 @@ describe('CartsScreen', () => {
     })
 
     renderScreen()
-    await user.click(screen.getByRole('button', { name: 'Generar carrito' }))
+    await user.click(screen.getByRole('button', { name: 'Generar desde compras programadas' }))
 
     // The notice appears after generateAutoCart's async pass — await it.
     expect(await screen.findByRole('alert')).toHaveTextContent('No hay productos pendientes de compra')
