@@ -104,6 +104,10 @@ export interface Cart {
   createdAt: string
   generatedAt?: string
   purchasedAt?: string
+  /** Planned spending cap in centavos. */
+  budget?: number
+  /** Planned purchase date, 'YYYY-MM-DD'. */
+  estimatedDate?: string
   items: CartItem[]
 }
 

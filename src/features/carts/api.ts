@@ -12,11 +12,33 @@ export const NO_SUPPLIER = 'Sin proveedor'
 export interface CartInput {
   name: string
   origin?: CartOrigin
+  /** Planned spending cap in centavos; must be zero or positive. */
+  budget?: number
+  /** Planned purchase date, 'YYYY-MM-DD'. */
+  estimatedDate?: string
 }
 
 function requireCartName(name: string): string {
   const trimmed = name.trim()
   if (!trimmed) throw new Error('El nombre del carrito es obligatorio')
+  return trimmed
+}
+
+/** Budgets below zero (or NaN) never reach storage; undefined means "no cap". */
+function normalizeBudget(budget: number | undefined): number | undefined {
+  if (budget == null) return undefined
+  if (Number.isNaN(budget) || budget < 0) throw new Error('El presupuesto no puede ser negativo')
+  return budget
+}
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/
+
+/** Blank strings mean "no estimate"; anything else must be 'YYYY-MM-DD'. */
+function normalizeEstimatedDate(date: string | undefined): string | undefined {
+  if (date == null) return undefined
+  const trimmed = date.trim()
+  if (!trimmed) return undefined
+  if (!ISO_DATE.test(trimmed)) throw new Error('La fecha estimada no es válida')
   return trimmed
 }
 
@@ -159,13 +181,16 @@ export function groupCartItems(items: CartItem[]): SupplierGroup[] {
   return groups
 }
 
-/** Creates a new active cart (origin defaults to a manual creation). */
+/** Creates a new active cart (origin defaults to a manual creation). Budget
+ * and estimated date are optional planning fields, normalized before storage. */
 export async function createCart(input: CartInput): Promise<number> {
   const id = await db.carts.add({
     name: requireCartName(input.name),
     status: 'active',
     origin: input.origin ?? 'manual',
     createdAt: new Date().toISOString(),
+    budget: normalizeBudget(input.budget),
+    estimatedDate: normalizeEstimatedDate(input.estimatedDate),
     items: [],
   })
   return id as number

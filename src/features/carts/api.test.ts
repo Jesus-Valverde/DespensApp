@@ -47,6 +47,53 @@ describe('createCart', () => {
   })
 })
 
+describe('createCart budget and estimated date', () => {
+  it('persists the budget (centavos) and the estimated date on the cart', async () => {
+    const id = await createCart({ name: 'Súper de la quincena', budget: 500000, estimatedDate: '2026-09-15' })
+
+    await expect(db.carts.get(id)).resolves.toMatchObject({
+      budget: 500000,
+      estimatedDate: '2026-09-15',
+    })
+  })
+
+  it('rejects a negative or NaN budget with a Spanish error and stores nothing', async () => {
+    await expect(createCart({ name: 'Súper', budget: -1 })).rejects.toThrow('El presupuesto no puede ser negativo')
+    await expect(createCart({ name: 'Súper', budget: Number.NaN })).rejects.toThrow('El presupuesto no puede ser negativo')
+
+    expect(await db.carts.count()).toBe(0)
+  })
+
+  it('rejects an estimated date that is not YYYY-MM-DD', async () => {
+    await expect(createCart({ name: 'Súper', estimatedDate: '15-09-2026' })).rejects.toThrow('La fecha estimada no es válida')
+    await expect(createCart({ name: 'Súper', estimatedDate: '2026/09/15' })).rejects.toThrow('La fecha estimada no es válida')
+
+    expect(await db.carts.count()).toBe(0)
+  })
+
+  it('normalizes blank strings to undefined', async () => {
+    const id = await createCart({ name: 'Súper', estimatedDate: '   ' })
+
+    const cart = await db.carts.get(id)
+    expect(cart?.estimatedDate).toBeUndefined()
+    expect(cart?.budget).toBeUndefined()
+  })
+
+  it('keeps budget and estimated date when the cart is bought', async () => {
+    const productId = await makeProduct('Leche entera')
+    const cartId = await createCart({ name: 'Súper', budget: 500000, estimatedDate: '2026-09-15' })
+    await addCartItem(cartId, { productId, qty: 2, unitPrice: 2800 })
+
+    await buyCart(cartId)
+
+    await expect(db.carts.get(cartId)).resolves.toMatchObject({
+      status: 'purchased',
+      budget: 500000,
+      estimatedDate: '2026-09-15',
+    })
+  })
+})
+
 describe('cancelCart', () => {
   it('marks an active cart cancelled and keeps it as history (spec: cancel keeps history)', async () => {
     const id = await createCart({ name: 'Súper de la semana' })
