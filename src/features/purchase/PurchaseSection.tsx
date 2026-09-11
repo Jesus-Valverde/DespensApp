@@ -5,6 +5,7 @@ import { db } from '../../db/db'
 import type { Period, Product, Supplier, SupplierLink } from '../../db/types'
 import { savePurchaseInfo } from './api'
 import { addMember, removeMember, createList } from '../lists/api'
+import { listColorClasses, listIconGlyph, LIST_COLORS, LIST_ICONS } from '../lists/ui'
 import { AddToCartModal } from '../carts/AddToCartModal'
 import { formatDate } from '../../lib/dates'
 import { formatMoney, parseMoney } from '../../lib/money'
@@ -574,19 +575,6 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
   const [saving, setSaving] = useState(false)
   const [search, setSearch] = useState('')
   const [creating, setCreating] = useState(false)
-  const [newListTitle, setNewListTitle] = useState('')
-  const [createError, setCreateError] = useState('')
-
-  async function handleCreateList() {
-    setCreateError('')
-    try {
-      await createList({ title: newListTitle })
-      setNewListTitle('')
-      setCreating(false)
-    } catch (cause) {
-      setCreateError(cause instanceof Error ? cause.message : 'No se pudo crear la lista')
-    }
-  }
 
   const baseMembership = (listId: number) =>
     product.id != null && lists.some((list) => list.id === listId && list.productIds.includes(product.id!))
@@ -684,8 +672,10 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
                 >
                   {checked && <Glyph d={GLYPHS.check} className="h-3 w-3" strokeWidth={3} />}
                 </span>
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200/80 bg-slate-50 text-blue-600">
-                  <Glyph d={GLYPHS.cart} className="h-4 w-4" />
+                <span
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200/80 ${listColorClasses(list.color).chip}`}
+                >
+                  <Glyph d={listIconGlyph(list.icon)} className="h-4 w-4" />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-xs font-bold text-slate-900">{list.title}</span>
@@ -704,45 +694,24 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
         })()}
       </div>
 
-      {creating ? (
-        <div className="shrink-0 space-y-1.5">
-          <div className="flex gap-2">
-            <input
-              value={newListTitle}
-              onChange={(event) => setNewListTitle(event.target.value)}
-              placeholder="Ej. Despensa Mensual, Frutas y Verduras…"
-              aria-label="Nombre de la lista"
-              className="flex-1 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-xs font-medium text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20"
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  event.preventDefault()
-                  handleCreateList()
-                }
-              }}
-            />
-            <button
-              type="button"
-              onClick={handleCreateList}
-              className="rounded-2xl bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-95"
-            >
-              Crear
-            </button>
-          </div>
-          {createError && (
-            <p role="alert" className="text-xs text-red-600">
-              {createError}
-            </p>
-          )}
-        </div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setCreating(true)}
-          className="flex w-full shrink-0 items-center justify-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2.5 text-xs font-semibold text-slate-600 transition active:scale-95 hover:bg-slate-50"
-        >
-          <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-400" />
-          Crear nueva lista
-        </button>
+      <button
+        type="button"
+        onClick={() => setCreating(true)}
+        className="flex w-full shrink-0 items-center justify-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2.5 text-xs font-semibold text-slate-600 transition active:scale-95 hover:bg-slate-50"
+      >
+        <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-400" />
+        Crear nueva lista
+      </button>
+
+      {creating && (
+        <CreateListModal
+          onCancel={() => setCreating(false)}
+          onCreated={(newId) => {
+            setCreating(false)
+            // Auto-select the fresh list so "Guardar asignación" includes it.
+            setAdded((current) => [...current, newId])
+          }}
+        />
       )}
 
       {error && (
@@ -1053,5 +1022,189 @@ export function PurchaseSection({ product }: { product: Product }) {
         <AddToCartModal product={product} onClose={() => setCartModalOpen(false)} />
       )}
     </section>
+  )
+}
+
+/** "Crear nueva lista" modal (Stitch design): name, thematic icon and color.
+ * On success the list id flows back so the pick list can preselect it. */
+function CreateListModal({
+  onCancel,
+  onCreated,
+}: {
+  onCancel: () => void
+  onCreated: (listId: number) => void
+}) {
+  const [title, setTitle] = useState('')
+  const [icon, setIcon] = useState(LIST_ICONS[0].key)
+  const [color, setColor] = useState(LIST_COLORS[0].key)
+  const [customColor, setCustomColor] = useState<string | null>(null)
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  const activeColorName = customColor ? 'Personalizado' : listColorClasses(color).name
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault()
+    setError('')
+    setSaving(true)
+    try {
+      const newId = await createList({ title, icon, color: customColor ?? color })
+      onCreated(newId)
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No se pudo crear la lista')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const labelClass = 'block text-xs font-bold uppercase tracking-wider text-slate-600'
+  const inputClass =
+    'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Crear nueva lista"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm"
+    >
+      <div className="relative flex max-h-[92vh] w-full max-w-sm flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white p-5 shadow-2xl sm:p-6">
+        <button
+          type="button"
+          aria-label="Cerrar modal"
+          onClick={onCancel}
+          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition hover:bg-slate-200 hover:text-slate-600 active:scale-95"
+        >
+          <Glyph d={GLYPHS.cerrar} className="h-4 w-4" />
+        </button>
+
+        <div className="mb-4 flex items-start gap-3.5 pr-8">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-blue-100/60 bg-blue-50 text-blue-600 shadow-sm">
+            <Glyph d={GLYPHS.lista} className="h-6 w-6" />
+          </span>
+          <div>
+            <h3 className="text-xl font-bold leading-snug tracking-tight text-slate-900">Crear nueva lista</h3>
+            <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
+              Organiza tus compras por ocasión, tienda o periodicidad
+            </p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4 overflow-y-auto pb-1 pr-1">
+          <div className="space-y-1.5">
+            <label htmlFor="list-name" className={labelClass}>
+              Nombre de la lista <span className="font-bold text-red-500">*</span>
+            </label>
+            <input
+              id="list-name"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              placeholder="Ej. Despensa Mensual, Frutas y Verduras…"
+              className={inputClass}
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <span className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+              Selecciona un ícono
+            </span>
+            <div className="flex items-center justify-between gap-2 pt-0.5">
+              {LIST_ICONS.map((option) => {
+                const tint = listColorClasses(color)
+                const selected = option.key === icon
+                return (
+                  <button
+                    key={option.key}
+                    type="button"
+                    aria-label={option.label}
+                    aria-pressed={selected}
+                    onClick={() => setIcon(option.key)}
+                    className={`flex h-11 w-11 items-center justify-center rounded-2xl shadow-sm transition-transform active:scale-95 ${tint.chip} ${
+                      selected ? 'ring-2 ring-blue-600 ring-offset-2' : ''
+                    }`}
+                  >
+                    <Glyph d={option.glyph} className="h-5 w-5" />
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="block text-xs font-bold uppercase tracking-wider text-slate-500">
+                Color de la lista
+              </span>
+              <span className="rounded-full border border-blue-100 bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-600">
+                {activeColorName}
+              </span>
+            </div>
+            <div className="rounded-2xl border border-slate-200/90 bg-slate-50/80 p-4 shadow-sm">
+              <div className="grid grid-cols-6 justify-items-center gap-2.5">
+                {LIST_COLORS.map((option) => {
+                  const selected = !customColor && option.key === color
+                  return (
+                    <button
+                      key={option.key}
+                      type="button"
+                      aria-label={option.name}
+                      aria-pressed={selected}
+                      onClick={() => {
+                        setColor(option.key)
+                        setCustomColor(null)
+                      }}
+                      className={`flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-transform active:scale-95 ${option.dot} ${
+                        selected ? 'ring-2 ring-slate-900 ring-offset-2' : 'hover:scale-105'
+                      }`}
+                    >
+                      {selected && <Glyph d={GLYPHS.check} className="h-4 w-4 text-white" strokeWidth={2.5} />}
+                    </button>
+                  )
+                })}
+                <label
+                  aria-label="Color personalizado"
+                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-slate-300 text-xs font-bold text-slate-400 transition-colors hover:border-slate-400 hover:text-slate-600"
+                  style={customColor ? { backgroundColor: customColor } : undefined}
+                >
+                  {!customColor && '+'}
+                  <input
+                    type="color"
+                    value={customColor ?? '#2563eb'}
+                    onChange={(event) => setCustomColor(event.target.value)}
+                    className="sr-only"
+                  />
+                </label>
+              </div>
+              <p className="mt-3 text-center text-[11px] text-slate-400">
+                El color destacará los productos y accesos directos de esta lista
+              </p>
+            </div>
+          </div>
+
+          {error && (
+            <p role="alert" className="text-sm text-red-600">
+              {error}
+            </p>
+          )}
+
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="w-full rounded-xl border border-slate-200 bg-slate-100 px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:bg-slate-200 active:scale-[0.98]"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="w-full rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-md shadow-blue-500/25 transition-all hover:bg-blue-700 active:scale-[0.98] disabled:opacity-60"
+            >
+              Crear lista
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }
