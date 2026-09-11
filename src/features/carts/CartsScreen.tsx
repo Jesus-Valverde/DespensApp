@@ -179,6 +179,27 @@ export function CartsScreen() {
           ))}
         </section>
       )}
+
+      {/* Screen-level FAB (the Layout FAB is suppressed on /carts). */}
+      <button
+        type="button"
+        aria-label="Nuevo carrito"
+        onClick={() => setCreating(true)}
+        className="fixed bottom-24 right-[max(1.25rem,calc(50vw-195px))] z-30 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 transition active:scale-95"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2.5}
+          strokeLinecap="round"
+          className="h-6 w-6"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14" />
+          <path d="M5 12h14" />
+        </svg>
+      </button>
     </section>
   )
 }

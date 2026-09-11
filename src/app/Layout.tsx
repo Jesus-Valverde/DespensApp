@@ -68,10 +68,10 @@ const tabs: { to: string; label: string; end?: boolean; Icon: IconComponent }[] 
 ]
 
 function fabFor(pathname: string): { to: string; label: string } | null {
-  // Exact list routes only — no FAB over detail/edit/new screens.
+  // Exact list routes only — no FAB over detail/edit/new screens. /carts
+  // renders its own FAB that opens the in-screen create modal.
   if (pathname === '/despensa' || pathname === '/products')
     return { to: '/products/new', label: 'Nuevo producto' }
-  if (pathname === '/carts') return { to: '/carts/new', label: 'Nuevo carrito' }
   return null
 }
 
