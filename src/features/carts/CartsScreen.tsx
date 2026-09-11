@@ -5,6 +5,7 @@ import { db } from '../../db/db'
 import type { Cart, CartStatus } from '../../db/types'
 import { formatMoney } from '../../lib/money'
 import { generateAutoCart } from './api'
+import { CreateCartModal } from './AddToCartModal'
 
 export const CART_STATUS_LABEL: Record<CartStatus, string> = {
   active: 'Activo',
@@ -80,6 +81,7 @@ export function CartsScreen() {
   const navigate = useNavigate()
   const carts = useLiveQuery(() => db.carts.toArray(), []) ?? []
   const [notice, setNotice] = useState('')
+  const [creating, setCreating] = useState(false)
 
   const active = carts
     .filter((cart) => cart.status === 'active')
@@ -136,7 +138,7 @@ export function CartsScreen() {
           </p>
           <button
             type="button"
-            onClick={() => navigate('/carts/new')}
+            onClick={() => setCreating(true)}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 py-3.5 text-sm font-bold text-white shadow-md shadow-blue-500/35 transition-all hover:bg-blue-700 active:scale-[0.99]"
           >
             <svg
@@ -166,6 +168,8 @@ export function CartsScreen() {
           </button>
         </section>
       )}
+
+      {creating && <CreateCartModal onCancel={() => setCreating(false)} onCreated={() => setCreating(false)} />}
 
       {history.length > 0 && (
         <section aria-label="Historial" className="mt-6 space-y-2.5">
