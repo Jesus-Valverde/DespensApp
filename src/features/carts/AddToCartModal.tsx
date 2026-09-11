@@ -2,14 +2,13 @@
 // to the full creation form), set a quantity and add the product. Adding to a
 // cart that already has the product merges quantities (addCartItem behavior).
 
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useEffect, useState, type FormEvent } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import type { Product } from '../../db/types'
-import { formatMoney } from '../../lib/money'
+import { formatMoney, parseMoney } from '../../lib/money'
 import { iconPath, toneClasses } from '../../lib/icons'
 import { useObjectUrl } from '../../lib/useObjectUrl'
-import { addCartItem, listCarts } from './api'
+import { addCartItem, createCart, listCarts } from './api'
 
 const GLYPHS = {
   cart: 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
@@ -46,13 +45,13 @@ function Glyph({ d, className = 'h-5 w-5', strokeWidth = 2 }: { d: string; class
 }
 
 export function AddToCartModal({ product, onClose }: { product: Product; onClose: () => void }) {
-  const navigate = useNavigate()
   const carts = useLiveQuery(() => listCarts('active'), []) ?? []
   const imageUrl = useObjectUrl(product.image)
   const [pickedId, setPickedId] = useState<number | null>(null)
   const [qty, setQty] = useState(1)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
+  const [creating, setCreating] = useState(false)
 
   // Preselect the newest active cart like the design's checked first row.
   useEffect(() => {
@@ -247,15 +246,22 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
 
         <button
           type="button"
-          onClick={() => {
-            onClose()
-            navigate('/carts/new')
-          }}
+          onClick={() => setCreating(true)}
           className="mt-2.5 flex w-full shrink-0 items-center justify-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2.5 text-xs font-semibold text-slate-600 transition active:scale-95 hover:bg-slate-50"
         >
           <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-400" />
           Crear nuevo carrito
         </button>
+
+        {creating && (
+          <CreateCartModal
+            onCancel={() => setCreating(false)}
+            onCreated={(newId) => {
+              setCreating(false)
+              setPickedId(newId)
+            }}
+          />
+        )}
 
         {error && (
           <p role="alert" className="mt-2 shrink-0 text-sm text-red-600">
@@ -281,6 +287,149 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
             Agregar al carrito
           </button>
         </div>
+      </div>
+    </div>
+  )
+}
+
+
+/** "Crear nuevo carrito" modal (Stitch design): name, optional budget and
+ * estimated date. On success the new cart id flows back so the pick list can
+ * preselect it. */
+export function CreateCartModal({
+  onCancel,
+  onCreated,
+}: {
+  onCancel: () => void
+  onCreated: (cartId: number) => void
+}) {
+  const [name, setName] = useState('')
+  const [budget, setBudget] = useState('')
+  const [date, setDate] = useState('')
+  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false)
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault()
+    setError('')
+    setSaving(true)
+    try {
+      const newId = await createCart({
+        name,
+        budget: budget.trim() === '' ? undefined : parseMoney(budget) ?? undefined,
+        estimatedDate: date || undefined,
+      })
+      onCreated(newId)
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'No se pudo crear el carrito')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const labelClass = 'mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700'
+  const inputClass =
+    'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-1 focus:ring-blue-600'
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Crear nuevo carrito"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
+    >
+      <div className="relative w-full max-w-sm rounded-3xl border border-slate-100 bg-white p-5 shadow-2xl sm:p-6">
+        <button
+          type="button"
+          aria-label="Cerrar modal"
+          onClick={onCancel}
+          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200 active:scale-95"
+        >
+          <Glyph d={GLYPHS.cerrar} className="h-4 w-4" />
+        </button>
+        <div className="mb-3.5 flex items-center gap-3 pr-8">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-blue-100/80 bg-blue-50 text-blue-600 shadow-sm">
+            <Glyph d={GLYPHS.cartPlus} className="h-6 w-6" />
+          </span>
+          <div>
+            <h3 className="text-lg font-bold leading-snug tracking-tight text-slate-800">Crear nuevo carrito</h3>
+            <p className="mt-0.5 text-xs leading-tight text-slate-500">
+              Configura un nuevo carrito de compra para surtir tu despensa
+            </p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-3.5">
+          <div>
+            <label htmlFor="cart-name" className={labelClass}>
+              Nombre del carrito *
+            </label>
+            <input
+              id="cart-name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Ej. Súper Quincenal Walmart, Reposición…"
+              className={inputClass}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-2.5">
+            <div>
+              <label htmlFor="cart-budget" className={labelClass}>
+                Presupuesto (opc.)
+              </label>
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-xs font-bold text-slate-400">$</span>
+                <input
+                  id="cart-budget"
+                  type="number"
+                  inputMode="decimal"
+                  step="any"
+                  value={budget}
+                  onChange={(event) => setBudget(event.target.value)}
+                  placeholder="0.00"
+                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-6 pr-10 text-xs font-bold text-slate-800 shadow-sm outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                />
+                <span className="absolute right-2.5 text-[10px] font-semibold text-slate-400">MXN</span>
+              </div>
+            </div>
+            <div>
+              <label htmlFor="cart-date" className={labelClass}>
+                Fecha estimada
+              </label>
+              <input
+                id="cart-date"
+                type="date"
+                value={date}
+                onChange={(event) => setDate(event.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-700 shadow-sm outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+              />
+            </div>
+          </div>
+
+          {error && (
+            <p role="alert" className="text-sm text-red-600">
+              {error}
+            </p>
+          )}
+
+          <div className="flex items-center gap-2.5 border-t border-slate-100 pt-2">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex-1 rounded-xl border border-slate-200 px-3 py-3 text-xs font-medium text-slate-700 transition hover:bg-slate-50 active:scale-95"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3 py-3 text-xs font-medium text-white shadow-md shadow-blue-500/25 transition hover:bg-blue-700 active:scale-95 disabled:opacity-60"
+            >
+              <Glyph d={GLYPHS.cart} className="h-4 w-4" />
+              Crear carrito
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )

@@ -161,4 +161,29 @@ describe('purchase section on ProductDetail', () => {
       expect.objectContaining({ productId: id, qty: 2, title: 'Detergente' }),
     ])
   })
+
+  it('creates a new cart with budget and estimated date from the modal', async () => {
+    const user = userEvent.setup()
+    const id = await createProduct({ title: 'Detergente', customProps: [] })
+
+    renderDetail(id)
+    await screen.findByRole('heading', { level: 1, name: 'Detergente' })
+    await user.click(await screen.findByRole('button', { name: 'Agregar al carrito' }))
+    await user.click(screen.getByRole('button', { name: 'Crear nuevo carrito' }))
+
+    const dialog = screen.getByRole('dialog', { name: 'Crear nuevo carrito' })
+    await user.type(within(dialog).getByLabelText(/Nombre del carrito/), 'Súper Quincenal')
+    await user.type(within(dialog).getByLabelText(/Presupuesto/), '1200')
+    await user.type(within(dialog).getByLabelText(/Fecha estimada/), '2026-09-20')
+    await user.click(within(dialog).getByRole('button', { name: 'Crear carrito' }))
+
+    const cart = await waitFor(async () => {
+      const created = (await db.carts.toArray()).find((candidate) => candidate.name === 'Súper Quincenal')
+      expect(created).toBeDefined()
+      return created
+    })
+    expect(cart).toMatchObject({ budget: 120000, estimatedDate: '2026-09-20', status: 'active' })
+    // The new cart lands in the pick list preselected.
+    expect(await screen.findByRole('dialog', { name: 'Agregar a carrito' })).toBeInTheDocument()
+  })
 })
