@@ -27,6 +27,18 @@ describe('renameList', () => {
     await expect(renameList(id, '  ')).rejects.toThrow('El nombre de la lista es obligatorio')
     await expect(renameList(999, 'Otro')).rejects.toThrow('Lista no encontrada')
   })
+
+  it('keeps icon and color when renaming (partial update)', async () => {
+    const id = await createList({ title: 'Para el viaje', icon: 'carrito', color: 'azul' })
+
+    await renameList(id, 'Súper del fin')
+
+    expect(await db.lists.get(id)).toMatchObject({
+      title: 'Súper del fin',
+      icon: 'carrito',
+      color: 'azul',
+    })
+  })
 })
 
 describe('deleteList', () => {
@@ -116,5 +128,19 @@ describe('createList', () => {
     expect((await db.lists.get(id))?.title).toBe('Para el viaje')
 
     await expect(createList({ title: '   ' })).rejects.toThrow('El nombre de la lista es obligatorio')
+  })
+
+  it('persists icon and color when provided', async () => {
+    const id = await createList({ title: 'Para el viaje', icon: 'carrito', color: 'azul' })
+
+    expect(await db.lists.get(id)).toMatchObject({ icon: 'carrito', color: 'azul' })
+  })
+
+  it('trims icon and color, storing undefined for empty or whitespace values', async () => {
+    const id = await createList({ title: 'Para el viaje', icon: '  carrito  ', color: '   ' })
+
+    const list = await db.lists.get(id)
+    expect(list?.icon).toBe('carrito')
+    expect(list?.color).toBeUndefined()
   })
 })

@@ -13,12 +13,22 @@ function requireListTitle(title: string): string {
 
 export interface ListInput {
   title: string
+  icon?: string
+  color?: string
+}
+
+/** Trims an optional string; empty or whitespace-only becomes undefined. */
+function normalizeOptional(value: string | undefined): string | undefined {
+  const trimmed = value?.trim()
+  return trimmed || undefined
 }
 
 /** Creates a list that starts with zero products. */
 export async function createList(input: ListInput): Promise<number> {
   const id = await db.lists.add({
     title: requireListTitle(input.title),
+    icon: normalizeOptional(input.icon),
+    color: normalizeOptional(input.color),
     productIds: [],
     createdAt: new Date().toISOString(),
   })

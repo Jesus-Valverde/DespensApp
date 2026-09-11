@@ -114,6 +114,10 @@ export interface Cart {
 export interface List {
   id?: number
   title: string
+  /** Short visual key, e.g. 'carrito'; the UI maps it to a glyph. */
+  icon?: string
+  /** Short color key, e.g. 'azul'; the UI maps it to a Tailwind tone. */
+  color?: string
   productIds: number[]
   createdAt: string
 }
