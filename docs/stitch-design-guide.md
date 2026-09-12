@@ -29,6 +29,8 @@ Chrome, every screen:
 - FAB: round gradient (blue→indigo) "+" button, bottom-right above the tab bar, ONLY on Despensa and Productos list (opens new-product form). The Carritos list has its own identical "+" FAB that opens a create-cart modal. No FAB on forms or detail screens.
 - Modals: centered white card rounded-3xl on a dimmed blurred overlay; leading icon chip (rounded, blue-50 bg, blue-600 icon), bold title + small subtitle; circular X close button top-right; footer row with an outline "Cancelar" button and one filled primary button (red if destructive).
 
+- Icons: Lucide (lucide.dev), stroke style, 24px grid, stroke-width 1.5 for UI icons and tab bar glyphs; the 25 pantry category icons are custom app glyphs (keep them as drawn). Never use emoji or other icon families.
+
 HARD RULES: Use ONLY the fields, buttons, tabs, and texts listed in this prompt. Do NOT invent extra fields, settings, filters, or actions. ALL visible text in Spanish, exactly as written.
 ```
 
