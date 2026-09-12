@@ -25,8 +25,8 @@ Mobile app "DespensApp" — a Spanish-language household pantry and inventory ma
 Chrome, every screen:
 - Top brand header, IDENTICAL on every screen: small rounded logo tile with blue gradient + bold wordmark "DespensApp" (dark, near-black) with small gray tagline "Control de despensa" under it, and on the right a notification bell icon with a small blue dot indicator when there are notifications (products under their minimum stock with alerts enabled). Tapping the bell opens the notifications panel. The header NEVER changes between screens — no back button, no screen title inside it.
 - Below the header, each screen renders its own window title bar separated by a thin divider: on tab-root screens the big title + small gray subtitle + a green count pill, NO back button; on form and detail screens a circular back-arrow button at top-left next to the window title (e.g. ← "Nuevo producto") that returns to the previous screen.
-- Bottom tab bar, 5 tabs, fixed, white with top border: "Inicio" (house), "Despensa" (cube), "Carritos" (cart), "Listas" (list), "Proveedores" (sliders). Active tab: blue pill behind icon + bold blue label; inactive slate-500. There is NO "Productos" tab — the catalog lives inside Despensa.
-- FAB: round gradient (blue→indigo) "+" button, bottom-right above the tab bar, ONLY on the Despensa screen's Catálogo view (opens new-product form). The Carritos list has its own identical "+" FAB that opens a create-cart modal. No FAB on the Stock view, forms, or detail screens.
+- Bottom tab bar, 3 tabs, fixed, white with top border: "Inicio" (house), "Despensa" (cube), "Compras" (shopping cart). Active tab: blue pill behind icon + bold blue label; inactive slate-500. Despensa hosts the catalog via a "Stock | Catálogo" toggle; Compras hosts Carritos, Listas and Proveedores via a three-way toggle. There are NO Productos, Carritos, Listas, or Proveedores tabs.
+- FAB: round gradient (blue→indigo) "+" button, bottom-right above the tab bar, ONLY on the Despensa screen's Catálogo view (opens new-product form). The Compras screen's Carritos view has its own identical "+" FAB that opens a create-cart modal. No FAB on the Stock, Listas or Proveedores views, forms, or detail screens.
 - Modals: centered white card rounded-3xl on a dimmed blurred overlay; leading icon chip (rounded, blue-50 bg, blue-600 icon), bold title + small subtitle; circular X close button top-right; footer row with an outline "Cancelar" button and one filled primary button (red if destructive).
 
 - Icons: Lucide (lucide.dev), stroke style, 24px grid, stroke-width 1.5 for UI icons and tab bar glyphs; the 25 pantry category icons are custom app glyphs (keep them as drawn). Never use emoji or other icon families.
@@ -188,13 +188,13 @@ Modal "Vincular nuevo proveedor" (or "Editar proveedor"): subtitle "Asocia una t
 Modal "Agregar a carrito": product chip (visual, family badge, brand · last price, title). Stepper "Cantidad a agregar" (−/+). Section "Carritos activos": radio list rows with meta "Proveedor: {name} · {n} arts. · Est. {money}", newest preselected; empty "No tienes carritos activos. Crea uno abajo.". Dashed button "Crear nuevo carrito". Footer "Cancelar" / filled blue "Agregar al carrito".
 ```
 
-### 9. Carritos (tab root)
+### 9. Compras (tab root, three internal views)
 
 ```text
-Screen "Carritos". Header: title "Carritos", subtitle "Gestión de compras y pedidos", green pill "{n} Activos". This screen has its own gradient "+" FAB opening the create-cart modal.
-Active cart cards: cart icon, bold name, summary "{n} artículos · Total {money}", blue status badge "Activo".
-History section with cards for purchased/cancelled carts, badges "Comprado" / "Cancelado".
-Empty: centered card "No tienes carritos activos", body "Sin carritos activos. Crea uno con el botón + o genera uno desde tus compras programadas.", blue button "Crear carrito" + text link "Generar desde compras programadas".
+Screen "Compras" with an internal segmented toggle right under the title: three tabs "Carritos", "Listas", "Proveedores" (remembered selection, defaults to Carritos). No global back button.
+CARRITOS VIEW: header row title "Carritos", subtitle "Gestión de compras y pedidos", green pill "{n} Activos". This view has its own gradient "+" FAB opening the create-cart modal (screen block 11). Active cart cards: cart icon, bold name, summary "{n} artículos · Total {money}", blue status badge "Activo". History section with cards for purchased/cancelled carts, badges "Comprado" / "Cancelado". Empty: centered card "No tienes carritos activos", body "Sin carritos activos. Crea uno con el botón + o genera uno desde tus compras programadas.", blue button "Crear carrito" + text link "Generar desde compras programadas".
+LISTAS VIEW: header row title "Listas". Colorful list cards: leading icon tile tinted with the list color (icon keys: Carrito de compras, Bolsa de mandado, Caja de despensa, Parrillada y eventos, Cafetería y oficina), bold list name, subtitle "1 producto" / "{n} productos". Inline create form at top: input "Nombre de la lista", placeholder "Para el viaje", button "Crear lista". Empty: "Aún no tienes listas."
+PROVEEDORES VIEW: header row title "Proveedores". Inline create/edit form card: "Nombre" (required), "Tipo" (placeholder "Supermercado, mayoreo, en línea…"), "Ubicaciones (separadas por comas)" (placeholder "Centro, Norte"). Buttons "Guardar" + "Cancelar" (only while editing). Supplier list: card per supplier with name, type chip, location rows, actions "Editar" / "Eliminar". Delete confirmation must mention affected products.
 ```
 
 ### 10. Carrito — detail
@@ -214,12 +214,9 @@ Fields: 1 "Nombre del carrito *" text, placeholder "Ej. Súper Quincenal Walmart
 Footer: outline "Cancelar" + filled blue "Crear carrito" with cart icon.
 ```
 
-### 12. Listas (tab root)
+### 12. Listas — merged into Compras
 
-```text
-Screen "Listas". Big title "Listas". Colorful list cards: leading icon tile tinted with the list color (icon keys: Carrito de compras, Bolsa de mandado, Caja de despensa, Parrillada y eventos, Cafetería y oficina), bold list name, subtitle "1 producto" / "{n} productos".
-Inline create form at top: input "Nombre de la lista", placeholder "Para el viaje", button "Crear lista". Empty: "Aún no tienes listas."
-```
+Removed as a standalone screen (2026-09-12): Listas is a view of the Compras module — see screen block 9. List detail (block 13) and create-list modal (block 14) still apply unchanged.
 
 ### 13. Lista — detail
 
@@ -237,13 +234,9 @@ Fields: 1 "Nombre de la lista *" text, placeholder "Ej. Despensa Mensual, Frutas
 Footer: "Cancelar" / "Crear lista".
 ```
 
-### 15. Proveedores (tab root)
+### 15. Proveedores — merged into Compras
 
-```text
-Screen "Proveedores". Big title "Proveedores".
-Inline create/edit form card: "Nombre" (required), "Tipo" (placeholder "Supermercado, mayoreo, en línea…"), "Ubicaciones (separadas por comas)" (placeholder "Centro, Norte"). Buttons "Guardar" + "Cancelar" (only while editing).
-Supplier list: card per supplier with name, type chip, location rows, actions "Editar" / "Eliminar". Delete confirmation must mention affected products.
-```
+Removed as a standalone screen (2026-09-12): Proveedores is a view of the Compras module — see screen block 9.
 
 ### 16. Notifications panel (from header bell)
 
@@ -258,13 +251,14 @@ List rows: product thumbnail, bold title, amber badge "Bajo mínimo", meta "Mín
 
 | Screen / surface | State |
 |---|---|
-| Shell (brand header, 5 tabs, FAB) | ✅ Stitched |
+| Shell (brand header, 3 tabs: Inicio/Despensa/Compras, FAB) | ✅ Stitched — 🆕 2026-09-12: 3-tab footer |
 | Inicio | ✅ Stitched |
-| Despensa | ✅ Stitched — 🆕 2026-09-12: now hosts Catalog via "Stock | Catálogo" toggle (footer tab Productos removed) |
+| Despensa | ✅ Stitched — 🆕 2026-09-12: now hosts Catalog via "Stock | Catálogo" toggle |
 | Productos catalog | ✅ Stitched — relocated as Despensa's Catálogo view |
+| Compras module | 🆕 2026-09-12: hosts Carritos + Listas + Proveedores via three-way toggle (blocks 10, 13, 14 unchanged) |
 | Product form + VisualPicker | ✅ Stitched |
 | Product detail + tabs + all modals (props, delete, levels, movement, history, suppliers, vincular, lists, add-to-cart) | ✅ Stitched |
-| Carritos list (status badge, empty state, own FAB) | ✅ Stitched |
+| Carritos (Compras view: status badge, empty state, own FAB) | ✅ Stitched |
 | Carrito detail | ⬜ legacy — next restyle target |
 | Cart create modal | ✅ Stitched (in-screen) |
 | Listas / List detail / Create list modal | ⬜ legacy — next restyle targets |
