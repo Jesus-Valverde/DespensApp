@@ -3,7 +3,7 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { ProductDetail } from './ProductDetail'
-import { ProductList } from './ProductList'
+import { CatalogView } from './ProductList'
 import { db } from '../../db/db'
 import { createProduct } from './api'
 
@@ -14,7 +14,7 @@ function renderAt(path: string) {
   render(
     <MemoryRouter initialEntries={[path]}>
       <Routes>
-        <Route path="/products" element={<ProductList />} />
+        <Route path="/products" element={<CatalogView />} />
         <Route path="/products/:id" element={<ProductDetail />} />
       </Routes>
     </MemoryRouter>,

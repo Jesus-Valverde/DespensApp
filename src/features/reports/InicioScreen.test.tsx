@@ -86,7 +86,7 @@ describe('InicioScreen', () => {
 
     const link = await screen.findByRole('link', { name: /Carritos/ })
     expect(link).toHaveTextContent('activos')
-    expect(link).toHaveAttribute('href', '/carts')
+    expect(link).toHaveAttribute('href', '/compras/carritos')
   })
 
   it('shows the empty states and recent movements when nothing is due', async () => {

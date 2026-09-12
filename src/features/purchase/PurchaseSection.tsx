@@ -281,7 +281,7 @@ function SuppliersModal({
                 )}
                 {principal ? (
                   <Link
-                    to="/settings/suppliers"
+                    to="/compras/proveedores"
                     className="inline-flex items-center gap-1 font-medium text-slate-600 transition hover:text-blue-600"
                   >
                     <Glyph d={GLYPHS.ojo} className="h-3.5 w-3.5" />

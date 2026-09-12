@@ -76,8 +76,9 @@ function CatalogCard({ product }: { product: Product }) {
   )
 }
 
-/** /products — the master catalog: search + product cards (Stitch design). */
-export function ProductList() {
+/** Catalog body: search + product cards, without the screen header. Lives
+ * inside the Despensa screen's "Catálogo" view (there is no Productos tab). */
+export function CatalogView() {
   const [query, setQuery] = useState('')
   const products = useLiveQuery(() => db.products.orderBy('title').toArray(), []) ?? []
 
@@ -92,17 +93,6 @@ export function ProductList() {
 
   return (
     <section>
-      <div className="mb-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Productos</h1>
-          <p className="mt-0.5 text-xs text-slate-500">Catálogo maestro de artículos</p>
-        </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-100/80 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-          <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
-          {products.length} en catálogo
-        </span>
-      </div>
-
       <div className="relative mb-5">
         <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">

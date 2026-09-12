@@ -2,10 +2,10 @@ import { describe, it, expect } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
 import { App } from './App'
 
-const TABS = ['Inicio', 'Despensa', 'Productos', 'Carritos', 'Listas', 'Proveedores']
+const TABS = ['Inicio', 'Despensa', 'Compras']
 
 describe('App shell', () => {
-  it('renders the 5 Spanish bottom tabs', () => {
+  it('renders the 3 Spanish bottom tabs', () => {
     render(<App />)
     // Scoped to the bottom nav: the Inicio dashboard also links to these sections.
     const nav = screen.getByRole('navigation', { name: 'Navegación principal' })

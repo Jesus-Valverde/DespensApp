@@ -49,7 +49,10 @@ describe('DespensaScreen', () => {
     expect(screen.getByText('Sin stock')).toBeInTheDocument()
     expect(screen.getByText('En inventario')).toBeInTheDocument()
     expect(screen.getByText(/2 Artículos/)).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /Catálogo/ })).toHaveAttribute('href', '/products')
+    expect(screen.getByRole('link', { name: 'Catálogo' })).toHaveAttribute(
+      'href',
+      '/despensa/catalogo',
+    )
   })
 
   it('filters by area using the chips', async () => {

@@ -48,30 +48,18 @@ const ProductsIcon = icon(
 const CartsIcon = icon(
   'M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z',
 )
-const ListsIcon = icon(
-  'M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z',
-)
-const SuppliersIcon = icon(
-  'M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75',
-)
-
-/** Catalog glyph: grid of squares (Productos tab). */
-const CatalogIcon = icon('M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z')
 
 const tabs: { to: string; label: string; end?: boolean; Icon: IconComponent }[] = [
   { to: '/', label: 'Inicio', end: true, Icon: HomeIcon },
   { to: '/despensa', label: 'Despensa', Icon: ProductsIcon },
-  { to: '/products', label: 'Productos', Icon: CatalogIcon },
-  { to: '/carts', label: 'Carritos', Icon: CartsIcon },
-  { to: '/lists', label: 'Listas', Icon: ListsIcon },
-  { to: '/settings/suppliers', label: 'Proveedores', Icon: SuppliersIcon },
+  { to: '/compras', label: 'Compras', Icon: CartsIcon },
 ]
 
 function fabFor(pathname: string): { to: string; label: string } | null {
-  // Exact list routes only — no FAB over detail/edit/new screens. /carts
-  // renders its own FAB that opens the in-screen create modal.
-  if (pathname === '/despensa' || pathname === '/products')
-    return { to: '/products/new', label: 'Nuevo producto' }
+  // Catalog view of Despensa only — no FAB over the stock view, detail/edit/new
+  // screens. The Compras Carritos view renders its own FAB that opens the
+  // in-screen create modal.
+  if (pathname === '/despensa/catalogo') return { to: '/products/new', label: 'Nuevo producto' }
   return null
 }
 
@@ -109,7 +97,7 @@ export function Layout({ children }: { children: ReactNode }) {
           aria-label="Navegación principal"
           className="fixed bottom-0 left-1/2 z-30 w-full max-w-[430px] -translate-x-1/2 border-t border-slate-200/80 bg-white/95 pb-[max(env(safe-area-inset-bottom),8px)] backdrop-blur-md"
         >
-          <ul className="grid grid-cols-6 pt-1.5 pb-1">
+          <ul className="grid grid-cols-3 pt-1.5 pb-1">
             {tabs.map(({ to, label, end, Icon }) => (
               <li key={to}>
                 <NavLink

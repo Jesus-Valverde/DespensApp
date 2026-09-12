@@ -5,8 +5,10 @@ import { db } from '../../db/db'
 import type { Product } from '../../db/types'
 import { useObjectUrl } from '../../lib/useObjectUrl'
 import { iconPath, toneClasses } from '../../lib/icons'
+import { ModuleToggle } from '../../lib/viewToggle'
 import { stockState } from '../inventory/StockSection'
 import { distinctAreas } from '../products/api'
+import { CatalogView } from '../products/ProductList'
 
 const TONE_CLASSES: Record<string, string> = {
   ok: 'bg-emerald-50 text-emerald-700 border-emerald-200/60',
@@ -63,9 +65,10 @@ function PantryCard({ product }: { product: Product }) {
   )
 }
 
-/** /despensa — the pantry view: what is in the house right now, with area
- * filters and stock state. The product catalog lives at /productos (Stitch design). */
-export function DespensaScreen() {
+/** /despensa — the pantry module: "Stock" shows what is in the house right now
+ * with area filters; "Catálogo" hosts the master product catalog (there is no
+ * Productos tab). The chosen view is remembered (see routes in App). */
+export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo' }) {
   const [area, setArea] = useState<string>('Todos')
 
   const products = (useLiveQuery(() => db.products.toArray(), []) ?? [])
@@ -86,25 +89,30 @@ export function DespensaScreen() {
             Control de despensa e inventario
           </p>
         </div>
-        <div className="flex flex-col items-end gap-1.5">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/60 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" aria-hidden="true" />
-            {products.length} Artículos
-          </span>
-          <Link
-            to="/products"
-            className="pressable flex items-center gap-0.5 text-xs font-semibold text-blue-600 hover:text-blue-700"
-          >
-            Catálogo
-            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
-            </svg>
-          </Link>
-        </div>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/60 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" aria-hidden="true" />
+          {products.length} Artículos
+        </span>
       </div>
 
-      {/* Area filter chips */}
-      <div className="no-scrollbar -mx-1 mb-4 mt-4 flex items-center gap-2 overflow-x-auto px-1 pb-3">
+      <div className="mt-4">
+        <ModuleToggle
+          base="/despensa"
+          storageKey="despensapp:despensa-view"
+          items={[
+            { key: 'stock', label: 'Stock' },
+            { key: 'catalogo', label: 'Catálogo' },
+          ]}
+          active={view}
+        />
+      </div>
+
+      {view === 'catalogo' ? (
+        <CatalogView />
+      ) : (
+        <>
+          {/* Area filter chips */}
+          <div className="no-scrollbar -mx-1 mb-4 mt-1 flex items-center gap-2 overflow-x-auto px-1 pb-3">
         {['Todos', ...areas].map((chip) => (
           <button
             key={chip}
@@ -166,6 +174,8 @@ export function DespensaScreen() {
         <p className="rounded-2xl border border-slate-200/80 bg-white p-4 text-sm text-slate-400">
           Sin productos en el área “{area}”.
         </p>
+      )}
+        </>
       )}
     </section>
   )

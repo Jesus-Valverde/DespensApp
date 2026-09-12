@@ -55,7 +55,7 @@ export function InicioScreen() {
       {/* Quick metrics */}
       <nav aria-label="Resumen" className="mt-5 grid grid-cols-3 gap-3">
         <Link
-          to="/products"
+          to="/despensa/catalogo"
           className="pressable group rounded-2xl border border-slate-200/70 bg-white p-3.5 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] transition duration-200 hover:border-blue-300"
         >
           <div className="mb-3 flex items-center justify-between">
@@ -79,7 +79,7 @@ export function InicioScreen() {
         </Link>
 
         <Link
-          to="/carts"
+          to="/compras/carritos"
           className="pressable group rounded-2xl border border-slate-200/70 bg-white p-3.5 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] transition duration-200 hover:border-amber-300"
         >
           <div className="mb-3 flex items-center justify-between">
@@ -102,7 +102,7 @@ export function InicioScreen() {
         </Link>
 
         <Link
-          to="/lists"
+          to="/compras/listas"
           className="pressable group rounded-2xl border border-slate-200/70 bg-white p-3.5 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] transition duration-200 hover:border-indigo-300"
         >
           <div className="mb-3 flex items-center justify-between">
@@ -143,7 +143,7 @@ export function InicioScreen() {
               </span>
             </div>
             <Link
-              to="/products"
+              to="/despensa/stock"
               className="pressable flex items-center gap-0.5 text-xs font-semibold text-blue-600 hover:text-blue-700"
             >
               Revisar
@@ -201,7 +201,7 @@ export function InicioScreen() {
               </span>
             </div>
             <Link
-              to="/products"
+              to="/despensa/stock"
               className="pressable flex items-center gap-0.5 text-xs font-semibold text-blue-600 hover:text-blue-700"
             >
               Revisar
@@ -262,7 +262,7 @@ export function InicioScreen() {
               </span>
             </div>
             <Link
-              to="/carts"
+              to="/compras/carritos"
               className="pressable flex items-center gap-0.5 text-xs font-semibold text-blue-600 hover:text-blue-700"
             >
               Programar

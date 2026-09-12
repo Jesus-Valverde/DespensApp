@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
-import { ProductList } from './ProductList'
+import { CatalogView } from './ProductList'
 import { db } from '../../db/db'
 import { createProduct } from './api'
 
@@ -22,7 +22,7 @@ describe('ProductList', () => {
 
     render(
       <MemoryRouter>
-        <ProductList />
+        <CatalogView />
       </MemoryRouter>,
     )
 
@@ -41,7 +41,6 @@ describe('ProductList', () => {
       'href',
       `/products/${detergenteId}/edit`,
     )
-    expect(screen.getByText(/2 en catálogo/)).toBeInTheDocument()
   })
 
   it('filters the catalog with the search box', async () => {
@@ -51,7 +50,7 @@ describe('ProductList', () => {
 
     render(
       <MemoryRouter>
-        <ProductList />
+        <CatalogView />
       </MemoryRouter>,
     )
     await screen.findByRole('link', { name: /^Leche entera/ })
@@ -69,7 +68,7 @@ describe('ProductList', () => {
   it('shows the empty state when the catalog has no products', async () => {
     render(
       <MemoryRouter>
-        <ProductList />
+        <CatalogView />
       </MemoryRouter>,
     )
 
