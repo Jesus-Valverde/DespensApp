@@ -23,7 +23,7 @@ DespensApp data models — so it never invents fields, tabs, or actions.
 Mobile app "DespensApp" — a Spanish-language household pantry and inventory manager. 430px phone frame on a slate-100 (#F1F5F9) page background; the app surface is slate-50 (#F8FAFC). Cards are white, rounded-2xl, thin slate-200 border, soft shadow. Primary color blue-600 (#2563EB); accent gradient from blue-600 to indigo-600; destructive red-600; stock-OK emerald; warnings amber. Headings: very bold, tight tracking, slate-900. Muted text slate-500/400. Pills and badges fully rounded. Inputs rounded-lg/xl with slate-200 borders.
 
 Chrome, every screen:
-- Top brand header: small rounded logo tile with blue gradient + wordmark "DespensApp" in blue-600.
+- Top brand header: small rounded logo tile with blue gradient + wordmark "DespensApp" in blue-600, and on the right a notification bell icon with a small red count badge (products under their minimum stock with alerts enabled). Tapping the bell opens the notifications panel.
 - Bottom tab bar, 6 tabs, fixed, white with top border: "Inicio" (house), "Despensa" (cube), "Productos" (grid), "Carritos" (cart), "Listas" (list), "Proveedores" (sliders). Active tab: blue pill behind icon + bold blue label; inactive slate-500.
 - Tab-root screens: big title + small gray subtitle + a green count pill. NO back button.
 - Form and detail screens: title bar WITH a circular back-arrow button at top-left that returns to the previous screen. Big title, no tabs of their own.
@@ -248,6 +248,13 @@ Inline create/edit form card: "Nombre" (required), "Tipo" (placeholder "Supermer
 Supplier list: card per supplier with name, type chip, location rows, actions "Editar" / "Eliminar". Delete confirmation must mention affected products.
 ```
 
+### 16. Notifications panel (from header bell)
+
+```text
+Modal "Notificaciones", subtitle "Productos bajo su stock mínimo", bell icon chip.
+List rows: product thumbnail, bold title, amber badge "Bajo mínimo", meta "Mín: {n} · Actual: {m}", each row links to the product detail. Empty: "Sin notificaciones." + "Todos tus productos están por encima de su stock mínimo." Single footer button "Cerrar".
+```
+
 ---
 
 ## Current design status
@@ -266,3 +273,4 @@ Supplier list: card per supplier with name, type chip, location rows, actions "E
 | Listas / List detail / Create list modal | ⬜ legacy — next restyle targets |
 | Proveedores screen | ⬜ legacy — next restyle target |
 | Back-arrow title bars on forms/details | 🆕 NEW RULE from this guide — implement when adapting each screen |
+| Header bell + notifications panel | 🆕 designed in guide — feature pending (in-app only, no OS push) |
