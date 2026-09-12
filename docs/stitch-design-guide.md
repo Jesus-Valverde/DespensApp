@@ -25,8 +25,8 @@ Mobile app "DespensApp" — a Spanish-language household pantry and inventory ma
 Chrome, every screen:
 - Top brand header, IDENTICAL on every screen: small rounded logo tile with blue gradient + bold wordmark "DespensApp" (dark, near-black) with small gray tagline "Control de despensa" under it, and on the right a notification bell icon with a small blue dot indicator when there are notifications (products under their minimum stock with alerts enabled). Tapping the bell opens the notifications panel. The header NEVER changes between screens — no back button, no screen title inside it.
 - Below the header, each screen renders its own window title bar separated by a thin divider: on tab-root screens the big title + small gray subtitle + a green count pill, NO back button; on form and detail screens a circular back-arrow button at top-left next to the window title (e.g. ← "Nuevo producto") that returns to the previous screen.
-- Bottom tab bar, 6 tabs, fixed, white with top border: "Inicio" (house), "Despensa" (cube), "Productos" (grid), "Carritos" (cart), "Listas" (list), "Proveedores" (sliders). Active tab: blue pill behind icon + bold blue label; inactive slate-500.
-- FAB: round gradient (blue→indigo) "+" button, bottom-right above the tab bar, ONLY on Despensa and Productos list (opens new-product form). The Carritos list has its own identical "+" FAB that opens a create-cart modal. No FAB on forms or detail screens.
+- Bottom tab bar, 5 tabs, fixed, white with top border: "Inicio" (house), "Despensa" (cube), "Carritos" (cart), "Listas" (list), "Proveedores" (sliders). Active tab: blue pill behind icon + bold blue label; inactive slate-500. There is NO "Productos" tab — the catalog lives inside Despensa.
+- FAB: round gradient (blue→indigo) "+" button, bottom-right above the tab bar, ONLY on the Despensa screen's Catálogo view (opens new-product form). The Carritos list has its own identical "+" FAB that opens a create-cart modal. No FAB on the Stock view, forms, or detail screens.
 - Modals: centered white card rounded-3xl on a dimmed blurred overlay; leading icon chip (rounded, blue-50 bg, blue-600 icon), bold title + small subtitle; circular X close button top-right; footer row with an outline "Cancelar" button and one filled primary button (red if destructive).
 
 - Icons: Lucide (lucide.dev), stroke style, 24px grid, stroke-width 1.5 for UI icons and tab bar glyphs; the 25 pantry category icons are custom app glyphs (keep them as drawn). Never use emoji or other icon families.
@@ -126,22 +126,18 @@ Stack of report cards, each: leading tinted icon square, bold lead, small gray e
 Cards: "Faltantes" (link "Revisar"; empty text "Sin productos en falta." + "Tu despensa está al día. No hay productos agotados marcados para reposición inmediata."); "Stock bajo" (link "Revisar"; empty "Sin alertas de stock bajo." + "Tu inventario tiene niveles óptimos. Te avisaremos cuando un producto esté por agotarse."); "Próximas compras" (link "Programar"; empty "Sin compras programadas." + "Planifica tu siguiente visita al supermercado o genera un carrito automático desde tus listas."); "Historial de movimientos" (empty "Sin movimientos recientes" + "Aquí verás los ingresos, egresos y cambios de inventario o compras realizadas."). No FAB.
 ```
 
-### 2. Despensa (tab root)
+### 2. Despensa (tab root, two internal views)
 
 ```text
-Screen "Despensa". Header: title "Despensa", subtitle "Control de despensa e inventario", right side a green pill "{n} Artículos" with a pulsing emerald dot + a blue link "Catálogo". Gradient "+" FAB.
-Below: horizontal filter chips of areas, first chip always "Todos"; active chip solid blue with white text.
-Product rows/cards: thumbnail (image, or pantry icon on its pastel tone, or a soft tinted fallback), title, stock badge pill: "En inventario" (emerald) / "Bajo mínimo" (amber) / "Sin stock" (red) / "Sobre máximo" (amber).
-Empty state (no products): centered white card with floating gradient illustration tile, title "Tu despensa está vacía", body "Sin productos todavía. Toca el botón + para agregar el primero.", soft-blue button "Añadir a Despensa". Filter with no matches: "Sin productos en el área “{area}”."
+Screen "Despensa" with an internal segmented toggle right under the title: two tabs "Stock" and "Catálogo" (remembered selection). Header: title "Despensa", subtitle "Control de despensa e inventario", right side a green pill "{n} Artículos" with a pulsing emerald dot.
+STOCK VIEW (below toggle): horizontal filter chips of areas, first chip always "Todos"; active chip solid blue with white text. Product rows/cards: thumbnail (image, or pantry icon on its pastel tone, or a soft tinted fallback), title, stock badge pill: "En inventario" (emerald) / "Bajo mínimo" (amber) / "Sin stock" (red) / "Sobre máximo" (amber). No FAB on this view.
+CATÁLOGO VIEW (below toggle): search input, placeholder "Buscar en catálogo...". Product cards: thumbnail (image / pantry icon on pastel tone / tinted fallback), bold title, gray subtitle "{contenido} • {marca} • {área}", kebab menu linking to edit. This view HAS the gradient "+" FAB (new product).
+Empty state (Stock, no products): centered white card with floating gradient illustration tile, title "Tu despensa está vacía", body "Sin productos todavía. Toca el botón + para agregar el primero.", soft-blue button "Añadir a Despensa". Filter with no matches: "Sin productos en el área “{area}”.". Catálogo without results: "Sin resultados para “{query}”."
 ```
 
-### 3. Productos — catalog (tab root)
+### 3. Catálogo — merged into Despensa
 
-```text
-Screen "Productos". Header: title "Productos", subtitle "Catálogo maestro de artículos", green pill "{n} en catálogo". Gradient "+" FAB.
-Search input, placeholder "Buscar en catálogo...". Product cards: thumbnail (image / pantry icon on pastel tone / tinted fallback), bold title, gray subtitle "{contenido} • {marca} • {área}", kebab menu linking to edit.
-Empty catalog: dashed-border card "Sin productos todavía." + "Toca el botón + para agregar el primero al catálogo.". Search without results: "Sin resultados para “{query}”."
-```
+Removed as a standalone screen (2026-09-12): the catalog is the "Catálogo" view of Despensa — see screen block 2. Product form/detail blocks below still apply unchanged.
 
 ### 4. Producto — form (new/edit)
 
@@ -262,10 +258,10 @@ List rows: product thumbnail, bold title, amber badge "Bajo mínimo", meta "Mín
 
 | Screen / surface | State |
 |---|---|
-| Shell (brand header, 6 tabs, FAB) | ✅ Stitched |
+| Shell (brand header, 5 tabs, FAB) | ✅ Stitched |
 | Inicio | ✅ Stitched |
-| Despensa | ✅ Stitched |
-| Productos catalog | ✅ Stitched |
+| Despensa | ✅ Stitched — 🆕 2026-09-12: now hosts Catalog via "Stock | Catálogo" toggle (footer tab Productos removed) |
+| Productos catalog | ✅ Stitched — relocated as Despensa's Catálogo view |
 | Product form + VisualPicker | ✅ Stitched |
 | Product detail + tabs + all modals (props, delete, levels, movement, history, suppliers, vincular, lists, add-to-cart) | ✅ Stitched |
 | Carritos list (status badge, empty state, own FAB) | ✅ Stitched |
