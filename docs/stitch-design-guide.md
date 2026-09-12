@@ -26,6 +26,10 @@ Chrome, every screen:
 - Top brand header, IDENTICAL on every screen: small rounded logo tile with blue gradient + bold wordmark "DespensApp" (dark, near-black) with small gray tagline "Control de despensa" under it, and on the right a notification bell icon with a small blue dot indicator when there are notifications (products under their minimum stock with alerts enabled). Tapping the bell opens the notifications panel. The header NEVER changes between screens — no back button, no screen title inside it.
 - Below the header, each screen renders its own window title bar separated by a thin divider: on tab-root screens the big title + small gray subtitle + a green count pill, NO back button; on form and detail screens a circular back-arrow button at top-left next to the window title (e.g. ← "Nuevo producto") that returns to the previous screen.
 - Bottom tab bar, 3 tabs, fixed, white with top border: "Inicio" (house), "Despensa" (cube), "Compras" (shopping cart). Active tab: blue pill behind icon + bold blue label; inactive slate-500. Despensa hosts the catalog via a "Stock | Catálogo" toggle; Compras hosts Carritos, Listas and Proveedores via a three-way toggle. There are NO Productos, Carritos, Listas, or Proveedores tabs.
+- Module switch (view selector inside Despensa and Compras): full-width segmented control right under the window title. Container: rounded-xl, slate-100 background, p-1. Segments: equal width; the ACTIVE segment is a white rounded-lg pill with small shadow and bold blue-700 text; inactive segments medium slate-500. There are no tab-panel semantics — segments are links.
+  - Despensa switch: "Stock" | "Catálogo" (this is the "Catálogo de productos" access).
+  - Compras switch: "Carritos" | "Listas" | "Proveedores" (Listas = shopping lists).
+  - Behavior: the module remembers the last visited view (localStorage); on first visit it opens the default: Stock for Despensa, Carritos for Compras.
 - FAB: round gradient (blue→indigo) "+" button, bottom-right above the tab bar, ONLY on the Despensa screen's Catálogo view (opens new-product form). The Compras screen's Carritos view has its own identical "+" FAB that opens a create-cart modal. No FAB on the Stock, Listas or Proveedores views, forms, or detail screens.
 - Modals: centered white card rounded-3xl on a dimmed blurred overlay; leading icon chip (rounded, blue-50 bg, blue-600 icon), bold title + small subtitle; circular X close button top-right; footer row with an outline "Cancelar" button and one filled primary button (red if destructive).
 
@@ -33,6 +37,24 @@ Chrome, every screen:
 
 HARD RULES: Use ONLY the fields, buttons, tabs, and texts listed in this prompt. Do NOT invent extra fields, settings, filters, or actions. ALL visible text in Spanish, exactly as written.
 ```
+
+---
+
+## Module map (navigation structure)
+
+```text
+DespensApp — modules
+├─ Inicio                      (dashboard)
+├─ Despensa                    (module switch: Stock | Catálogo)
+│   ├─ Stock                   (default — pantry with area filters + stock badges)
+│   └─ Catálogo                (the product catalog: search + cards)
+└─ Compras                     (module switch: Carritos | Listas | Proveedores)
+    ├─ Carritos                (default — active carts + history, own FAB)
+    ├─ Listas                  (shopping lists)
+    └─ Proveedores             (supplier catalog)
+```
+
+3 bottom tabs only. Switches live INSIDE Despensa and Compras (see "Module switch" in GLOBAL CONTEXT).
 
 ---
 
