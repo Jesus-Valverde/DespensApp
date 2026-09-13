@@ -144,8 +144,8 @@ Tone set (closed — 11): Azul suave, Verde menta, Ámbar suave, Naranja suave, 
 
 ```text
 Screen "Inicio". Header: title "Inicio", subtitle "Control de despensa e inventario". No back button.
-Stack of report cards, each: leading tinted icon square, bold lead, small gray explanation, small header link.
-Cards: "Faltantes" (link "Revisar"; empty text "Sin productos en falta." + "Tu despensa está al día. No hay productos agotados marcados para reposición inmediata."); "Stock bajo" (link "Revisar"; empty "Sin alertas de stock bajo." + "Tu inventario tiene niveles óptimos. Te avisaremos cuando un producto esté por agotarse."); "Próximas compras" (link "Programar"; empty "Sin compras programadas." + "Planifica tu siguiente visita al supermercado o genera un carrito automático desde tus listas."); "Historial de movimientos" (empty "Sin movimientos recientes" + "Aquí verás los ingresos, egresos y cambios de inventario o compras realizadas."). No FAB.
+KPI grid 2×2 (white stat tiles, icon tile + big value + small gray label): "Faltantes" (count, red accent, icon circle-alert), "Bajo mínimo" (count, amber accent, icon triangle-alert), "Próxima reposición" (date of the nearest active cart's estimatedDate, blue accent, icon calendar-days), "Compra estimada" (money, Σ qty×unitPrice of the nearest active cart, green accent, icon shopping-cart). Faltantes/Bajo mínimo counts: current=0 / current≤min.
+Below: "Historial de movimientos" card — header row with link "Ver todos ›", then 2-3 recent movement rows (type · product, quantity transition). No FAB.
 ```
 
 ### 2. Despensa (tab root, two internal views)
