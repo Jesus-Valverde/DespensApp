@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>DespensApp - Carritos Activos</title>
+<!-- Tailwind CSS v3 with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for crisp mobile UI -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="typography">
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+<style data-purpose="custom-scrollbars">
+    /* Hide scrollbar for horizontal category filter pill list */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-[#0F172A] antialiased min-h-screen flex justify-center selection:bg-blue-100">
+<!-- Mobile Screen Container -->
+<div class="w-full max-w-md bg-[#F8FAFC] min-h-screen flex flex-col relative pb-28 shadow-xl">
+<!-- BEGIN: TopHeader -->
+<header class="w-full px-5 pt-4 pb-3 flex items-center justify-between bg-white/90 backdrop-blur-md sticky top-0 z-30 border-b border-slate-100">
+<!-- App Brand & Icon -->
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-blue-500 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="m21.12 6.4-6.05-4.06a2 2 0 0 0-2.17-.05L2.93 8.2a2 2 0 0 0-.93 1.69v7.79a2 2 0 0 0 .99 1.73l9.04 5.3a2 2 0 0 0 2.02-.04l6.98-4.32a2 2 0 0 0 .97-1.7V8.12a2 2 0 0 0-.88-1.72Z"></path>
+<path d="m12 22 9-5.2"></path>
+<path d="M12 12.5V22"></path>
+<path d="m12 12.5 8.5-5.2"></path>
+<path d="M12 12.5 3.5 7.3"></path>
+</svg>
+</div>
+<span class="text-xl font-extrabold tracking-tight text-[#2563EB]">DespensApp</span>
+</div>
+<!-- Notifications Icon Button -->
+<button aria-label="Notificaciones" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-slate-100 active:scale-95 transition-all" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+</svg>
+</button>
+</header>
+<!-- END: TopHeader -->
+<!-- BEGIN: MainContent -->
+<main class="px-5 pt-4 flex-1 flex flex-col gap-4">
+<!-- Section Title & Status Badge -->
+<section class="flex items-start justify-between" data-purpose="title-section">
+<div>
+<h1 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">Carritos</h1>
+<p class="text-xs font-medium text-slate-400 mt-0.5">Gestión de compras y pedidos</p>
+</div>
+<!-- Active Carts Badge -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#ECFDF5] border border-emerald-100 text-[#059669] rounded-full text-xs font-bold shadow-xs">
+<span class="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
+          3 Activos
+        </span>
+</section>
+<!-- Category / Status Filter Chips -->
+<nav class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 -mx-5 px-5" data-purpose="filter-pills">
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-[#2563EB] text-white text-xs font-bold shadow-sm shadow-blue-500/25" type="button">
+          Todos (3)
+        </button>
+<button class="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white text-slate-600 hover:text-slate-900 border border-slate-200/80 text-xs font-semibold shadow-xs" type="button">
+          En preparación (2)
+        </button>
+<button class="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white text-slate-600 hover:text-slate-900 border border-slate-200/80 text-xs font-semibold shadow-xs" type="button">
+          Completados (5)
+        </button>
+<button class="whitespace-nowrap px-3.5 py-1.5 rounded-full bg-white text-slate-600 hover:text-slate-900 border border-slate-200/80 text-xs font-semibold shadow-xs" type="button">
+          Por fecha
+        </button>
+</nav>
+<!-- Summary Quick Metrics Card -->
+<section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100/80 flex items-center justify-between" data-purpose="metrics-summary">
+<!-- Budget Metric -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Presupuesto total</p>
+<p class="text-base font-bold text-slate-800 tracking-tight">$ 2,850.00 <span class="text-xs text-slate-400 font-medium">MXN</span></p>
+</div>
+</div>
+<div class="w-px h-8 bg-slate-100"></div>
+<!-- Items Quantity Metric -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total compras</p>
+<p class="text-base font-bold text-slate-800 tracking-tight">24 <span class="text-xs text-slate-500 font-medium">productos</span></p>
+</div>
+</div>
+</section>
+<!-- BEGIN: CartCardsList -->
+<section class="space-y-3.5 pt-1" data-purpose="carts-list">
+<!-- Card 1: Walmart (Featured / In progress) -->
+<article class="bg-white rounded-3xl p-4 shadow-sm border border-blue-100 relative overflow-hidden transition-transform active:scale-[0.99]">
+<div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50/50 to-transparent rounded-bl-full pointer-events-none"></div>
+<!-- Card Header & Badge -->
+<div class="flex items-start justify-between relative z-10 mb-2.5">
+<div>
+<div class="flex items-center gap-1.5 text-xs font-semibold text-blue-600 mb-1">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Walmart Express</span>
+</div>
+<h2 class="text-base font-bold text-slate-900 leading-tight">Súper Quincenal Walmart</h2>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[11px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+              En curso
+            </span>
+</div>
+<!-- Metadata info: Date and Total -->
+<div class="flex items-center justify-between text-xs text-slate-500 mb-3 pb-2.5 border-b border-slate-100">
+<div class="flex items-center gap-1.5">
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Este fin de semana (18 Oct)</span>
+</div>
+<div class="font-bold text-slate-800 text-sm">
+              $ 1,200.00 <span class="text-[10px] text-slate-400 font-normal">MXN</span>
+</div>
+</div>
+<!-- Progress Bar & Count -->
+<div class="mb-3.5">
+<div class="flex justify-between text-xs mb-1.5 font-medium">
+<span class="text-slate-600">Progreso de compra</span>
+<span class="text-blue-600 font-bold">8 de 14 productos (57%)</span>
+</div>
+<div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+<div class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full" style="width: 57%"></div>
+</div>
+</div>
+<!-- Bottom Row: Product Item Previews & Open Button -->
+<div class="flex items-center justify-between pt-1">
+<!-- Miniature Item Icons Preview -->
+<div class="flex items-center -space-x-1.5">
+<!-- Item 1: Dairy/Milk -->
+<div class="w-7 h-7 rounded-full bg-blue-50 border-2 border-white flex items-center justify-center text-blue-500 text-xs shadow-xs" title="Lácteos">
+                🥛
+              </div>
+<!-- Item 2: Fruit -->
+<div class="w-7 h-7 rounded-full bg-rose-50 border-2 border-white flex items-center justify-center text-rose-500 text-xs shadow-xs" title="Frutas">
+                🍎
+              </div>
+<!-- Item 3: Cleaning -->
+<div class="w-7 h-7 rounded-full bg-purple-50 border-2 border-white flex items-center justify-center text-purple-500 text-xs shadow-xs" title="Limpieza">
+                🧼
+              </div>
+<!-- Badge +More -->
+<div class="w-7 h-7 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-600">
+                +11
+              </div>
+</div>
+<!-- Action Button -->
+<button class="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50/80 px-3 py-1.5 rounded-full transition-colors" type="button">
+<span>Abrir carrito</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</article>
+<!-- Card 2: Costco Wholesale -->
+<article class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 transition-transform active:scale-[0.99]">
+<!-- Card Header & Badge -->
+<div class="flex items-start justify-between mb-2.5">
+<div>
+<div class="flex items-center gap-1.5 text-xs font-semibold text-amber-600 mb-1">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Costco Wholesale</span>
+</div>
+<h2 class="text-base font-bold text-slate-900 leading-tight">Despensa Mensual Costco</h2>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-[11px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              Planificado
+            </span>
+</div>
+<!-- Metadata info: Date and Total -->
+<div class="flex items-center justify-between text-xs text-slate-500 mb-3 pb-2.5 border-b border-slate-100">
+<div class="flex items-center gap-1.5">
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Fin de mes (30 Oct)</span>
+</div>
+<div class="font-bold text-slate-800 text-sm">
+              $ 1,450.00 <span class="text-[10px] text-slate-400 font-normal">MXN</span>
+</div>
+</div>
+<!-- Progress Bar & Count -->
+<div class="mb-3.5">
+<div class="flex justify-between text-xs mb-1.5 font-medium">
+<span class="text-slate-600">Progreso de compra</span>
+<span class="text-amber-600 font-bold">2 de 8 productos (25%)</span>
+</div>
+<div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full" style="width: 25%"></div>
+</div>
+</div>
+<!-- Bottom Row: Previews & Open Button -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center -space-x-1.5">
+<div class="w-7 h-7 rounded-full bg-emerald-50 border-2 border-white flex items-center justify-center text-emerald-600 text-xs shadow-xs" title="Aceite">
+                🫒
+              </div>
+<div class="w-7 h-7 rounded-full bg-orange-50 border-2 border-white flex items-center justify-center text-orange-600 text-xs shadow-xs" title="Cereal">
+                🌾
+              </div>
+<div class="w-7 h-7 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-600">
+                +6
+              </div>
+</div>
+<button class="inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-blue-600 bg-slate-100/70 hover:bg-blue-50 px-3 py-1.5 rounded-full transition-colors" type="button">
+<span>Abrir carrito</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</article>
+<!-- Card 3: Mercado Central (Pending) -->
+<article class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100 transition-transform active:scale-[0.99]">
+<!-- Card Header & Badge -->
+<div class="flex items-start justify-between mb-2.5">
+<div>
+<div class="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 mb-1">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Mercado Central</span>
+</div>
+<h2 class="text-base font-bold text-slate-900 leading-tight">Frescos del Mercado Local</h2>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+              Pendiente
+            </span>
+</div>
+<!-- Metadata info: Date and Total -->
+<div class="flex items-center justify-between text-xs text-slate-500 mb-3 pb-2.5 border-b border-slate-100">
+<div class="flex items-center gap-1.5">
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Mañana</span>
+</div>
+<div class="font-bold text-slate-800 text-sm">
+              $ 200.00 <span class="text-[10px] text-slate-400 font-normal">MXN</span>
+</div>
+</div>
+<!-- Progress Bar & Count -->
+<div class="mb-3.5">
+<div class="flex justify-between text-xs mb-1.5 font-medium">
+<span class="text-slate-600">Progreso de compra</span>
+<span class="text-slate-500 font-bold">0 de 5 productos (0%)</span>
+</div>
+<div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+<div class="h-full bg-slate-300 rounded-full" style="width: 0%"></div>
+</div>
+</div>
+<!-- Bottom Row: Previews & Open Button -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center -space-x-1.5">
+<div class="w-7 h-7 rounded-full bg-yellow-50 border-2 border-white flex items-center justify-center text-xs shadow-xs" title="Huevos">
+                🥚
+              </div>
+<div class="w-7 h-7 rounded-full bg-green-50 border-2 border-white flex items-center justify-center text-xs shadow-xs" title="Verduras">
+                🥬
+              </div>
+<div class="w-7 h-7 rounded-full bg-slate-100 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-600">
+                +3
+              </div>
+</div>
+<button class="inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-blue-600 bg-slate-100/70 hover:bg-blue-50 px-3 py-1.5 rounded-full transition-colors" type="button">
+<span>Abrir carrito</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</article>
+</section>
+<!-- END: CartCardsList -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: FloatingActionButton -->
+<!-- Circular blue FAB button to create a new cart -->
+<div class="fixed bottom-24 right-5 z-40 max-w-md pointer-events-none">
+<div class="w-full flex justify-end">
+<button aria-label="Crear nuevo carrito" class="pointer-events-auto w-14 h-14 rounded-full bg-[#2563EB] hover:bg-blue-700 text-white flex items-center justify-center shadow-lg shadow-blue-600/40 active:scale-95 transition-all transform" type="button">
+<svg class="w-7 h-7 stroke-[2.5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- END: FloatingActionButton -->
+<!-- BEGIN: BottomNavigationBar -->
+<!-- 5-item standard mobile navigation bar matching DespensApp -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-4 py-2 z-50 flex items-center justify-around shadow-lg">
+<!-- Tab 1: Inicio -->
+<a class="flex flex-col items-center gap-1 py-1 px-2 text-slate-400 hover:text-slate-600 transition-colors" href="#">
+<svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] font-semibold tracking-tight">Inicio</span>
+</a>
+<!-- Tab 2: Despensa / Productos -->
+<a class="flex flex-col items-center gap-1 py-1 px-2 text-slate-400 hover:text-slate-600 transition-colors" href="#">
+<svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] font-semibold tracking-tight">Despensa</span>
+</a>
+<!-- Tab 3: Carritos (Active Tab) -->
+<a class="flex flex-col items-center gap-1 py-1 px-4 rounded-2xl bg-blue-50/80 text-[#2563EB] transition-all" href="#">
+<div class="relative">
+<svg class="w-6 h-6 stroke-[2.2]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<!-- Active Dot indicator inside tab -->
+<span class="absolute -top-0.5 -right-1 w-2 h-2 bg-blue-600 rounded-full"></span>
+</div>
+<span class="text-[11px] font-bold tracking-tight text-[#2563EB]">Carritos</span>
+</a>
+<!-- Tab 4: Listas -->
+<a class="flex flex-col items-center gap-1 py-1 px-2 text-slate-400 hover:text-slate-600 transition-colors" href="#">
+<svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] font-semibold tracking-tight">Listas</span>
+</a>
+<!-- Tab 5: Proveedores -->
+<a class="flex flex-col items-center gap-1 py-1 px-2 text-slate-400 hover:text-slate-600 transition-colors" href="#">
+<svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] font-semibold tracking-tight">Proveedores</span>
+</a>
+</nav>
+<!-- END: BottomNavigationBar -->
+</div>
+</body></html>

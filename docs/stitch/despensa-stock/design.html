@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>DespensApp - Productos</title>
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              500: '#3B82F6',
+              600: '#2563EB',
+              700: '#1D4ED8',
+            }
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-enhancements">
+    /* Subtle pulse animation for decorative empty state glow */
+    @keyframes subtle-float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+    }
+    .animate-subtle-float {
+      animation: subtle-float 3.5s ease-in-out infinite;
+    }
+    /* Safe area padding for mobile navigation */
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-blue-100 selection:text-blue-700">
+<!-- BEGIN: MainHeader -->
+<!-- Top App Bar following iOS/Material clean design pattern -->
+<header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100 transition-colors" data-purpose="app-header">
+<div class="max-w-md mx-auto px-5 h-16 flex items-center justify-between">
+<!-- Brand identity with stylized pantry box icon -->
+<div class="flex items-center space-x-2.5">
+<div aria-hidden="true" class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-xl font-bold tracking-tight text-blue-600">DespensApp</span>
+</div>
+<!-- Action buttons in header -->
+<div class="flex items-center space-x-2">
+<button aria-label="Notificaciones" class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200/80 flex items-center justify-center text-slate-600 transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 max-w-md mx-auto w-full px-5 pt-6 pb-28" data-purpose="products-content">
+<!-- Title and quick summary badge -->
+<div class="flex items-start justify-between mb-4">
+<div>
+<h1 class="text-2xl font-extrabold tracking-tight text-slate-900 leading-tight">Despensa</h1>
+<p class="text-xs font-medium text-slate-400 mt-0.5">Control de despensa e inventario</p>
+</div>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200/60 whitespace-nowrap"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        15 Artículos
+      </span>
+</div>
+<!-- Category filter chips (idle/contextual preview) -->
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-3 mb-4 -mx-1 px-1" data-purpose="category-filters">
+<button class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-600 text-white shadow-sm shadow-blue-500/20 whitespace-nowrap">
+        Todos
+      </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-slate-500 border border-slate-200/70 hover:border-slate-300 whitespace-nowrap">
+        Despensa
+      </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-slate-500 border border-slate-200/70 hover:border-slate-300 whitespace-nowrap">
+        Nevera
+      </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-white text-slate-500 border border-slate-200/70 hover:border-slate-300 whitespace-nowrap">
+        Limpieza
+      </button>
+</div>
+<!-- BEGIN: EmptyStateCard -->
+<!-- Polished, production-ready empty state container -->
+<div class="flex flex-col space-y-3 mt-2 pb-12" data-purpose="products-list"><!-- Producto 1: Leche Entera -->
+<div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between transition-all hover:border-slate-200/80">
+<div class="flex items-center flex-1 min-w-0 pr-2">
+<div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M7 8h10M7 12h10m-7 4h4M8 4h8v2H8V4zM6 6h12v13a2 2 0 01-2 2H8a2 2 0 01-2-2V6z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 flex-1 min-w-0">
+<h3 class="text-sm font-semibold text-slate-800 truncate">Leche Entera 1L</h3>
+<div class="flex items-center gap-1.5 mt-0.5 whitespace-nowrap"><span class="text-[11px] font-medium text-slate-400">Nevera</span></div>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200/70 rounded-xl flex items-center px-1.5 py-1 gap-2 flex-shrink-0">
+<button aria-label="Reducir stock" class="w-6 h-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-500 hover:text-slate-700 active:scale-95 transition-all text-xs font-bold">
+        -
+      </button>
+<span class="font-bold text-slate-800 text-sm w-5 text-center">3</span>
+<button aria-label="Aumentar stock" class="w-6 h-6 rounded-lg bg-blue-600 shadow-sm flex items-center justify-center text-white hover:bg-blue-700 active:scale-95 transition-all text-xs font-bold">
+        +
+      </button>
+</div>
+</div>
+<!-- Producto 2: Arroz Integral -->
+<div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between transition-all hover:border-slate-200/80">
+<div class="flex items-center flex-1 min-w-0 pr-2">
+<div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-amber-600 flex-shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 flex-1 min-w-0">
+<h3 class="text-sm font-semibold text-slate-800 truncate">Arroz Integral 1kg</h3>
+<div class="flex items-center gap-1.5 mt-0.5 whitespace-nowrap"><span class="text-[11px] font-medium text-slate-400">Despensa</span></div>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200/70 rounded-xl flex items-center px-1.5 py-1 gap-2 flex-shrink-0">
+<button aria-label="Reducir stock" class="w-6 h-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-500 hover:text-slate-700 active:scale-95 transition-all text-xs font-bold">
+        -
+      </button>
+<span class="font-bold text-slate-800 text-sm w-5 text-center">2</span>
+<button aria-label="Aumentar stock" class="w-6 h-6 rounded-lg bg-blue-600 shadow-sm flex items-center justify-center text-white hover:bg-blue-700 active:scale-95 transition-all text-xs font-bold">
+        +
+      </button>
+</div>
+</div>
+<!-- Producto 3: Detergente Líquido -->
+<div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between transition-all hover:border-slate-200/80">
+<div class="flex items-center flex-1 min-w-0 pr-2">
+<div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 4H9L8 4zM6 8h12v11a3 3 0 01-3 3H9a3 3 0 01-3-3V8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 flex-1 min-w-0">
+<h3 class="text-sm font-semibold text-slate-800 truncate">Detergente Líquido</h3>
+<div class="flex items-center gap-1.5 mt-0.5 whitespace-nowrap"><span class="text-[11px] font-medium text-slate-400">Limpieza</span></div>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200/70 rounded-xl flex items-center px-1.5 py-1 gap-2 flex-shrink-0">
+<button aria-label="Reducir stock" class="w-6 h-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-500 hover:text-slate-700 active:scale-95 transition-all text-xs font-bold">
+        -
+      </button>
+<span class="font-bold text-slate-800 text-sm w-5 text-center">1</span>
+<button aria-label="Aumentar stock" class="w-6 h-6 rounded-lg bg-blue-600 shadow-sm flex items-center justify-center text-white hover:bg-blue-700 active:scale-95 transition-all text-xs font-bold">
+        +
+      </button>
+</div>
+</div>
+<!-- Producto 4: Huevos Frescos (Docena) -->
+<div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between transition-all hover:border-slate-200/80">
+<div class="flex items-center flex-1 min-w-0 pr-2">
+<div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 flex-shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M12 3C8 3 5 8 5 13a7 7 0 0014 0c0-5-3-10-7-10z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 flex-1 min-w-0">
+<h3 class="text-sm font-semibold text-slate-800 truncate">Huevos Frescos (Docena)</h3>
+<div class="flex items-center gap-1.5 mt-0.5 whitespace-nowrap"><span class="text-[11px] font-medium text-slate-400">Nevera</span></div>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200/70 rounded-xl flex items-center px-1.5 py-1 gap-2 flex-shrink-0">
+<button aria-label="Reducir stock" class="w-6 h-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-500 hover:text-slate-700 active:scale-95 transition-all text-xs font-bold">
+        -
+      </button>
+<span class="font-bold text-slate-800 text-sm w-5 text-center">1</span>
+<button aria-label="Aumentar stock" class="w-6 h-6 rounded-lg bg-blue-600 shadow-sm flex items-center justify-center text-white hover:bg-blue-700 active:scale-95 transition-all text-xs font-bold">
+        +
+      </button>
+</div>
+</div>
+<!-- Producto 5: Aceite de Oliva Extra -->
+<div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between transition-all hover:border-slate-200/80">
+<div class="flex items-center flex-1 min-w-0 pr-2">
+<div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 flex-shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M10 3h4v4h-4V3zM8 7h8l2 14H6L8 7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 flex-1 min-w-0">
+<h3 class="text-sm font-semibold text-slate-800 truncate">Aceite de Oliva Extra</h3>
+<div class="flex items-center gap-1.5 mt-0.5 whitespace-nowrap"><span class="text-[11px] font-medium text-slate-400">Despensa</span></div>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200/70 rounded-xl flex items-center px-1.5 py-1 gap-2 flex-shrink-0">
+<button aria-label="Reducir stock" class="w-6 h-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-500 hover:text-slate-700 active:scale-95 transition-all text-xs font-bold">
+        -
+      </button>
+<span class="font-bold text-slate-800 text-sm w-5 text-center">2</span>
+<button aria-label="Aumentar stock" class="w-6 h-6 rounded-lg bg-blue-600 shadow-sm flex items-center justify-center text-white hover:bg-blue-700 active:scale-95 transition-all text-xs font-bold">
+        +
+      </button>
+</div>
+</div>
+<!-- Producto 6: Manzanas Royal Gala -->
+<div class="bg-white rounded-2xl p-3.5 shadow-sm border border-slate-100 flex items-center justify-between transition-all hover:border-slate-200/80">
+<div class="flex items-center flex-1 min-w-0 pr-2">
+<div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500 flex-shrink-0">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M12 6c-2-2.5-5-2-7 0s-2 6 0 9.5 5 4.5 7 4.5 5-1 7-4.5 2-7 0-9.5-5-2.5-7 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M12 6V3c1-1 3 0 3 0" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 flex-1 min-w-0">
+<h3 class="text-sm font-semibold text-slate-800 truncate">Manzanas Royal Gala</h3>
+<div class="flex items-center gap-1.5 mt-0.5 whitespace-nowrap"><span class="text-[11px] font-medium text-slate-400">Nevera</span></div>
+</div>
+</div>
+<div class="bg-slate-50 border border-slate-200/70 rounded-xl flex items-center px-1.5 py-1 gap-2 flex-shrink-0">
+<button aria-label="Reducir stock" class="w-6 h-6 rounded-lg bg-white shadow-sm flex items-center justify-center text-slate-500 hover:text-slate-700 active:scale-95 transition-all text-xs font-bold">
+        -
+      </button>
+<span class="font-bold text-slate-800 text-sm w-5 text-center">6</span>
+<button aria-label="Aumentar stock" class="w-6 h-6 rounded-lg bg-blue-600 shadow-sm flex items-center justify-center text-white hover:bg-blue-700 active:scale-95 transition-all text-xs font-bold">
+        +
+      </button>
+</div>
+</div></div>
+<!-- END: EmptyStateCard -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: FloatingActionButton -->
+<!-- Prominent Primary Action Button positioned right above the bottom bar -->
+<div class="fixed bottom-20 left-0 right-0 z-40 px-5 pointer-events-none" data-purpose="bottom-action-buttons"><div class="max-w-md mx-auto flex items-center gap-3 pointer-events-auto bg-white/90 backdrop-blur-md p-2.5 rounded-2xl shadow-lg border border-slate-200/80"><button type="button" class="flex-1 py-3 px-4 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200/80 border border-slate-200/70 transition-all active:scale-95 text-center">Cancelar</button><button type="button" class="flex-1 py-3 px-4 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/20 transition-all active:scale-95 text-center flex items-center justify-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="">Guardar</span></button></div></div>
+<!-- END: FloatingActionButton -->
+<!-- BEGIN: BottomNavigation -->
+<!-- Fixed modern tab bar with exact required labels and icons -->
+<nav class="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-lg border-t border-slate-200/80 pb-safe" data-purpose="bottom-navigation">
+<div class="max-w-md mx-auto px-2 py-1.5 flex justify-around items-center"><!-- Tab 1: Inicio -->
+<a class="flex flex-col items-center py-1 px-1.5 text-slate-400 hover:text-slate-600 transition-colors group" href="#">
+<div class="w-10 h-7 flex items-center justify-center">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-[11px] font-medium tracking-tight mt-0.5 whitespace-nowrap">Inicio</span>
+</a>
+<!-- Tab 2: Productos (Active State with soft pill) -->
+<a class="flex flex-col items-center py-1 px-1.5 text-blue-600 font-semibold transition-all" href="#">
+<div class="w-12 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shadow-sm">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-[11px] tracking-tight mt-0.5 whitespace-nowrap">Despensa</span>
+</a>
+<!-- Tab 3: Carrito -->
+<a class="flex flex-col items-center py-1 px-1.5 text-slate-400 hover:text-slate-600 transition-colors group" href="#">
+<div class="w-10 h-7 flex items-center justify-center">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-[11px] font-medium tracking-tight mt-0.5 whitespace-nowrap">Carrito</span>
+</a>
+<!-- Tab 4: Listas -->
+<a class="flex flex-col items-center py-1 px-1.5 text-slate-400 hover:text-slate-600 transition-colors group" href="#">
+<div class="w-10 h-7 flex items-center justify-center">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-[11px] font-medium tracking-tight mt-0.5 whitespace-nowrap">Lista</span>
+</a>
+<!-- Tab 5: Proveedores -->
+<a class="flex flex-col items-center py-1 px-1.5 text-slate-400 hover:text-slate-600 transition-colors group" href="#">
+<div class="w-10 h-7 flex items-center justify-center">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-[11px] font-medium tracking-tight mt-0.5 whitespace-nowrap">Proveedores</span>
+</a></div>
+</nav>
+<!-- END: BottomNavigation -->
+</body></html>

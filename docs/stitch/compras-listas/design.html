@@ -1,0 +1,197 @@
+<!DOCTYPE html><html class="h-full bg-slate-50" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>DespensApp - Listas</title>
+<!-- Tailwind CSS CDN with forms and container-queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          },
+          boxShadow: {
+            'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
+            'button': '0 8px 20px -4px rgba(37, 99, 235, 0.28)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Styles for iOS smooth feel -->
+<style data-purpose="ios-optimizations">
+    /* iOS Momentum Scrolling and tap highlights */
+    body {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    input {
+      user-select: auto;
+    }
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    .safe-top {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+  </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 antialiased font-sans flex flex-col justify-between">
+<!-- BEGIN: MainHeader -->
+<!-- Top App Navigation Bar with Logo and Notifications -->
+<header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100/80 px-5 py-3.5 safe-top shadow-sm flex items-center justify-between" data-purpose="app-header">
+<div class="flex items-center gap-2.5">
+<!-- DespensApp Cube Icon -->
+<div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-500 flex items-center justify-center shadow-md shadow-blue-500/20 text-white">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewBox="0 0 24 24">
+<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+<polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+<line x1="12" x2="12" y1="22.08" y2="12"></line>
+</svg>
+</div>
+<!-- Verbatim Brand Name -->
+<span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">DespensApp</span>
+</div>
+<!-- Right Header Action (Notification Bell) -->
+<button aria-label="Notificaciones" class="w-9 h-9 rounded-full bg-slate-100/70 hover:bg-slate-200/60 active:scale-95 transition flex items-center justify-center text-slate-600 relative" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="absolute top-2 right-2 w-2 h-2 bg-blue-500 rounded-full ring-2 ring-white"></span>
+</button>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: ContentArea -->
+<!-- Main Scrollable Content -->
+<main class="flex-1 overflow-y-auto px-5 pt-6 pb-28 space-y-6 max-w-md mx-auto w-full" data-purpose="list-management-content">
+<!-- Section Title & Meta Header -->
+<div class="flex items-center justify-between">
+<div>
+<!-- Verbatim Section Title -->
+<h1 class="text-2xl font-bold tracking-tight text-slate-900">Listas</h1>
+<p class="text-xs text-slate-500 mt-0.5 font-medium">Organización de compras y eventos</p>
+</div>
+<!-- Pill Badge: 0 Guardadas -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/60 text-xs font-semibold text-slate-600 shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span>0 Guardadas</span>
+</div>
+</div>
+<!-- BEGIN: CreateListCard -->
+<!-- Form Card to Create New List -->
+<section class="bg-white rounded-3xl p-5 border border-slate-100 shadow-soft" data-purpose="create-list-card">
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<div>
+<!-- Verbatim Field Label -->
+<label class="flex items-center gap-1.5 text-sm font-semibold text-slate-800 mb-2" for="list-name">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+            Nombre de la lista
+          </label>
+<!-- Verbatim Placeholder Input -->
+<div class="relative">
+<input class="w-full bg-slate-50/70 text-slate-800 text-sm font-medium placeholder-slate-400 border border-slate-200/90 rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition duration-150 shadow-inner" id="list-name" name="list-name" placeholder="Para el viaje" type="text">
+</div>
+</div>
+<!-- Verbatim Button Label -->
+<button class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-2xl shadow-button flex items-center justify-center gap-2 transition duration-200 active:scale-[0.99]" data-purpose="submit-list-button" type="submit">
+<svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<line x1="12" x2="12" y1="5" y2="19"></line>
+<line x1="5" x2="19" y1="12" y2="12"></line>
+</svg>
+<span>Crear lista</span>
+</button>
+</form>
+</section>
+<!-- END: CreateListCard -->
+<!-- BEGIN: EmptyStateCard -->
+<!-- Stylized Empty State Container without dashed borders -->
+<section class="bg-white rounded-3xl p-8 border border-slate-100 shadow-soft text-center flex flex-col items-center justify-center my-4" data-purpose="empty-state">
+<!-- Illustrative Center Icon with soft decorative badge -->
+<div class="relative mb-4">
+<!-- Floating accent sparkle -->
+<div class="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-amber-100 text-amber-500 flex items-center justify-center shadow-sm">
+<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+<path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.5-6.2-4.5-6.2 4.5 2.4-7.5-6.2-4.5h7.6z"></path>
+</svg>
+</div>
+<!-- Main Circular/Soft-Square Container -->
+<div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100/60 border border-blue-100 flex items-center justify-center text-blue-600 shadow-inner">
+<svg class="w-10 h-10 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M9 14l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+<!-- Verbatim Empty Text -->
+<h2 class="text-lg font-bold text-slate-800 mb-1">Aún no tienes listas.</h2>
+<!-- Supplementary Context Text -->
+<p class="text-xs text-slate-400 max-w-[240px] leading-relaxed">
+        Crea tu primera lista para organizar tus compras o planificar un viaje.
+      </p>
+</section>
+<!-- END: EmptyStateCard -->
+</main>
+<!-- END: ContentArea -->
+<!-- BEGIN: BottomNavigation -->
+<!-- Fixed Tab Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-slate-200/80 safe-bottom px-3 py-2 shadow-lg" data-purpose="bottom-nav">
+<div class="max-w-md mx-auto grid grid-cols-5 items-center text-center">
+<!-- Tab 1: Inicio -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-600 transition group" data-purpose="nav-item" href="#">
+<svg class="w-5 h-5 mb-1 group-active:scale-95 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Inicio</span>
+</a>
+<!-- Tab 2: Productos -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-600 transition group" data-purpose="nav-item" href="#">
+<svg class="w-5 h-5 mb-1 group-active:scale-95 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Productos</span>
+</a>
+<!-- Tab 3: Carritos -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-600 transition group" data-purpose="nav-item" href="#">
+<svg class="w-5 h-5 mb-1 group-active:scale-95 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Carritos</span>
+</a>
+<!-- Tab 4: Listas (Active) -->
+<a class="flex flex-col items-center justify-center py-1 group" data-purpose="nav-item-active" href="#">
+<div class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full flex flex-col items-center gap-0.5 transition active:scale-95">
+<svg class="w-5 h-5 stroke-[2.4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<line x1="8" x2="21" y1="6" y2="6"></line>
+<line x1="8" x2="21" y1="12" y2="12"></line>
+<line x1="8" x2="21" y1="18" y2="18"></line>
+<line x1="3" x2="3.01" y1="6" y2="6"></line>
+<line x1="3" x2="3.01" y1="12" y2="12"></line>
+<line x1="3" x2="3.01" y1="18" y2="18"></line>
+</svg>
+<span class="text-[10.5px] font-bold tracking-tight">Listas</span>
+</div>
+</a>
+<!-- Tab 5: Proveedores -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-600 transition group" data-purpose="nav-item" href="#">
+<svg class="w-5 h-5 mb-1 group-active:scale-95 transition" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Proveedores</span>
+</a>
+</div>
+</nav>
+<!-- END: BottomNavigation -->
+</body></html>

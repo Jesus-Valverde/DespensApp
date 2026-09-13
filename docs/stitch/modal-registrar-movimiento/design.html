@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>DespensApp - Modal Registrar Movimiento</title>
+<!-- Tailwind CSS v3 CDN with forms and container queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-100 font-sans antialiased text-slate-800 flex justify-center items-center min-h-screen p-0 sm:p-4">
+<!-- Mobile Screen Container -->
+<div class="relative w-full max-w-sm sm:max-w-md bg-white min-h-screen sm:min-h-[844px] sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col justify-between border border-slate-200">
+<!-- BEGIN: Background Content (Stock Tab View) -->
+<!-- This section replicates the background view (Product Detail - Stock) and is blurred and dimmed by the modal overlay -->
+<div aria-hidden="true" class="flex-1 overflow-y-auto pb-24 select-none pointer-events-none">
+<!-- Top App Bar -->
+<header class="flex items-center justify-between px-5 pt-4 pb-2">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/30">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-xl font-bold tracking-tight text-blue-600">DespensApp</span>
+</div>
+<button class="p-2 rounded-full text-slate-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</header>
+<!-- Main Product Card Header -->
+<div class="mx-4 mt-3 p-5 rounded-3xl bg-white border border-slate-100 shadow-sm flex flex-col items-center">
+<!-- Product Icon -->
+<div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/25 mb-3 text-white">
+<svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+<path d="M19 5H5a2 2 0 00-2 2v2a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2zM5 11l1.5 9.5a1.5 1.5 0 001.5 1.5h8a1.5 1.5 0 001.5-1.5L19 11M10 16h4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<!-- Category Tag -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide uppercase bg-blue-50 text-blue-600 mb-2">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+          LÁCTEOS Y DERIVADOS
+        </span>
+<h1 class="text-xl font-extrabold text-slate-900 text-center">Leche Deslactosada 1L</h1>
+<p class="text-xs text-slate-500 mt-1 font-medium">Marca: <strong class="text-slate-700">Lala</strong> · ID: #08291</p>
+<!-- Action Quick Buttons -->
+<div class="grid grid-cols-3 gap-2 w-full mt-4">
+<div class="py-2.5 rounded-2xl border border-slate-200 text-center text-xs font-semibold text-slate-700 bg-white">Editar</div>
+<div class="py-2.5 rounded-2xl border border-slate-200 text-center text-xs font-semibold text-slate-700 bg-white">Crear copia</div>
+<div class="py-2.5 rounded-2xl border border-red-200 text-center text-xs font-semibold text-red-600 bg-red-50/50">Eliminar</div>
+</div>
+</div>
+<!-- Navigation Section Tabs -->
+<div class="px-4 mt-5">
+<div class="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+<span class="">Secciones</span>
+<span class="text-[10px] lowercase font-normal">Toca para alternar</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div class="p-3 bg-blue-50/50 border border-blue-100 rounded-2xl flex flex-col items-center">
+<span class="text-xs font-bold text-slate-800">Datos</span>
+<span class="text-[10px] text-slate-400">Ficha</span>
+</div>
+<div class="p-3 bg-emerald-700 border-2 border-emerald-500 rounded-2xl flex flex-col items-center text-white shadow-sm">
+<span class="text-xs font-bold">Stock</span>
+<span class="text-[10px] text-emerald-100">4 disp.</span>
+</div>
+<div class="p-3 bg-amber-50/50 border border-amber-100 rounded-2xl flex flex-col items-center">
+<span class="text-xs font-bold text-slate-800">Compra</span>
+<span class="text-[10px] text-slate-400">Precios</span>
+</div>
+</div>
+</div>
+<!-- Inventory Card Background Content -->
+<div class="mx-4 mt-4 p-4 rounded-3xl bg-white border border-slate-100 shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium inline-flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> En inventario
+          </span>
+<span class="text-xs text-slate-500">Refrigerador Cocina</span>
+</div>
+<div class="p-3 bg-slate-50 rounded-2xl flex justify-between items-center">
+<div>
+<span class="text-xs text-slate-500 block">Existencias actuales</span>
+<span class="text-3xl font-black text-slate-900">4 <span class="text-base font-normal text-slate-600">unidades</span></span>
+</div>
+<div class="text-right text-xs text-slate-500">
+<div class="">Mínimo: <strong class="text-slate-800">2</strong></div>
+<div class="">Máximo: <strong class="text-slate-800">8</strong></div>
+</div>
+</div>
+</div>
+</div>
+<!-- END: Background Content -->
+<!-- BEGIN: Bottom Tab Navigation Bar (Background Level) -->
+<nav aria-hidden="true" class="absolute bottom-0 inset-x-0 bg-white border-t border-slate-100 px-4 py-2.5 flex justify-between items-center text-[10px] font-medium text-slate-400 select-none pointer-events-none">
+<div class="flex flex-col items-center gap-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="">Inicio</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="">Despensa</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-blue-600 font-semibold">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="">Productos</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="">Carritos</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="">Listas</span>
+</div>
+<div class="flex flex-col items-center gap-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="">Proveedores</span>
+</div>
+</nav>
+<!-- END: Bottom Tab Navigation Bar -->
+<!-- BEGIN: Modal Backdrop & Container -->
+<!-- Dimmed & blurred overlay covering the entire viewport matching Screen 1 style -->
+<div class="absolute inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex flex-col sm:p-4 justify-center items-center p-4">
+<!-- Modal Card -->
+<section aria-labelledby="modal-title" aria-modal="true" class="bg-white rounded-3xl shadow-2xl border border-slate-100 flex flex-col overflow-hidden max-h-[92%] animate-in fade-in zoom-in-95 duration-200 w-full" role="dialog">
+<!-- Modal Drag Indicator for iOS style -->
+
+<!-- BEGIN: Modal Header -->
+<div class="px-5 pb-3 flex items-start justify-between border-b border-slate-100 pt-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm">
+<!-- Sync / Exchange arrows icon representing inventory movement -->
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+<path d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h2 class="text-lg font-bold text-slate-900 leading-tight" id="modal-title">Registrar movimiento</h2>
+<p class="text-xs text-slate-500 mt-0.5">Actualiza las existencias de <span class="font-medium text-slate-700">Leche Deslactosada 1L</span></p>
+</div>
+</div>
+<!-- Close Button -->
+<button aria-label="Cerrar modal" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-colors" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- END: Modal Header -->
+<!-- BEGIN: Modal Body Form -->
+<div class="px-5 py-4 overflow-y-auto space-y-4 pt-4">
+<!-- Movement Type Selector (Segmented Control) -->
+<div data-purpose="movement-type-selector">
+<label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Tipo de Movimiento</label>
+<div class="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-2xl">
+<!-- Option: Entrada (Selected Active) -->
+<button class="flex flex-col items-center justify-center py-2 px-1 bg-white rounded-xl shadow-xs border border-emerald-100 text-emerald-700 font-semibold text-xs transition" type="button">
+<span class="flex items-center gap-1 font-bold">
+<svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+                  Entrada
+                </span>
+<span class="text-[9px] text-slate-400 font-normal">Compra/Suma</span>
+</button>
+<!-- Option: Salida -->
+<button class="flex flex-col items-center justify-center py-2 px-1 text-slate-600 rounded-xl hover:bg-white/60 transition text-xs font-medium" type="button">
+<span class="flex items-center gap-1">
+<svg class="w-3.5 h-3.5 text-rose-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M20 12H4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+                  Salida
+                </span>
+<span class="text-[9px] text-slate-400 font-normal">Consumo</span>
+</button>
+<!-- Option: Ajuste -->
+<button class="flex flex-col items-center justify-center py-2 px-1 text-slate-600 rounded-xl hover:bg-white/60 transition text-xs font-medium" type="button">
+<span class="flex items-center gap-1">
+<svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M4 8h16M4 16h16" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+                  Ajuste
+                </span>
+<span class="text-[9px] text-slate-400 font-normal">Conteo físico</span>
+</button>
+</div>
+</div>
+<!-- Quantity Stepper Section -->
+<div class="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-100" data-purpose="quantity-selector">
+<div class="flex items-center justify-between mb-2">
+<label class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Cantidad a ingresar</label>
+<span class="text-xs text-slate-500 font-medium">Unidades</span>
+</div>
+<!-- Stepper Controls -->
+<div class="flex items-center justify-between gap-3">
+<button class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-slate-700 shadow-sm flex items-center justify-center active:scale-95 transition text-xl font-bold hover:bg-slate-50" type="button">
+                −
+              </button>
+<div class="flex-1 flex flex-col items-center justify-center">
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-black text-slate-900 tracking-tight">+1</span>
+<span class="text-xs font-semibold text-slate-400">ud.</span>
+</div>
+</div>
+<button class="w-12 h-12 rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-500/25 flex items-center justify-center active:scale-95 transition text-xl font-bold hover:bg-blue-700" type="button">
+                +
+              </button>
+</div>
+<!-- Impact Indicator Pill -->
+<div class="mt-3 pt-2.5 border-t border-slate-200/70 flex items-center justify-between text-xs">
+<span class="text-slate-500">Existencias resultantes:</span>
+<span class="font-semibold text-slate-800 bg-white px-2 py-0.5 rounded-lg border border-slate-200/80 shadow-2xs">
+                4 <span class="text-blue-600 mx-0.5">➔</span> <span class="text-emerald-600 font-bold">5</span> unidades
+              </span>
+</div>
+</div>
+<!-- Motivo / Quick Reason Chips -->
+<div data-purpose="reason-field">
+<label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5" for="motivo-input">Motivo o detalle (Opcional)</label>
+<input class="w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition placeholder:text-slate-400" id="motivo-input" placeholder="Ej. Compra semanal de despensa, consumo familiar..." type="text" value="Compra semanal súper">
+<!-- Quick Chips -->
+<div class="flex flex-wrap gap-1.5 mt-2">
+<span class="inline-flex items-center text-[11px] bg-blue-50 border border-blue-200/60 text-blue-700 px-2.5 py-1 rounded-lg font-medium cursor-pointer">
+                ✓ Compra súper
+              </span>
+<span class="inline-flex items-center text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1 rounded-lg font-medium cursor-pointer transition">
+                Consumo diario
+              </span>
+<span class="inline-flex items-center text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-600 px-2.5 py-1 rounded-lg font-medium cursor-pointer transition">
+                Caducado/Merma
+              </span>
+</div>
+</div>
+<!-- Date & Time Row -->
+<div data-purpose="datetime-field">
+<label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Fecha del movimiento</label>
+<button class="w-full flex items-center justify-between text-xs font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 hover:bg-white transition text-left" type="button">
+<span class="flex items-center gap-2">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+                Hoy, 12 de Octubre 2023 · 16:45
+              </span>
+<span class="text-[10px] text-blue-600 font-semibold">Cambiar</span>
+</button>
+</div>
+</div>
+<!-- END: Modal Body Form -->
+<!-- BEGIN: Modal Action Buttons (Footer) -->
+<div class="p-4 bg-white border-t border-slate-100 grid grid-cols-2 gap-3">
+<button class="w-full py-3 px-4 rounded-2xl border border-slate-200 text-slate-700 text-sm font-semibold bg-white hover:bg-slate-50 active:scale-98 transition text-center shadow-xs" type="button">
+            Cancelar
+          </button>
+<button class="w-full py-3 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-98 transition text-white text-sm font-semibold shadow-md shadow-blue-500/25 flex items-center justify-center gap-1.5" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+            Guardar
+          </button>
+</div>
+<!-- END: Modal Action Buttons -->
+</section>
+</div>
+<!-- END: Modal Backdrop & Container -->
+</div>
+
+
+</body></html>

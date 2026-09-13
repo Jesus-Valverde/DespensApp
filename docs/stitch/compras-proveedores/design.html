@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>DespensApp - Proveedores</title>
+<!-- Tailwind CSS v3 with forms and container plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              500: '#3B82F6',
+              600: '#2563EB',
+              700: '#1D4ED8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Utility Styles -->
+<style data-purpose="custom-layout">
+    /* Disable tap highlight on mobile WebKit */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Hide scrollbars for slick app look */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased flex justify-center min-h-screen">
+<!-- BEGIN: MobileDeviceFrame -->
+<div class="w-full max-w-md min-h-screen bg-slate-50 flex flex-col justify-between relative shadow-2xl border-x border-slate-200/60 pb-24">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-slate-100 px-5 py-3.5 flex items-center justify-between" data-purpose="app-header">
+<!-- Brand logo and text -->
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/30">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewBox="0 0 24 24">
+<path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+</svg>
+</div>
+<span class="text-xl font-bold tracking-tight text-blue-600">DespensApp</span>
+</div>
+<!-- Action: Notifications icon button -->
+<button aria-label="Notificaciones" class="w-9 h-9 rounded-full bg-slate-100/90 text-slate-600 hover:bg-slate-200/80 flex items-center justify-center transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewBox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+</svg>
+</button>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 px-5 pt-5 pb-6 overflow-y-auto no-scrollbar space-y-5" data-purpose="screen-content">
+<!-- Section Title & Status Badge -->
+<div class="flex items-center justify-between">
+<div>
+<h1 class="text-2xl font-bold text-slate-900 tracking-tight">Proveedores</h1>
+<p class="text-xs text-slate-500 mt-0.5 font-medium">Gestión de tiendas y comercios habituales</p>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          0 Registrados
+        </span>
+</div>
+<!-- BEGIN: FormCard -->
+<section class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-100/90 relative overflow-hidden" data-purpose="supplier-form-card">
+<!-- Subtle gradient decorative accent on top of card -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600"></div>
+<form action="#" class="space-y-4" method="POST" onsubmit="event.preventDefault();">
+<!-- Field: Nombre -->
+<div data-purpose="form-group-nombre">
+<label class="text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5" for="supplier-name">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+</svg>
+              Nombre
+            </label>
+<div class="relative">
+<input class="w-full px-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all shadow-none" id="supplier-name" name="nombre" required="" type="text">
+</div>
+</div>
+<!-- Field: Tipo -->
+<div data-purpose="form-group-tipo">
+<label class="text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5" for="supplier-type">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+</svg>
+              Tipo
+            </label>
+<input class="w-full px-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all shadow-none" id="supplier-type" name="tipo" placeholder="Supermercado, mayoreo, en línea..." type="text">
+</div>
+<!-- Field: Ubicaciones (separadas por comas) -->
+<div data-purpose="form-group-ubicaciones">
+<label class="text-sm font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5" for="supplier-locations">
+<svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+<path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+</svg>
+              Ubicaciones (separadas por comas)
+            </label>
+<input class="w-full px-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-slate-900 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all shadow-none" id="supplier-locations" name="ubicaciones" placeholder="Centro, Norte" type="text">
+</div>
+<!-- Submit Button: Guardar -->
+<div class="pt-2">
+<button class="w-full py-3.5 px-6 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-semibold rounded-xl text-base shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 transition-all duration-150 cursor-pointer" data-purpose="submit-button" type="submit">
+<svg class="w-5 h-5 stroke-current" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewBox="0 0 24 24">
+<path d="M5 13l4 4L19 7"></path>
+</svg>
+<span>Guardar</span>
+</button>
+</div>
+</form>
+</section>
+<!-- END: FormCard -->
+<!-- BEGIN: RegisteredSuppliersPreview (Empty State) -->
+<section class="rounded-2xl border border-dashed border-slate-200 bg-white/60 p-6 flex flex-col items-center justify-center text-center space-y-2.5" data-purpose="empty-state">
+<div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+</svg>
+</div>
+<div>
+<h3 class="text-sm font-semibold text-slate-700">Sin proveedores guardados</h3>
+<p class="text-xs text-slate-400 mt-0.5">Completa el formulario para agregar tu primer proveedor frecuente.</p>
+</div>
+</section>
+<!-- END: RegisteredSuppliersPreview -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomNavigation -->
+<nav aria-label="Navegación principal" class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-3 py-2 flex items-center justify-around z-30 shadow-lg shadow-slate-900/5" data-purpose="bottom-navbar">
+<!-- Tab 1: Inicio -->
+<button class="group flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl text-slate-400 hover:text-slate-600 transition-colors" type="button">
+<svg class="w-5 h-5 transition-transform group-hover:scale-105" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Inicio</span>
+</button>
+<!-- Tab 2: Productos -->
+<button class="group flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl text-slate-400 hover:text-slate-600 transition-colors" type="button">
+<svg class="w-5 h-5 transition-transform group-hover:scale-105" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Productos</span>
+</button>
+<!-- Tab 3: Carritos -->
+<button class="group flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl text-slate-400 hover:text-slate-600 transition-colors" type="button">
+<svg class="w-5 h-5 transition-transform group-hover:scale-105" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+<circle cx="9" cy="21" r="1"></circle>
+<circle cx="20" cy="21" r="1"></circle>
+<path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Carritos</span>
+</button>
+<!-- Tab 4: Listas -->
+<button class="group flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl text-slate-400 hover:text-slate-600 transition-colors" type="button">
+<svg class="w-5 h-5 transition-transform group-hover:scale-105" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewBox="0 0 24 24">
+<line x1="8" x2="21" y1="6" y2="6"></line>
+<line x1="8" x2="21" y1="12" y2="12"></line>
+<line x1="8" x2="21" y1="18" y2="18"></line>
+<line x1="3" x2="3.01" y1="6" y2="6"></line>
+<line x1="3" x2="3.01" y1="12" y2="12"></line>
+<line x1="3" x2="3.01" y1="18" y2="18"></line>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Listas</span>
+</button>
+<!-- Tab 5: Proveedores (ACTIVE) -->
+<button aria-current="page" class="flex flex-col items-center gap-1 py-1 px-3.5 rounded-2xl bg-blue-50 text-blue-600 shadow-sm border border-blue-100/80 transition-transform active:scale-95" type="button">
+<!-- Sliders icon strictly identical to original mockup -->
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24">
+<line x1="4" x2="4" y1="21" y2="14"></line>
+<line x1="4" x2="4" y1="10" y2="3"></line>
+<line x1="12" x2="12" y1="21" y2="12"></line>
+<line x1="12" x2="12" y1="8" y2="3"></line>
+<line x1="20" x2="20" y1="21" y2="16"></line>
+<line x1="20" x2="20" y1="12" y2="3"></line>
+<line x1="1" x2="7" y1="14" y2="14"></line>
+<line x1="9" x2="15" y1="8" y2="8"></line>
+<line x1="17" x2="23" y1="16" y2="16"></line>
+</svg>
+<span class="text-[11px] font-bold tracking-tight">Proveedores</span>
+</button>
+</nav>
+<!-- END: BottomNavigation -->
+</div>
+<!-- END: MobileDeviceFrame -->
+</body></html>

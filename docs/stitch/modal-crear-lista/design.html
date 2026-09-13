@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>DespensApp - Crear Nueva Lista</title>
+<!-- Tailwind CSS v3 CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style data-purpose="custom-typography">
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+<style data-purpose="modal-scroll-styling">
+    /* Custom subtle scrollbar for the modal content if screen height is small */
+    .modal-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .modal-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .modal-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 antialiased overflow-hidden min-h-screen flex items-center justify-center p-0">
+<!-- BEGIN: BlurredBackgroundApp -->
+<!-- Contextual background reflecting DespensApp product screen and underlying list selector -->
+<div aria-hidden="true" class="fixed inset-0 w-full h-full bg-slate-100 flex flex-col justify-between select-none pointer-events-none filter blur-sm scale-105">
+<!-- Header simulation -->
+<header class="bg-white/90 px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm">D</div>
+<span class="font-extrabold text-blue-600 text-lg tracking-tight">DespensApp</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200"></div>
+</header>
+<!-- Main screen content simulation -->
+<main class="flex-1 p-4 space-y-4 max-w-md mx-auto w-full">
+<!-- Product presentation card -->
+<div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200/80 flex flex-col items-center text-center">
+<div class="w-24 h-24 bg-blue-600 rounded-2xl flex items-center justify-center text-white mb-4 shadow-lg shadow-blue-500/30">
+<svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold text-slate-800">Leche Deslactosada 1L</h2>
+<p class="text-xs text-blue-600 font-semibold mt-1">Lácteos y Derivados • Lala</p>
+<div class="mt-4 text-3xl font-extrabold text-slate-900">$28.50 <span class="text-xs text-slate-400 font-normal">MXN</span></div>
+</div>
+<!-- Quick list preview item -->
+<div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div class="text-left">
+<div class="text-sm font-bold text-slate-800">Súper Semanal</div>
+<div class="text-xs text-slate-400">18 artículos</div>
+</div>
+</div>
+<span class="text-xs bg-blue-600 text-white font-medium px-2 py-1 rounded-full">1 ud.</span>
+</div>
+</main>
+<!-- Bottom navigation simulation -->
+<nav class="bg-white border-t border-slate-200 px-6 py-2 flex justify-around text-slate-400">
+<div class="w-6 h-6 bg-slate-200 rounded-md"></div>
+<div class="w-6 h-6 bg-slate-200 rounded-md"></div>
+<div class="w-6 h-6 bg-blue-600 rounded-md"></div>
+<div class="w-6 h-6 bg-slate-200 rounded-md"></div>
+</nav>
+</div>
+<!-- END: BlurredBackgroundApp -->
+<!-- BEGIN: ModalOverlay -->
+<!-- Dark backdrop with subtle blur to spotlight the modal -->
+<div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 flex items-center justify-center p-4" data-purpose="modal-overlay">
+<!-- BEGIN: CreateListModalCard -->
+<div class="w-full max-w-sm sm:max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 p-5 sm:p-6 relative flex flex-col max-h-[92vh] transition-all" data-purpose="create-list-modal">
+<!-- Close button (top-right) -->
+<button aria-label="Cerrar modal" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:text-slate-600 hover:bg-slate-200 flex items-center justify-center transition-colors" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- BEGIN: ModalHeader -->
+<header class="flex items-start gap-3.5 pr-8 mb-4">
+<!-- Icon container with blue pastel styling -->
+<div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0 shadow-sm border border-blue-100/60">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Title and helper description -->
+<div>
+<h1 class="text-xl font-bold text-slate-900 tracking-tight leading-snug">Crear nueva lista</h1>
+<p class="text-xs text-slate-500 mt-0.5 leading-relaxed">Organiza tus compras por ocasión, tienda o periodicidad</p>
+</div>
+</header>
+<!-- END: ModalHeader -->
+<!-- BEGIN: ModalForm -->
+<form class="space-y-4 overflow-y-auto modal-scroll pr-1 pb-1" onsubmit="event.preventDefault();">
+<!-- Field 1: List Name -->
+<div class="space-y-1.5">
+<label class="block text-xs font-bold uppercase tracking-wider text-slate-600" for="list-name">
+            Nombre de la lista <span class="text-red-500 font-bold">*</span>
+</label>
+<input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition-all shadow-sm" id="list-name" name="list-name" placeholder="Ej. Despensa Mensual, Frutas y Verduras..." required="" type="text">
+</div>
+<!-- Field 2: Icon and Color Selector -->
+<div class="space-y-1.5">
+<label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Selecciona un ícono</label>
+<!-- Grid of thematic icons -->
+<div class="flex items-center justify-between gap-2 pt-0.5">
+<!-- Option 1: Supermarket / Cart (Selected) -->
+<button aria-label="Carrito de compras (Azul)" class="relative w-11 h-11 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center ring-2 ring-blue-600 ring-offset-2 transition-transform active:scale-95 shadow-sm" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Option 2: Grocery Bag (Green) -->
+<button aria-label="Bolsa de mandado (Verde)" class="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-600 hover:bg-emerald-200/80 flex items-center justify-center transition-transform active:scale-95" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Option 3: Pantry Box (Orange) -->
+<button aria-label="Caja de despensa (Naranja)" class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-600 hover:bg-amber-200/80 flex items-center justify-center transition-transform active:scale-95" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Option 4: Party / Grill (Purple) -->
+<button aria-label="Parrillada y eventos (Morado)" class="w-11 h-11 rounded-2xl bg-purple-100 text-purple-600 hover:bg-purple-200/80 flex items-center justify-center transition-transform active:scale-95" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343a7.975 7.975 0 012.344 5.657c0 2.122-.843 4.072-2.343 5.657z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Option 5: Coffee / Office (Rose) -->
+<button aria-label="Cafetería y oficina (Rosa)" class="w-11 h-11 rounded-2xl bg-rose-100 text-rose-600 hover:bg-rose-200/80 flex items-center justify-center transition-transform active:scale-95" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><line x1="6" x2="6" y1="1" y2="4"></line><line x1="10" x2="10" y1="1" y2="4"></line><line x1="14" x2="14" y1="1" y2="4"></line></svg>
+</button>
+</div>
+</div>
+<!-- Field 3: Frequency / List Type Pills -->
+<div class="space-y-1.5"><div class="flex items-center justify-between"><label class="block text-xs font-bold uppercase tracking-wider text-slate-500">Color de la lista</label><span class="text-[11px] font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">Azul Despensa</span></div><div class="p-4 bg-slate-50/80 rounded-2xl border border-slate-200/90 shadow-sm"><div class="grid grid-cols-6 gap-2.5 justify-items-center"><button type="button" aria-label="Azul real" class="relative w-9 h-9 rounded-full bg-blue-600 ring-2 ring-blue-600 ring-offset-2 flex items-center justify-center text-white shadow-sm transition-transform active:scale-95"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg></button><button type="button" aria-label="Verde esmeralda" class="w-9 h-9 rounded-full bg-emerald-500 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Ámbar cálido" class="w-9 h-9 rounded-full bg-amber-500 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Púrpura vibrante" class="w-9 h-9 rounded-full bg-purple-600 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Rosa coral" class="w-9 h-9 rounded-full bg-rose-500 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Índigo noche" class="w-9 h-9 rounded-full bg-indigo-600 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Cian fresco" class="w-9 h-9 rounded-full bg-cyan-500 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Naranja Mandarina" class="w-9 h-9 rounded-full bg-orange-500 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Verde lima" class="w-9 h-9 rounded-full bg-lime-600 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Fucsia magenta" class="w-9 h-9 rounded-full bg-pink-600 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Gris pizarra" class="w-9 h-9 rounded-full bg-slate-600 hover:scale-105 transition-transform active:scale-95 shadow-sm"></button><button type="button" aria-label="Personalizado con selector" class="w-9 h-9 rounded-full bg-white border-2 border-dashed border-slate-300 text-slate-400 hover:text-slate-600 hover:border-slate-400 flex items-center justify-center text-xs font-bold transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg></button></div><p class="text-[11px] text-slate-400 text-center mt-3">El color destacará los productos y accesos directos de esta lista</p></div></div>
+<!-- Field 4: Preferred Store Select -->
+
+<!-- Field 5: Immediate Inclusion Checkbox Card -->
+
+<!-- BEGIN: ActionButtons -->
+<div class="pt-2 grid grid-cols-2 gap-3">
+<button class="w-full py-3 px-4 rounded-xl font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-sm active:scale-[0.98] transition-all text-center" type="button">
+            Cancelar
+          </button>
+<button class="w-full py-3 px-4 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/25 text-sm active:scale-[0.98] transition-all text-center" type="submit">
+            Crear lista
+          </button>
+</div>
+<!-- END: ActionButtons -->
+</form>
+<!-- END: ModalForm -->
+</div>
+<!-- END: CreateListModalCard -->
+</div>
+<!-- END: ModalOverlay -->
+
+
+</body></html>

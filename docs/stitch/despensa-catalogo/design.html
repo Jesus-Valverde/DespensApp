@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>DespensApp - Catálogo de Productos</title>
+<!-- Tailwind CSS v3 CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style data-purpose="base-typography">
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+<style data-purpose="mobile-viewport">
+    /* Constrain desktop preview to natural mobile viewport */
+    .mobile-frame {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 flex justify-center min-h-screen text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-700">
+<!-- BEGIN: MobileDeviceContainer -->
+<div class="mobile-frame w-full bg-slate-50 relative flex flex-col shadow-2xl overflow-x-hidden min-h-screen">
+<!-- BEGIN: TopAppHeader -->
+<!-- Application Brand Header & Notifications Icon -->
+<header class="sticky top-0 z-30 bg-slate-50/95 backdrop-blur-md px-5 pt-4 pb-3 flex items-center justify-between border-b border-slate-200/40">
+<div class="flex items-center gap-2.5">
+<!-- Blue Box Logo Icon -->
+<div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+<svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-2xl font-bold tracking-tight text-blue-600">DespensApp</span>
+</div>
+<!-- Notification Bell Button -->
+<button aria-label="Notificaciones" class="w-10 h-10 rounded-full bg-slate-200/60 hover:bg-slate-200 active:scale-95 transition-all flex items-center justify-center text-slate-600">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</header>
+<!-- END: TopAppHeader -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 px-4 pt-4 pb-32">
+<!-- Catalog Header & Badge -->
+<div class="flex items-center justify-between mb-4">
+<div>
+<h1 class="text-2xl font-bold tracking-tight text-slate-900">Productos</h1>
+<p class="text-xs text-slate-500 mt-0.5">Catálogo maestro de artículos</p>
+</div>
+<!-- Active Count Badge -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100/80 text-xs font-semibold">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          24 en catálogo
+        </div>
+</div>
+<!-- BEGIN: SearchBar -->
+<!-- Universal filter input -->
+<div class="relative mb-5" data-purpose="product-search">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="11" cy="11" r="7"></circle>
+<line stroke-linecap="round" x1="21" x2="16.65" y1="21" y2="16.65"></line>
+</svg>
+</div>
+<input class="w-full bg-white text-slate-800 placeholder-slate-400 pl-10 pr-4 py-3 rounded-xl border border-slate-200/80 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm transition-all" placeholder="Buscar en catálogo..." type="text">
+</div>
+<!-- END: SearchBar -->
+<!-- BEGIN: ProductList -->
+<!-- Continuous flat list of products -->
+<section aria-label="Lista de productos del catálogo" class="space-y-3" data-purpose="catalog-product-list">
+<!-- Card 1: Leche Entera -->
+<article class="bg-white rounded-2xl p-3.5 flex items-center justify-between shadow-sm border border-slate-100 hover:border-slate-200 transition-colors">
+<div class="flex items-center flex-1 min-w-0">
+<div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 text-blue-600">
+<!-- Milk / Carton Icon -->
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M7 3h10v4H7zM5 7h14v14H5zM8 12h8M8 16h5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 min-w-0 flex-1">
+<h2 class="text-slate-800 font-semibold text-base leading-tight truncate">Leche Entera</h2>
+<p class="text-xs text-slate-500 mt-1 truncate">Tetra Pak 1L • La Campiña</p>
+</div>
+</div>
+<button aria-label="Editar Leche Entera" class="w-9 h-9 ml-2 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="5" r="1"></circle>
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="12" cy="19" r="1"></circle>
+</svg>
+</button>
+</article>
+<!-- Card 2: Arroz Blanco Extra -->
+<article class="bg-white rounded-2xl p-3.5 flex items-center justify-between shadow-sm border border-slate-100 hover:border-slate-200 transition-colors">
+<div class="flex items-center flex-1 min-w-0">
+<div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center shrink-0 text-amber-600">
+<!-- Grain / Package Icon -->
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 min-w-0 flex-1">
+<h2 class="text-slate-800 font-semibold text-base leading-tight truncate">Arroz Blanco Grano Largo</h2>
+<p class="text-xs text-slate-500 mt-1 truncate">Bolsa 1kg • Calasparra</p>
+</div>
+</div>
+<button aria-label="Editar Arroz Blanco" class="w-9 h-9 ml-2 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="5" r="1"></circle>
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="12" cy="19" r="1"></circle>
+</svg>
+</button>
+</article>
+<!-- Card 3: Detergente Líquido -->
+<article class="bg-white rounded-2xl p-3.5 flex items-center justify-between shadow-sm border border-slate-100 hover:border-slate-200 transition-colors">
+<div class="flex items-center flex-1 min-w-0">
+<div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0 text-indigo-600">
+<!-- Detergent / Bottle Icon -->
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 3h6m-3 0v4m-5 4h10l-1 10H8L7 11z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 min-w-0 flex-1">
+<h2 class="text-slate-800 font-semibold text-base leading-tight truncate">Detergente Líquido Multiusos</h2>
+<p class="text-xs text-slate-500 mt-1 truncate">Envase 1.5L • Floral Fresco</p>
+</div>
+</div>
+<button aria-label="Editar Detergente" class="w-9 h-9 ml-2 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="5" r="1"></circle>
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="12" cy="19" r="1"></circle>
+</svg>
+</button>
+</article>
+<!-- Card 4: Huevos Frescos -->
+<article class="bg-white rounded-2xl p-3.5 flex items-center justify-between shadow-sm border border-slate-100 hover:border-slate-200 transition-colors">
+<div class="flex items-center flex-1 min-w-0">
+<div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center shrink-0 text-orange-600">
+<!-- Egg Icon -->
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 3C8.5 3 6 7.5 6 12.5C6 16.642 8.686 20 12 20C15.314 20 18 16.642 18 12.5C18 7.5 15.5 3 12 3Z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 min-w-0 flex-1">
+<h2 class="text-slate-800 font-semibold text-base leading-tight truncate">Huevos Camperos</h2>
+<p class="text-xs text-slate-500 mt-1 truncate">Docena (12 uds) • Clase L</p>
+</div>
+</div>
+<button aria-label="Editar Huevos" class="w-9 h-9 ml-2 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="5" r="1"></circle>
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="12" cy="19" r="1"></circle>
+</svg>
+</button>
+</article>
+<!-- Card 5: Aceite de Oliva Extra -->
+<article class="bg-white rounded-2xl p-3.5 flex items-center justify-between shadow-sm border border-slate-100 hover:border-slate-200 transition-colors">
+<div class="flex items-center flex-1 min-w-0">
+<div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0 text-emerald-600">
+<!-- Oil Bottle Icon -->
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M10 2h4M12 2v4m-3 3h6l1.5 12h-9L9 9z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 min-w-0 flex-1">
+<h2 class="text-slate-800 font-semibold text-base leading-tight truncate">Aceite de Oliva Virgen Extra</h2>
+<p class="text-xs text-slate-500 mt-1 truncate">Botella Vidrio 1L • Cosecha Propia</p>
+</div>
+</div>
+<button aria-label="Editar Aceite" class="w-9 h-9 ml-2 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="5" r="1"></circle>
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="12" cy="19" r="1"></circle>
+</svg>
+</button>
+</article>
+<!-- Card 6: Manzanas Rojas -->
+<article class="bg-white rounded-2xl p-3.5 flex items-center justify-between shadow-sm border border-slate-100 hover:border-slate-200 transition-colors">
+<div class="flex items-center flex-1 min-w-0">
+<div class="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center shrink-0 text-rose-500">
+<!-- Apple / Fruit Icon -->
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 4c.5-1.5 2-2 3-2M12 7c-3 0-6 2.5-6 6.5C6 17.5 9 21 12 21s6-3.5 6-7.5C18 9.5 15 7 12 7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 min-w-0 flex-1">
+<h2 class="text-slate-800 font-semibold text-base leading-tight truncate">Manzanas Royal Gala</h2>
+<p class="text-xs text-slate-500 mt-1 truncate">Bolsa 1.5kg • Granel Fresco</p>
+</div>
+</div>
+<button aria-label="Editar Manzanas" class="w-9 h-9 ml-2 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="5" r="1"></circle>
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="12" cy="19" r="1"></circle>
+</svg>
+</button>
+</article>
+<!-- Card 7: Café Tostado Molido -->
+<article class="bg-white rounded-2xl p-3.5 flex items-center justify-between shadow-sm border border-slate-100 hover:border-slate-200 transition-colors">
+<div class="flex items-center flex-1 min-w-0">
+<div class="w-12 h-12 rounded-xl bg-yellow-50 flex items-center justify-center shrink-0 text-amber-700">
+<!-- Coffee Cup Icon -->
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 min-w-0 flex-1">
+<h2 class="text-slate-800 font-semibold text-base leading-tight truncate">Café Tostado Molido</h2>
+<p class="text-xs text-slate-500 mt-1 truncate">Paquete 500g • Arábica 100%</p>
+</div>
+</div>
+<button aria-label="Editar Café" class="w-9 h-9 ml-2 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="5" r="1"></circle>
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="12" cy="19" r="1"></circle>
+</svg>
+</button>
+</article>
+<!-- Card 8: Pasta Spaguetti -->
+<article class="bg-white rounded-2xl p-3.5 flex items-center justify-between shadow-sm border border-slate-100 hover:border-slate-200 transition-colors">
+<div class="flex items-center flex-1 min-w-0">
+<div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center shrink-0 text-orange-500">
+<!-- Pasta / Package Icon -->
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="ml-3.5 min-w-0 flex-1">
+<h2 class="text-slate-800 font-semibold text-base leading-tight truncate">Spaguetti al Huevo</h2>
+<p class="text-xs text-slate-500 mt-1 truncate">Paquete 500g • Trigo Duro</p>
+</div>
+</div>
+<button aria-label="Editar Pasta" class="w-9 h-9 ml-2 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="5" r="1"></circle>
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="12" cy="19" r="1"></circle>
+</svg>
+</button>
+</article>
+</section>
+<!-- END: ProductList -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: FloatingActionButton -->
+<!-- Primary CTA: Add new product to master catalog -->
+<div class="fixed bottom-24 right-5 sm:right-[calc(50%-215px+20px)] z-30">
+<button aria-label="Agregar producto al catálogo" class="w-14 h-14 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-500/35 hover:bg-blue-700 active:scale-95 transition-all focus:outline-none">
+<svg class="w-7 h-7 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<line stroke-linecap="round" x1="12" x2="12" y1="5" y2="19"></line>
+<line stroke-linecap="round" x1="5" x2="19" y1="12" y2="12"></line>
+</svg>
+</button>
+</div>
+<!-- END: FloatingActionButton -->
+<!-- BEGIN: BottomNavigation -->
+<!-- Tab bar adhering exactly to DespensApp layout -->
+<nav aria-label="Navegación principal" class="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto bg-white/95 backdrop-blur-lg border-t border-slate-200/80 py-2 px-3 flex justify-around items-center z-40">
+<!-- Tab 1: Inicio -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 transition-colors flex-1 py-1" href="#">
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10.5px] mt-1 font-medium">Inicio</span>
+</a>
+<!-- Tab 2: Productos (ACTIVE STATE) -->
+<a aria-current="page" class="flex flex-col items-center justify-center text-blue-600 transition-colors flex-1 py-1" href="#">
+<div class="bg-blue-50 px-3.5 py-1 rounded-full flex items-center justify-center">
+<svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-[10.5px] mt-0.5 font-bold">Productos</span>
+</a>
+<!-- Tab 3: Carritos -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 transition-colors flex-1 py-1" href="#">
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10.5px] mt-1 font-medium">Carritos</span>
+</a>
+<!-- Tab 4: Listas -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 transition-colors flex-1 py-1" href="#">
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10.5px] mt-1 font-medium">Listas</span>
+</a>
+<!-- Tab 5: Proveedores -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 transition-colors flex-1 py-1" href="#">
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10.5px] mt-1 font-medium">Proveedores</span>
+</a>
+</nav>
+<!-- END: BottomNavigation -->
+</div>
+<!-- END: MobileDeviceContainer -->
+</body></html>

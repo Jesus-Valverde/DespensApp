@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>DespensApp - Editar niveles de stock</title>
+<!-- Tailwind CSS v3 with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            },
+            stock: {
+              teal: '#0d9488',
+              emerald: '#059669',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars">
+    /* Ocultar barra de scroll para un acabado móvil nativo */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 flex justify-center items-center min-h-screen text-slate-800 antialiased font-sans p-0 sm:p-4 selection:bg-blue-100">
+<!-- BEGIN: MobileDeviceFrame -->
+<div class="relative w-full max-w-md h-[884px] bg-slate-50 overflow-hidden shadow-2xl sm:rounded-[40px] border border-slate-200/80 flex flex-col">
+<!-- BEGIN: BackgroundProductDetailScreen (Blurred in background) -->
+<!-- Simulación fiel de la pantalla Detalle de Producto Pestaña Stock con efecto desenfoque -->
+<div aria-hidden="true" class="absolute inset-0 flex flex-col pointer-events-none filter blur-[5px] scale-[0.98] select-none opacity-80 transition-all duration-300">
+<!-- App Header -->
+<header class="px-5 pt-7 pb-3 flex items-center justify-between bg-white border-b border-slate-100">
+<div class="flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-xl font-bold tracking-tight text-blue-600">DespensApp</span>
+</div>
+<div class="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 border border-slate-100">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+</div>
+</header>
+<!-- Scrollable Background View Content -->
+<div class="flex-1 overflow-y-auto px-4 py-4 space-y-4 no-scrollbar">
+<!-- Product Card Header -->
+<div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/25 mb-3 text-white">
+<svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 tracking-wider uppercase mb-2">
+            Lácteos y Derivados
+          </span>
+<h2 class="text-xl font-bold text-slate-900 leading-tight">Leche Deslactosada 1L</h2>
+<p class="text-xs text-slate-400 font-medium mt-1">Marca: <span class="text-slate-600 font-semibold">Lala</span> · ID: #08291</p>
+<!-- Quick Actions -->
+<div class="grid grid-cols-3 gap-2 w-full mt-4">
+<button class="py-2.5 px-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-medium text-slate-600 flex items-center justify-center space-x-1">
+<span class="">✏️</span> <span class="">Editar</span>
+</button>
+<button class="py-2.5 px-3 bg-slate-50 border border-slate-100 rounded-xl text-xs font-medium text-slate-600 flex items-center justify-center space-x-1">
+<span class="">📋</span> <span class="">Copiar</span>
+</button>
+<button class="py-2.5 px-3 bg-rose-50 border border-rose-100 rounded-xl text-xs font-medium text-rose-600 flex items-center justify-center space-x-1">
+<span class="">🗑️</span> <span class="">Eliminar</span>
+</button>
+</div>
+</div>
+<!-- Tab Selector -->
+<div>
+<div class="flex items-center justify-between text-xs text-slate-400 font-medium px-1 mb-2">
+<span class="">SECCIONES</span>
+<span class="">Toca para alternar</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div class="p-3 bg-blue-50/60 border border-blue-100 rounded-2xl text-center">
+<div class="text-sm font-semibold text-slate-700">Datos</div>
+<div class="text-[11px] text-slate-400">Ficha</div>
+</div>
+<div class="p-3 bg-emerald-600 text-white rounded-2xl text-center shadow-md ring-2 ring-emerald-500/20">
+<div class="text-sm font-semibold">Stock</div>
+<div class="text-[11px] text-emerald-100">4 disp.</div>
+</div>
+<div class="p-3 bg-amber-50/70 border border-amber-100 rounded-2xl text-center">
+<div class="text-sm font-semibold text-slate-700">Compra</div>
+<div class="text-[11px] text-slate-400">Precios</div>
+</div>
+</div>
+</div>
+<!-- Stock Details Card -->
+<div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-4">
+<div class="flex justify-between items-center text-xs">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-medium border border-emerald-100">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> En inventario
+            </span>
+<span class="text-slate-500">📍 Refrigerador Cocina</span>
+</div>
+<div class="flex items-end justify-between bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
+<div>
+<span class="text-xs text-slate-400 font-medium block mb-1">Existencias actuales</span>
+<div class="text-3xl font-extrabold text-slate-900 leading-none">4 <span class="text-sm font-normal text-slate-500">unidades</span></div>
+</div>
+<div class="text-right text-xs text-slate-500 space-y-0.5">
+<div class="">Mínimo: <span class="font-bold text-slate-800">2</span></div>
+<div class="">Máximo: <span class="font-bold text-slate-800">8</span></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Tab Bar in Background -->
+<nav class="bg-white border-t border-slate-200/80 px-6 py-3 flex justify-between items-center text-[10px] text-slate-400">
+<div class="flex flex-col items-center"><span class="text-lg">🏠</span>Inicio</div>
+<div class="flex flex-col items-center"><span class="text-lg">📦</span>Despensa</div>
+<div class="flex flex-col items-center text-blue-600 font-bold"><span class="text-lg">🗃️</span>Productos</div>
+<div class="flex flex-col items-center"><span class="text-lg">🛒</span>Carritos</div>
+<div class="flex flex-col items-center"><span class="text-lg">⚙️</span>Ajustes</div>
+</nav>
+</div>
+<!-- END: BackgroundProductDetailScreen -->
+<!-- BEGIN: BackdropOverlay -->
+<!-- Capa oscura semitransparente con desenfoque de fondo idéntica al snapshot SCREEN_1 -->
+<div class="absolute inset-0 bg-slate-900/50 backdrop-blur-[4px] z-10 transition-opacity"></div>
+<!-- END: BackdropOverlay -->
+<!-- BEGIN: EditStockLevelsModal -->
+<!-- Contenedor del Modal centrado/adaptado a pantalla móvil -->
+<div class="relative z-20 flex-1 flex items-end sm:items-center justify-center p-3 sm:p-4 overflow-y-auto no-scrollbar">
+<div aria-labelledby="modal-title" aria-modal="true" class="w-full bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col my-auto animate-in fade-in slide-in-from-bottom-6 duration-200" role="dialog">
+<!-- BEGIN: ModalHeader -->
+<div class="px-5 pt-5 pb-3 border-b border-slate-100 flex items-start justify-between bg-white relative">
+<div class="flex items-start space-x-3">
+<!-- Icono decorativo de niveles / deslizador de stock -->
+<div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100/70 flex items-center justify-center flex-shrink-0 mt-0.5">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900 leading-tight" id="modal-title">
+                Editar niveles de stock
+              </h3>
+<p class="text-xs text-slate-500 mt-1 font-normal">
+                Configura alertas y límites para <span class="font-medium text-slate-700">Leche Deslactosada 1L</span>
+</p>
+</div>
+</div>
+<!-- Botón de Cerrar Modal -->
+<button aria-label="Cerrar modal" class="w-8 h-8 rounded-full bg-slate-100/80 hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors flex-shrink-0 ml-2" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- END: ModalHeader -->
+<!-- BEGIN: ModalBodyForm -->
+<form class="p-5 space-y-3.5 overflow-y-auto max-h-[66vh] no-scrollbar">
+<!-- Stock Mínimo Card -->
+<div class="bg-slate-50/90 border border-slate-200/70 rounded-2xl p-3.5 space-y-2.5">
+<div class="flex items-start justify-between">
+<div>
+<label class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5" for="stock-min">
+                  Stock Mínimo
+                  <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">Alerta reposición</span>
+</label>
+<p class="text-[11px] text-slate-500 mt-0.5">Notificar cuando queden pocas existencias</p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<!-- Stepper Controls -->
+<div class="flex items-center space-x-2 bg-white rounded-xl p-1 border border-slate-200 shadow-sm">
+<button aria-label="Disminuir stock mínimo" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 flex items-center justify-center font-bold text-base transition-all" type="button">
+                  -
+                </button>
+<input class="w-12 text-center border-0 p-0 text-slate-900 font-extrabold text-base focus:ring-0" id="stock-min" min="0" type="number" value="2">
+<button aria-label="Aumentar stock mínimo" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 flex items-center justify-center font-bold text-base transition-all" type="button">
+                  +
+                </button>
+</div>
+<div class="text-right">
+<span class="text-xs font-medium text-amber-700 bg-amber-50 px-2 py-1 rounded-lg border border-amber-200/60 inline-flex items-center">
+                  ⚠️ Alerta ≤ 2 uds.
+                </span>
+</div>
+</div>
+</div>
+<!-- Stock Máximo Card -->
+<div class="bg-slate-50/90 border border-slate-200/70 rounded-2xl p-3.5 space-y-2.5">
+<div class="flex items-start justify-between">
+<div>
+<label class="text-xs font-bold uppercase tracking-wider text-slate-600 flex items-center gap-1.5" for="stock-max">
+                  Stock Máximo
+                  <span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">Capacidad sugerida</span>
+</label>
+<p class="text-[11px] text-slate-500 mt-0.5">Límite ideal para evitar sobrecompra o caducidad</p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<!-- Stepper Controls -->
+<div class="flex items-center space-x-2 bg-white rounded-xl p-1 border border-slate-200 shadow-sm">
+<button aria-label="Disminuir stock máximo" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 flex items-center justify-center font-bold text-base transition-all" type="button">
+                  -
+                </button>
+<input class="w-12 text-center border-0 p-0 text-slate-900 font-extrabold text-base focus:ring-0" id="stock-max" min="1" type="number" value="8">
+<button aria-label="Aumentar stock máximo" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 flex items-center justify-center font-bold text-base transition-all" type="button">
+                  +
+                </button>
+</div>
+<div class="text-right">
+<span class="text-xs font-medium text-slate-600 bg-slate-200/60 px-2 py-1 rounded-lg">
+                  Capacidad: 8 uds.
+                </span>
+</div>
+</div>
+</div>
+<!-- Ubicación Asignada -->
+
+<!-- Toggle Notificación Reposición -->
+<div class="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-3 flex items-center justify-between">
+<div class="pr-2">
+<p class="text-xs font-bold text-slate-800">Recibir alertas automáticas</p>
+<p class="text-[11px] text-slate-500 leading-tight">Avisarme en el móvil al llegar al stock mínimo</p>
+</div>
+<!-- Custom Toggle Switch -->
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+</label>
+</div>
+<!-- Helper Note -->
+<p class="text-[11px] text-slate-400 text-center px-1">
+            Los cambios afectarán el cálculo del estado de inventario en tiempo real.
+          </p>
+<!-- BEGIN: ModalActionButtons -->
+<div class="grid grid-cols-2 gap-2.5 pt-2">
+<button class="w-full py-3 px-4 rounded-2xl border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 active:bg-slate-100 font-semibold text-xs tracking-wide transition-colors text-center" type="button">
+              Cancelar
+            </button>
+<button class="w-full py-3 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-xs tracking-wide shadow-md shadow-blue-500/25 transition-all text-center" type="submit">
+              Guardar niveles
+            </button>
+</div>
+<!-- END: ModalActionButtons -->
+</form>
+<!-- END: ModalBodyForm -->
+</div>
+</div>
+<!-- END: EditStockLevelsModal -->
+</div>
+<!-- END: MobileDeviceFrame -->
+
+
+</body></html>

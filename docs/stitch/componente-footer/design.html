@@ -1,0 +1,498 @@
+<!DOCTYPE html><html lang="es" class="h-full bg-slate-100"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DespensApp - Componente Footer y Barra de Navegación</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+  </style>
+</head>
+<body class="min-h-full bg-slate-100 text-slate-900 py-10 px-4 sm:px-8">
+  <div class="max-w-4xl mx-auto space-y-10">
+    
+    <!-- Hero / Spec Header -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-6 mb-6">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
+              SISTEMA DE DISEÑO • COMPONENTE
+            </span>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              ARQUITECTURA 3 TABS (2026)
+            </span>
+          </div>
+          <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Componente Footer / Bottom Tab Bar</h1>
+          <p class="text-sm text-slate-500 mt-1">Especificación técnica, estados activos/inactivos, interacción de FABs y tokens de navegación móvil para DespensApp.</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+            <!-- Icono Tab Bar -->
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+              <path d="M6 8h.01"></path>
+              <path d="M10 8h.01"></path>
+              <path d="M14 8h.01"></path>
+              <path d="M2 16h20"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick summary bullets -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
+          <span class="font-bold text-slate-800 block text-sm mb-1">3 Tabs Únicas</span>
+          <p class="text-slate-500 leading-relaxed">Solo 3 pestañas: <strong class="text-slate-700">Inicio</strong>, <strong class="text-slate-700">Despensa</strong> y <strong class="text-slate-700">Compras</strong>. No existen pestañas independientes para Productos, Carritos o Listas.</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80"><span class="font-bold text-slate-800 block text-sm mb-1">Iconografía Lucide 24px</span>
+<p class="text-slate-500 leading-relaxed">Trazos limpios con <strong class="text-slate-700">stroke-width 1.5</strong>. Glifos: Layout-Grid (Inicio), Warehouse (Despensa) y Shopping-Cart (Compras). Prohibidos emojis.</p></div>
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
+          <span class="font-bold text-slate-800 block text-sm mb-1">Reglas del FAB Flotante</span>
+          <p class="text-slate-500 leading-relaxed">Botón redondo `+` con gradiente (`blue-600`→`indigo-600`) posicionado a 20px sobre el tab bar. <strong class="text-slate-700">Solo activo</strong> en Catálogo y Carritos.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive / Visual Showcase of the 3 States -->
+    <div class="space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+          Variantes por Pestaña Activa en Mobile Frame (430px)
+        </h2>
+        <span class="text-xs text-slate-400 font-medium">Fondo slate-50 (#F8FAFC) · Barra fija blanca</span>
+      </div>
+
+      <!-- Grid of 3 phone previews -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- VARIANT 1: TAB INICIO ACTIVA -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm flex flex-col">
+          <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Variante A: Inicio Activo</span>
+            <span class="text-[10px] font-semibold text-slate-500 bg-slate-200/60 px-2 py-0.5 rounded-md">Sin FAB</span>
+          </div>
+
+          <!-- Mock phone body -->
+          <div class="bg-slate-50 p-4 flex-1 flex flex-col justify-between min-h-[260px] relative">
+            <div class="space-y-3">
+              <!-- Window title bar mock -->
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-extrabold text-slate-900">Inicio</h3>
+                  <p class="text-[11px] text-slate-500">Control de despensa e inventario</p>
+                </div>
+              </div>
+
+              <!-- Mini card mock -->
+              <div class="bg-white p-3 rounded-xl border border-slate-200/70 shadow-xs flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs font-bold text-slate-800">Despensa al día</p>
+                  <p class="text-[10px] text-slate-400 truncate">Niveles de inventario óptimos</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- THE COMPONENT: Bottom Nav Bar -->
+            <div class="mt-8 pt-2">
+              <nav class="bg-white border-t border-slate-200 py-2 px-6 rounded-2xl shadow-sm flex items-center justify-between">
+                <!-- Tab 1: Inicio (Active) -->
+                <button class="flex flex-col items-center gap-1 group focus:outline-none">
+                  <div class="px-4 py-1 rounded-full bg-blue-50 text-blue-600 transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg></div>
+                  <span class="text-[11px] font-bold text-blue-600 tracking-tight">Inicio</span>
+                </button>
+
+                <!-- Tab 2: Despensa (Inactive) -->
+                <button class="flex flex-col items-center gap-1 group focus:outline-none">
+                  <div class="px-4 py-1 rounded-full text-slate-500 hover:text-slate-800 transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35a2 2 0 0 1 1.1-1.78l8-4a2 2 0 0 1 1.8 0l8 4a2 2 0 0 1 1.1 1.78Z"></path><path d="M6 18h12"></path><path d="M6 14h12"></path><rect width="12" height="12" x="6" y="10"></rect></svg></div>
+                  <span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-700">Despensa</span>
+                </button>
+
+                <!-- Tab 3: Compras (Inactive) -->
+                <button class="flex flex-col items-center gap-1 group focus:outline-none">
+                  <div class="px-4 py-1 rounded-full text-slate-500 hover:text-slate-800 transition-colors">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="8" cy="21" r="1"></circle>
+                      <circle cx="19" cy="21" r="1"></circle>
+                      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                  </div>
+                  <span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-700">Compras</span>
+                </button>
+              </nav>
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between">
+            <span class="">Ruta: <code>/inicio</code></span>
+            <span class="text-slate-400">Dashboard General</span>
+          </div>
+        </div>
+
+        <!-- VARIANT 2: TAB DESPENSA ACTIVA + FAB EN CATÁLOGO -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm flex flex-col">
+          <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Variante B: Despensa Activa</span>
+            <span class="text-[10px] font-semibold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md">Con FAB en Catálogo</span>
+          </div>
+
+          <!-- Mock phone body -->
+          <div class="bg-slate-50 p-4 flex-1 flex flex-col justify-between min-h-[260px] relative">
+            <div class="space-y-3">
+              <!-- Window title bar mock with toggle -->
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-extrabold text-slate-900">Despensa</h3>
+                  <p class="text-[11px] text-slate-500">Control de despensa e inventario</p>
+                </div>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> 18 Artículos
+                </span>
+              </div>
+
+              <!-- Mini module switch -->
+              <div class="bg-slate-200/70 p-0.5 rounded-lg flex text-[10px]">
+                <span class="flex-1 py-1 text-center font-medium text-slate-500">Stock</span>
+                <span class="flex-1 py-1 text-center font-bold bg-white text-blue-700 rounded shadow-xs">Catálogo</span>
+              </div>
+            </div>
+
+            <!-- FLOATING ACTION BUTTON (FAB) ONLY ON CATÁLOGO -->
+            <div class="relative mt-8 pt-2">
+              <!-- FAB positioned directly above tab bar right -->
+              <div class="absolute -top-12 right-2 z-10">
+                <button class="w-11 h-11 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:scale-105 active:scale-95 transition-all">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- THE COMPONENT: Bottom Nav Bar -->
+              <nav class="bg-white border-t border-slate-200 py-2 px-6 rounded-2xl shadow-sm flex items-center justify-between">
+                <!-- Tab 1: Inicio (Inactive) -->
+                <button class="flex flex-col items-center gap-1 group focus:outline-none">
+                  <div class="px-4 py-1 rounded-full text-slate-500 hover:text-slate-800 transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg></div>
+                  <span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-700">Inicio</span>
+                </button>
+
+                <!-- Tab 2: Despensa (Active) -->
+                <button class="flex flex-col items-center gap-1 group focus:outline-none">
+                  <div class="px-4 py-1 rounded-full bg-blue-50 text-blue-600 transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35a2 2 0 0 1 1.1-1.78l8-4a2 2 0 0 1 1.8 0l8 4a2 2 0 0 1 1.1 1.78Z"></path><path d="M6 18h12"></path><path d="M6 14h12"></path><rect width="12" height="12" x="6" y="10"></rect></svg></div>
+                  <span class="text-[11px] font-bold text-blue-600 tracking-tight">Despensa</span>
+                </button>
+
+                <!-- Tab 3: Compras (Inactive) -->
+                <button class="flex flex-col items-center gap-1 group focus:outline-none">
+                  <div class="px-4 py-1 rounded-full text-slate-500 hover:text-slate-800 transition-colors">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="8" cy="21" r="1"></circle>
+                      <circle cx="19" cy="21" r="1"></circle>
+                      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                  </div>
+                  <span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-700">Compras</span>
+                </button>
+              </nav>
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between">
+            <span class="">Ruta: <code>/despensa</code></span>
+            <span class="text-blue-600 font-semibold">Abre formulario producto</span>
+          </div>
+        </div>
+
+        <!-- VARIANT 3: TAB COMPRAS ACTIVA + FAB EN CARRITOS -->
+        <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm flex flex-col">
+          <div class="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Variante C: Compras Activa</span>
+            <span class="text-[10px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-md">Con FAB en Carritos</span>
+          </div>
+
+          <!-- Mock phone body -->
+          <div class="bg-slate-50 p-4 flex-1 flex flex-col justify-between min-h-[260px] relative">
+            <div class="space-y-3">
+              <!-- Window title bar mock with 3-way toggle -->
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-extrabold text-slate-900">Compras</h3>
+                  <p class="text-[11px] text-slate-500">Gestión de compras y pedidos</p>
+                </div>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                  2 Activos
+                </span>
+              </div>
+
+              <!-- Mini module 3-way switch -->
+              <div class="bg-slate-200/70 p-0.5 rounded-lg flex text-[10px]">
+                <span class="flex-1 py-1 text-center font-bold bg-white text-blue-700 rounded shadow-xs">Carritos</span>
+                <span class="flex-1 py-1 text-center font-medium text-slate-500">Listas</span>
+                <span class="flex-1 py-1 text-center font-medium text-slate-500">Proveed.</span>
+              </div>
+            </div>
+
+            <!-- FLOATING ACTION BUTTON (FAB) FOR CARRITOS -->
+            <div class="relative mt-8 pt-2">
+              <!-- FAB positioned directly above tab bar right -->
+              <div class="absolute -top-12 right-2 z-10">
+                <button class="w-11 h-11 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:scale-105 active:scale-95 transition-all">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- THE COMPONENT: Bottom Nav Bar -->
+              <nav class="bg-white border-t border-slate-200 py-2 px-6 rounded-2xl shadow-sm flex items-center justify-between">
+                <!-- Tab 1: Inicio (Inactive) -->
+                <button class="flex flex-col items-center gap-1 group focus:outline-none">
+                  <div class="px-4 py-1 rounded-full text-slate-500 hover:text-slate-800 transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg></div>
+                  <span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-700">Inicio</span>
+                </button>
+
+                <!-- Tab 2: Despensa (Inactive) -->
+                <button class="flex flex-col items-center gap-1 group focus:outline-none">
+                  <div class="px-4 py-1 rounded-full text-slate-500 hover:text-slate-800 transition-colors"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35a2 2 0 0 1 1.1-1.78l8-4a2 2 0 0 1 1.8 0l8 4a2 2 0 0 1 1.1 1.78Z"></path><path d="M6 18h12"></path><path d="M6 14h12"></path><rect width="12" height="12" x="6" y="10"></rect></svg></div>
+                  <span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-700">Despensa</span>
+                </button>
+
+                <!-- Tab 3: Compras (Active) -->
+                <button class="flex flex-col items-center gap-1 group focus:outline-none">
+                  <div class="px-4 py-1 rounded-full bg-blue-50 text-blue-600 transition-colors">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="8" cy="21" r="1"></circle>
+                      <circle cx="19" cy="21" r="1"></circle>
+                      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                    </svg>
+                  </div>
+                  <span class="text-[11px] font-bold text-blue-600 tracking-tight">Compras</span>
+                </button>
+              </nav>
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between">
+            <span class="">Ruta: <code>/compras</code></span>
+            <span class="text-blue-600 font-semibold">Abre modal crear carrito</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Technical Specification & Anatomy Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Anatomy Breakdown -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+          Anatomía y Tokens del Tab Bar
+        </h3>
+        
+        <div class="space-y-3 text-xs">
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 flex items-start justify-between gap-4">
+            <div>
+              <p class="font-bold text-slate-800">Contenedor Principal (Barra Fija)</p>
+              <p class="text-slate-500 text-[11px] mt-0.5">Fondo blanco puro (<code class="text-slate-700">#FFFFFF</code>), altura total ~68px con safe area, borde superior <code class="text-slate-700">border-slate-200</code>.</p>
+            </div>
+            <span class="shrink-0 px-2 py-1 bg-white border border-slate-200 rounded-md font-mono text-[10px] text-slate-600">fixed bottom-0</span>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 flex items-start justify-between gap-4">
+            <div>
+              <p class="font-bold text-slate-800">Estado Activo (Tab Pill)</p>
+              <p class="text-slate-500 text-[11px] mt-0.5">Pastilla redondeada suave en <code class="text-slate-700">bg-blue-50</code> detrás del glifo, con color primario <code class="text-slate-700">#2563EB</code> y etiqueta en <code class="text-slate-700">font-bold</code>.</p>
+            </div>
+            <span class="shrink-0 px-2 py-1 bg-blue-50 text-blue-700 border border-blue-200 rounded-md font-mono text-[10px]">px-4 py-1 rounded-full</span>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 flex items-start justify-between gap-4">
+            <div>
+              <p class="font-bold text-slate-800">Estado Pasivo / Inactivo</p>
+              <p class="text-slate-500 text-[11px] mt-0.5">Ícono y etiqueta en tono neutro <code class="text-slate-700">slate-500 (#64748B)</code> con peso <code class="text-slate-700">font-medium</code>. Hover en desktop a <code class="text-slate-700">slate-800</code>.</p>
+            </div>
+            <span class="shrink-0 px-2 py-1 bg-slate-100 text-slate-600 border border-slate-200 rounded-md font-mono text-[10px]">text-slate-500</span>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 flex items-start justify-between gap-4">
+            <div>
+              <p class="font-bold text-slate-800">Distribución de Columnas</p>
+              <p class="text-slate-500 text-[11px] mt-0.5">3 columnas de idéntico ancho (<code class="text-slate-700">grid-cols-3</code> o <code class="text-slate-700">justify-around</code>) para garantizar target táctil mínimo de 48x48px.</p>
+            </div>
+            <span class="shrink-0 px-2 py-1 bg-white border border-slate-200 rounded-md font-mono text-[10px] text-slate-600">flex-1 min-w-[48px]</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAB Rules & Matrix -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+          Reglas del Botón Flotante (FAB)
+        </h3>
+
+        <div class="space-y-3 text-xs">
+          <!-- FAB Visual Token Card -->
+          <div class="p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-blue-600/30 shrink-0">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 text-sm">FAB Gradient Tile</p>
+              <p class="text-slate-600 text-[11px]">Degradado <code class="font-mono text-blue-700">from-blue-600 to-indigo-600</code>. Tamaño 52x52px en móvil real, sombra elevada <code class="font-mono text-slate-600">shadow-lg</code>.</p>
+            </div>
+          </div>
+
+          <!-- Strict Display Matrix Table -->
+          <div class="border border-slate-200 rounded-xl overflow-hidden">
+            <table class="w-full text-left text-[11px]">
+              <thead class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-bold">
+                <tr>
+                  <th class="p-2.5">Módulo / Vista</th>
+                  <th class="p-2.5">Estado del FAB</th>
+                  <th class="p-2.5">Acción Disparada</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr>
+                  <td class="p-2.5 font-medium text-slate-800">Inicio (Dashboard)</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-semibold">NO DISPONIBLE</span></td>
+                  <td class="p-2.5 text-slate-500">Ninguna</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium text-slate-800">Despensa ➔ Stock</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-semibold">NO DISPONIBLE</span></td>
+                  <td class="p-2.5 text-slate-500">Solo consulta y filtros</td>
+                </tr>
+                <tr class="bg-blue-50/40">
+                  <td class="p-2.5 font-bold text-blue-900">Despensa ➔ Catálogo</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold">VISIBLE (Activo)</span></td>
+                  <td class="p-2.5 text-blue-800 font-medium">Abre formulario "Nuevo producto"</td>
+                </tr>
+                <tr class="bg-indigo-50/40">
+                  <td class="p-2.5 font-bold text-indigo-900">Compras ➔ Carritos</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 font-bold">VISIBLE (Activo)</span></td>
+                  <td class="p-2.5 text-indigo-800 font-medium">Abre modal "Crear carrito"</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium text-slate-800">Compras ➔ Listas</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-semibold">NO DISPONIBLE</span></td>
+                  <td class="p-2.5 text-slate-500">Formulario inline en vista</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium text-slate-800">Compras ➔ Proveedores</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 font-semibold">NO DISPONIBLE</span></td>
+                  <td class="p-2.5 text-slate-500">Formulario inline en vista</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium text-slate-800">Formularios / Detalles</td>
+                  <td class="p-2.5"><span class="px-2 py-0.5 rounded bg-rose-50 text-rose-600 font-semibold">PROHIBIDO</span></td>
+                  <td class="p-2.5 text-slate-500">Sin tab bar ni FAB</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Code Snippet / Production Implementation for Developer Export -->
+    <div class="bg-slate-900 rounded-3xl p-6 text-white space-y-4 shadow-xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+          <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+          <span class="text-xs font-mono text-slate-400 ml-2">BottomTabBar.jsx / template.html</span>
+        </div>
+        <span class="text-[11px] font-mono text-blue-400 bg-blue-950 px-2.5 py-0.5 rounded border border-blue-800/60">Tailwind CSS 3.4+</span>
+      </div>
+
+      <pre class="font-mono text-xs text-slate-300 overflow-x-auto leading-relaxed p-2"><code>&lt;!-- Persistent Bottom Tab Bar (DespensApp Oficial 2026) --&gt;
+&lt;!-- Glifos oficiales: Inicio (layout-grid), Despensa (warehouse), Compras (shopping-cart) --&gt;
+&lt;footer class="fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto bg-white border-t border-slate-200 px-6 py-2 z-40"&gt;
+  &lt;nav class="grid grid-cols-3 items-center justify-items-center" aria-label="Navegación principal"&gt;
+    
+    &lt;!-- 1. Inicio (Active example - Lucide layout-grid) --&gt;
+    &lt;a href="/inicio" class="flex flex-col items-center gap-1 w-full text-center"&gt;
+      &lt;div class="px-5 py-1 rounded-full bg-blue-50 text-blue-600"&gt;
+        &lt;svg class="w-5 h-5 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"&gt;
+          &lt;rect width="7" height="7" x="3" y="3" rx="1"/&gt;
+          &lt;rect width="7" height="7" x="14" y="3" rx="1"/&gt;
+          &lt;rect width="7" height="7" x="14" y="14" rx="1"/&gt;
+          &lt;rect width="7" height="7" x="3" y="14" rx="1"/&gt;
+        &lt;/svg&gt;
+      &lt;/div&gt;
+      &lt;span class="text-xs font-bold text-blue-600 tracking-tight"&gt;Inicio&lt;/span&gt;
+    &lt;/a&gt;
+
+    &lt;!-- 2. Despensa (Inactive - Lucide warehouse) --&gt;
+    &lt;a href="/despensa" class="flex flex-col items-center gap-1 w-full text-center text-slate-500 hover:text-slate-800"&gt;
+      &lt;div class="px-5 py-1 rounded-full"&gt;
+        &lt;svg class="w-5 h-5 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"&gt;
+          &lt;path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35a2 2 0 0 1 1.1-1.78l8-4a2 2 0 0 1 1.8 0l8 4a2 2 0 0 1 1.1 1.78Z"/&gt;
+          &lt;path d="M6 18h12"/&gt;
+          &lt;path d="M6 14h12"/&gt;
+          &lt;rect width="12" height="12" x="6" y="10"/&gt;
+        &lt;/svg&gt;
+      &lt;/div&gt;
+      &lt;span class="text-xs font-medium"&gt;Despensa&lt;/span&gt;
+    &lt;/a&gt;
+
+    &lt;!-- 3. Compras (Inactive - Lucide shopping-cart) --&gt;
+    &lt;a href="/compras" class="flex flex-col items-center gap-1 w-full text-center text-slate-500 hover:text-slate-800"&gt;
+      &lt;div class="px-5 py-1 rounded-full"&gt;
+        &lt;svg class="w-5 h-5 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"&gt;
+          &lt;circle cx="8" cy="21" r="1"/&gt;
+          &lt;circle cx="19" cy="21" r="1"/&gt;
+          &lt;path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/&gt;
+        &lt;/svg&gt;
+      &lt;/div&gt;
+      &lt;span class="text-xs font-medium"&gt;Compras&lt;/span&gt;
+    &lt;/a&gt;
+
+  &lt;/nav&gt;
+&lt;/footer&gt;</code></pre>
+    </div>
+
+  </div>
+
+
+
+</body></html>

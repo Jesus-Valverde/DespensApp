@@ -1,0 +1,339 @@
+<!DOCTYPE html><html class="h-full bg-slate-100" lang="es" style="width: 390px; height: 1271px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>DespensApp - Inicio</title>
+<!-- Tailwind CSS CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'sans-serif'],
+          },
+          boxShadow: {
+            'subtle': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03)',
+            'card': '0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -2px rgba(0, 0, 0, 0.02)',
+            'elevated': '0 10px 25px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.02)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Layout Styles -->
+<style data-purpose="ios-safe-areas">
+    /* iOS Safe Area handling */
+    .safe-top {
+      padding-top: max(env(safe-area-inset-top), 16px);
+    }
+    .safe-bottom {
+      padding-bottom: max(env(safe-area-inset-bottom), 12px);
+    }
+    
+    /* Subtle touch feedback */
+    .pressable:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease-out;
+    }
+  </style>
+</head>
+<body class="h-full font-sans antialiased text-slate-900 bg-slate-100 flex justify-center selection:bg-blue-100 selection:text-blue-700">
+<!-- Mobile View Container (~412px standard modern phone frame) -->
+<div class="relative w-full max-w-[430px] min-h-screen bg-slate-50 flex flex-col shadow-2xl overflow-x-hidden border-x border-slate-200/60">
+<!-- BEGIN: TopBar -->
+<header class="safe-top px-5 pt-3 pb-2 flex items-center justify-between sticky top-0 bg-slate-50/90 backdrop-blur-md z-20 border-b border-slate-200/50">
+<div class="flex items-center gap-2">
+<!-- Brand Logo & Name -->
+<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-sm shadow-blue-500/20">
+<svg class="w-4 h-4 stroke-[2.2]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<path d="m7.5 4.27 9 5.15"></path>
+<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+<path d="m3.3 7 8.7 5 8.7-5"></path>
+<path d="M12 22V12"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-blue-600 flex items-center gap-1">
+          DespensApp
+        </h1>
+</div>
+<!-- Quick Action / Notification Profile Button -->
+<div class="flex items-center gap-2">
+<button aria-label="Notificaciones" class="w-9 h-9 rounded-full bg-white border border-slate-200/80 flex items-center justify-center text-slate-500 hover:text-slate-700 hover:bg-slate-50 pressable shadow-subtle transition-colors" type="button">
+<svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 px-5 pt-5 pb-28 space-y-6">
+<!-- Section Header -->
+<div class="flex items-baseline justify-between">
+<div>
+<h2 class="text-2xl font-black tracking-tight text-slate-900">Inicio</h2>
+<p class="text-xs font-medium text-slate-400 mt-0.5">Control de despensa e inventario</p>
+</div>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+          Actualizado
+        </span>
+</div>
+<!-- BEGIN: SummaryCards -->
+<!-- 3-Column Metrics Grid -->
+<section aria-label="Resumen de inventario" class="grid grid-cols-3 gap-3">
+<!-- Card 1: Productos -->
+<div class="group pressable bg-white rounded-2xl p-3.5 flex flex-col justify-between border border-slate-200/70 shadow-subtle hover:border-blue-300 hover:shadow-card transition duration-200">
+<div class="flex items-center justify-between mb-3">
+<div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200">
+<svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<path d="m7.5 4.27 9 5.15"></path>
+<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+<path d="m3.3 7 8.7 5 8.7-5"></path>
+<path d="M12 22V12"></path>
+</svg>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total</span>
+</div>
+<div>
+<div class="text-2xl font-black tracking-tight text-slate-900 leading-none">0</div>
+<div class="text-xs font-semibold text-slate-700 mt-1">Productos</div>
+<div class="text-[11px] font-normal text-slate-400 truncate">en catálogo</div>
+</div>
+</div>
+<!-- Card 2: Carritos -->
+<div class="group pressable bg-white rounded-2xl p-3.5 flex flex-col justify-between border border-slate-200/70 shadow-subtle hover:border-amber-300 hover:shadow-card transition duration-200">
+<div class="flex items-center justify-between mb-3">
+<div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition-colors duration-200">
+<svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<circle cx="8" cy="21" r="1"></circle>
+<circle cx="19" cy="21" r="1"></circle>
+<path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+</svg>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Hoy</span>
+</div>
+<div>
+<div class="text-2xl font-black tracking-tight text-slate-900 leading-none">0</div>
+<div class="text-xs font-semibold text-slate-700 mt-1">Carritos</div>
+<div class="text-[11px] font-normal text-slate-400 truncate">activos</div>
+</div>
+</div>
+<!-- Card 3: Listas -->
+<div class="group pressable bg-white rounded-2xl p-3.5 flex flex-col justify-between border border-slate-200/70 shadow-subtle hover:border-indigo-300 hover:shadow-card transition duration-200">
+<div class="flex items-center justify-between mb-3">
+<div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-200">
+<svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+<path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z"></path>
+<path d="m9 14 2 2 4-4"></path>
+</svg>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Base</span>
+</div>
+<div>
+<div class="text-2xl font-black tracking-tight text-slate-900 leading-none">0</div>
+<div class="text-xs font-semibold text-slate-700 mt-1">Listas</div>
+<div class="text-[11px] font-normal text-slate-400 truncate">guardadas</div>
+</div>
+</div>
+</section>
+<!-- END: SummaryCards -->
+<!-- BEGIN: StatusCardsSection -->
+<section aria-label="Estados del inventario" class="space-y-4">
+<!-- Status Card 1: Faltantes -->
+<div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-subtle relative overflow-hidden transition-all duration-200 hover:border-slate-300">
+<!-- Subtle Semantic Left Accent Strip -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-400"></div>
+<!-- Header of Card -->
+<div class="flex items-center justify-between pb-3 border-b border-slate-100 pl-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold uppercase tracking-wider text-slate-700">Faltantes</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600">
+                0
+              </span>
+</div>
+<button class="text-xs font-semibold text-blue-600 hover:text-blue-700 pressable flex items-center gap-0.5" type="button">
+<span class="">Revisar</span>
+<svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="m9 18 6-6-6-6"></path>
+</svg>
+</button>
+</div>
+<!-- Friendly Empty State Content -->
+<div class="pt-3 pb-1 pl-1 flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-amber-50/80 text-amber-500 border border-amber-100 flex-shrink-0 flex items-center justify-center">
+<svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+<path d="m9 12 2 2 4-4"></path>
+</svg>
+</div>
+<div class="space-y-0.5 flex-1">
+<p class="text-sm font-semibold text-slate-800">Sin productos en falta.</p>
+<p class="text-xs text-slate-400 leading-relaxed">Tu despensa está al día. No hay productos agotados marcados para reposición inmediata.</p>
+</div>
+</div>
+</div><!-- Status Card: Stock Bajo -->
+<div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-subtle relative overflow-hidden transition-all duration-200 hover:border-slate-300">
+<!-- Subtle Semantic Left Accent Strip -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-400"></div>
+<!-- Header of Card -->
+<div class="flex items-center justify-between pb-3 border-b border-slate-100 pl-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold uppercase tracking-wider text-slate-700">Stock Bajo</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-600">
+                0
+              </span>
+</div>
+<button class="text-xs font-semibold text-blue-600 hover:text-blue-700 pressable flex items-center gap-0.5" type="button">
+<span class="">Revisar</span>
+<svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="m9 18 6-6-6-6"></path>
+</svg>
+</button>
+</div>
+<!-- Friendly Empty State Content -->
+<div class="pt-3 pb-1 pl-1 flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex-shrink-0 flex items-center justify-center">
+<svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+<line x1="12" x2="12" y1="9" y2="13"></line>
+<line x1="12" x2="12.01" y1="17" y2="17"></line>
+</svg>
+</div>
+<div class="space-y-0.5 flex-1">
+<p class="text-sm font-semibold text-slate-800">Sin alertas de stock bajo.</p>
+<p class="text-xs text-slate-400 leading-relaxed">Tu inventario tiene niveles óptimos. Te avisaremos cuando un producto esté por agotarse.</p>
+</div>
+</div>
+</div>
+<!-- Status Card 2: Próximas Compras -->
+<div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-subtle relative overflow-hidden transition-all duration-200 hover:border-slate-300">
+<!-- Subtle Semantic Left Accent Strip -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500"></div>
+<!-- Header of Card -->
+<div class="flex items-center justify-between pb-3 border-b border-slate-100 pl-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold uppercase tracking-wider text-slate-700">Próximas Compras</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600">
+                0
+              </span>
+</div>
+<button class="text-xs font-semibold text-blue-600 hover:text-blue-700 pressable flex items-center gap-0.5" type="button">
+<span class="">Programar</span>
+<svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="m9 18 6-6-6-6"></path>
+</svg>
+</button>
+</div>
+<!-- Friendly Empty State Content -->
+<div class="pt-3 pb-1 pl-1 flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex-shrink-0 flex items-center justify-center">
+<svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect>
+<line x1="16" x2="16" y1="2" y2="6"></line>
+<line x1="8" x2="8" y1="2" y2="6"></line>
+<line x1="3" x2="21" y1="10" y2="10"></line>
+<path d="M8 14h.01"></path>
+<path d="M12 14h.01"></path>
+<path d="M16 14h.01"></path>
+</svg>
+</div>
+<div class="space-y-0.5 flex-1">
+<p class="text-sm font-semibold text-slate-800">Sin compras programadas.</p>
+<p class="text-xs text-slate-400 leading-relaxed">Planifica tu siguiente visita al supermercado o genera un carrito automático desde tus listas.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: StatusCardsSection -->
+<!-- Quick Action Floating Shortcut -->
+<div class="pt-2">
+<button class="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-semibold text-sm shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 pressable" type="button">
+<svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<line x1="12" x2="12" y1="5" y2="19"></line>
+<line x1="5" x2="19" y1="12" y2="12"></line>
+</svg>
+<span class="">Añadir Producto o Compra</span>
+</button>
+</div><section aria-label="Historial de movimientos" class="space-y-3 pt-3"><div class="flex items-center justify-between"><h3 class="text-sm font-bold uppercase tracking-wider text-slate-700">Historial de movimientos</h3><button class="text-xs font-semibold text-blue-600 hover:text-blue-700 pressable flex items-center gap-0.5" type="button"><span class="">Ver todo</span><svg class="w-3.5 h-3.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"></path></svg></button></div><div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-subtle flex items-start gap-3.5"><div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex-shrink-0 flex items-center justify-center"><svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 8v4l3 3"></path><circle cx="12" cy="12" r="9"></circle></svg></div><div class="space-y-0.5 flex-1"><p class="text-sm font-semibold text-slate-800">Sin movimientos recientes</p><p class="text-xs text-slate-400 leading-relaxed">Aquí verás los ingresos, egresos y cambios de inventario o compras realizadas.</p></div></div></section>
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomNavigation -->
+<nav aria-label="Navegación principal" class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-white/95 backdrop-blur-md border-t border-slate-200/80 safe-bottom z-30">
+<div class="grid grid-cols-5 pt-1.5 pb-1">
+<!-- Tab 1: Inicio (Active) -->
+<a aria-current="page" class="flex flex-col items-center justify-center py-1 group pressable" href="#inicio">
+<div class="px-3.5 py-1 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center transition-transform group-active:scale-95">
+<svg class="w-5 h-5 stroke-[2.4]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+</div>
+<span class="text-[11px] font-bold text-blue-600 mt-0.5">Inicio</span>
+</a>
+<!-- Tab 2: Productos -->
+<a class="flex flex-col items-center justify-center py-1 group pressable text-slate-500 hover:text-slate-800" href="#productos">
+<div class="px-2 py-1 flex items-center justify-center">
+<svg class="w-5 h-5 stroke-[1.8] group-hover:stroke-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<path d="m7.5 4.27 9 5.15"></path>
+<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+<path d="m3.3 7 8.7 5 8.7-5"></path>
+<path d="M12 22V12"></path>
+</svg>
+</div>
+<span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-800 transition-colors">Productos</span>
+</a>
+<!-- Tab 3: Carritos -->
+<a class="flex flex-col items-center justify-center py-1 group pressable text-slate-500 hover:text-slate-800" href="#carritos">
+<div class="px-2 py-1 flex items-center justify-center">
+<svg class="w-5 h-5 stroke-[1.8] group-hover:stroke-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<circle cx="8" cy="21" r="1"></circle>
+<circle cx="19" cy="21" r="1"></circle>
+<path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+</svg>
+</div>
+<span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-800 transition-colors">Carritos</span>
+</a>
+<!-- Tab 4: Listas -->
+<a class="flex flex-col items-center justify-center py-1 group pressable text-slate-500 hover:text-slate-800" href="#listas">
+<div class="px-2 py-1 flex items-center justify-center">
+<svg class="w-5 h-5 stroke-[1.8] group-hover:stroke-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<line x1="8" x2="21" y1="6" y2="6"></line>
+<line x1="8" x2="21" y1="12" y2="12"></line>
+<line x1="8" x2="21" y1="18" y2="18"></line>
+<line x1="3" x2="3.01" y1="6" y2="6"></line>
+<line x1="3" x2="3.01" y1="12" y2="12"></line>
+<line x1="3" x2="3.01" y1="18" y2="18"></line>
+</svg>
+</div>
+<span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-800 transition-colors">Listas</span>
+</a>
+<!-- Tab 5: Proveedores -->
+<a class="flex flex-col items-center justify-center py-1 group pressable text-slate-500 hover:text-slate-800" href="#proveedores">
+<div class="px-2 py-1 flex items-center justify-center">
+<svg class="w-5 h-5 stroke-[1.8] group-hover:stroke-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+<line x1="4" x2="4" y1="21" y2="14"></line>
+<line x1="4" x2="4" y1="10" y2="3"></line>
+<line x1="12" x2="12" y1="21" y2="12"></line>
+<line x1="12" x2="12" y1="8" y2="3"></line>
+<line x1="20" x2="20" y1="21" y2="16"></line>
+<line x1="20" x2="20" y1="12" y2="3"></line>
+<line x1="1" x2="7" y1="14" y2="14"></line>
+<line x1="9" x2="15" y1="8" y2="8"></line>
+<line x1="17" x2="23" y1="16" y2="16"></line>
+</svg>
+</div>
+<span class="text-[11px] font-medium text-slate-500 group-hover:text-slate-800 transition-colors">Proveedores</span>
+</a>
+</div>
+</nav>
+<!-- END: BottomNavigation -->
+</div>
+
+
+
+
+</body></html>

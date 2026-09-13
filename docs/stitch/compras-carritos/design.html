@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>DespensApp - Carritos</title>
+<!-- Tailwind CSS CDN with forms and container queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="custom-fonts">
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+<style data-purpose="elevation-and-shadows">
+    .card-shadow {
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+    }
+    .fab-glow {
+      box-shadow: 0 10px 25px -4px rgba(37, 99, 235, 0.4), 0 4px 10px -2px rgba(37, 99, 235, 0.2);
+    }
+    .primary-glow {
+      box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.35);
+    }
+  </style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" data-snapdom="injected-import"></head>
+<body class="bg-slate-50 flex justify-center min-h-screen text-slate-800 antialiased selection:bg-blue-100">
+<!-- BEGIN: MobileDeviceFrame -->
+<div class="w-full max-w-[420px] min-h-screen bg-[#f8fafc] flex flex-col relative pb-28">
+<!-- BEGIN: TopBar -->
+<header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md px-5 py-3.5 flex items-center justify-between border-b border-slate-100" data-purpose="app-header">
+<!-- Brand Logo & Name -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center shadow-md shadow-blue-500/20 text-white">
+<!-- Isometric Box Icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.1" viewBox="0 0 24 24">
+<path d="m7.5 4.27 9 5.15"></path>
+<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+<path d="m3.3 7 8.7 5 8.7-5"></path>
+<path d="M12 22V12"></path>
+</svg>
+</div>
+<span class="text-xl font-extrabold text-blue-600 tracking-tight">DespensApp</span>
+</div>
+<!-- Notification Action -->
+<button aria-label="Notificaciones" class="w-10 h-10 rounded-full bg-slate-100/80 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
+<path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
+</svg>
+</button>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 px-5 pt-6 pb-4 flex flex-col" data-purpose="screen-content">
+<!-- Section Title & Status Badge -->
+<div class="flex items-center justify-between mb-1" data-purpose="title-row">
+<h1 class="text-2xl font-black tracking-tight text-slate-900">Carritos</h1>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-100/60">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          0 Activos
+        </span>
+</div>
+<p class="text-xs text-slate-400 font-medium mb-5">Gestión de compras y pedidos</p>
+<!-- Primary Action: Generar Carrito Button -->
+
+<!-- BEGIN: EmptyStateCard -->
+<section class="bg-white rounded-3xl p-7 border border-slate-100/90 card-shadow flex flex-col items-center text-center mt-1" data-purpose="empty-cart-state">
+<!-- Modern Friendly Illustration Container -->
+
+<h2 class="text-lg font-bold text-slate-900 tracking-tight mb-2">No tienes carritos activos</h2>
+<!-- Verbatim text from original source screen -->
+<p class="text-sm text-slate-500 leading-relaxed max-w-[270px] mb-6">
+          Sin carritos activos. Crea uno con el botón + o genera uno desde tus compras programadas.
+        </p>
+<!-- Auxiliary Action -->
+<button class="w-full py-3.5 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-sm primary-glow transition-all flex items-center justify-center gap-2" type="button"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path><line x1="12" x2="12" y1="6" y2="10"></line><line x1="10" x2="14" y1="8" y2="8"></line></svg><span class="">Crear carrito</span></button>
+</section>
+<!-- END: EmptyStateCard -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: FloatingActionButton -->
+<div class="fixed bottom-24 right-5 z-40 max-w-[420px]" data-purpose="floating-action-button">
+<button aria-label="Crear nuevo carrito" class="w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white flex items-center justify-center fab-glow transition-all" type="button">
+<svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24">
+<line x1="12" x2="12" y1="5" y2="19"></line>
+<line x1="5" x2="19" y1="12" y2="12"></line>
+</svg>
+</button>
+</div>
+<!-- END: FloatingActionButton -->
+<!-- BEGIN: BottomNavigation -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-[420px] mx-auto bg-white/95 backdrop-blur-md border-t border-slate-100 px-3 py-2 z-30 flex items-center justify-around" data-purpose="bottom-navigation-bar">
+<!-- Tab: Inicio -->
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 px-2.5 py-1 text-center transition-colors" href="#">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+<polyline points="9 22 9 12 15 12 15 22"></polyline>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Inicio</span>
+</a>
+<!-- Tab: Productos -->
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 px-2.5 py-1 text-center transition-colors" href="#">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="m7.5 4.27 9 5.15"></path>
+<path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"></path>
+<path d="m3.3 7 8.7 5 8.7-5"></path>
+<path d="M12 22V12"></path>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Productos</span>
+</a>
+<!-- Tab: Carritos (ACTIVE) -->
+<a class="flex flex-col items-center gap-1 bg-blue-50/90 text-blue-600 px-4 py-1.5 rounded-2xl font-bold transition-all shadow-sm" href="#">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" viewBox="0 0 24 24">
+<circle cx="8" cy="21" r="1"></circle>
+<circle cx="19" cy="21" r="1"></circle>
+<path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+</svg>
+<span class="text-[11px] font-bold tracking-tight">Carritos</span>
+</a>
+<!-- Tab: Listas -->
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 px-2.5 py-1 text-center transition-colors" href="#">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<line x1="8" x2="21" y1="6" y2="6"></line>
+<line x1="8" x2="21" y1="12" y2="12"></line>
+<line x1="8" x2="21" y1="18" y2="18"></line>
+<line x1="3" x2="3.01" y1="6" y2="6"></line>
+<line x1="3" x2="3.01" y1="12" y2="12"></line>
+<line x1="3" x2="3.01" y1="18" y2="18"></line>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Listas</span>
+</a>
+<!-- Tab: Proveedores -->
+<a class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-600 px-2.5 py-1 text-center transition-colors" href="#">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<line x1="4" x2="4" y1="21" y2="14"></line>
+<line x1="4" x2="4" y1="10" y2="3"></line>
+<line x1="12" x2="12" y1="21" y2="12"></line>
+<line x1="12" x2="12" y1="8" y2="3"></line>
+<line x1="20" x2="20" y1="21" y2="16"></line>
+<line x1="20" x2="20" y1="12" y2="3"></line>
+<line x1="1" x2="7" y1="14" y2="14"></line>
+<line x1="9" x2="15" y1="8" y2="8"></line>
+<line x1="17" x2="23" y1="16" y2="16"></line>
+</svg>
+<span class="text-[11px] font-medium tracking-tight">Proveedores</span>
+</a>
+</nav>
+<!-- END: BottomNavigation -->
+</div>
+<!-- END: MobileDeviceFrame -->
+
+
+</body></html>

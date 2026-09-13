@@ -1,0 +1,458 @@
+<!DOCTYPE html><html class="h-full bg-slate-100" lang="es" style="width: 390px; height: 1315px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Detalle de Producto - DespensApp</title>
+<!-- Tailwind CSS v3 with Forms & Container Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<!-- Global Custom Styles -->
+<style data-purpose="custom-inputs">
+    /* Remove native appearance tweaks & customize inputs */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    .custom-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.75rem center;
+      background-repeat: no-repeat;
+      background-size: 1.25em 1.25em;
+      padding-right: 2.5rem;
+    }
+    /* Smooth touch tap highlights */
+    button, a, input, select {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"></head>
+<body class="h-full text-slate-800 antialiased flex flex-col justify-start items-center">
+<!-- Mobile Viewport Container (~400px wide for iOS simulation) -->
+<div class="w-full max-w-[420px] min-h-screen bg-slate-50 flex flex-col relative shadow-xl border-x border-slate-200">
+<!-- BEGIN: TopBar -->
+<header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-100 px-4 py-3.5 flex items-center justify-between" data-purpose="mobile-header">
+<div class="flex items-center gap-2.5">
+<!-- Logo / App Icon -->
+<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-blue-500 flex items-center justify-center text-white shadow-sm shadow-blue-500/20">
+<svg class="w-4 h-4 stroke-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-blue-600">DespensApp</h1>
+</div>
+<!-- Quick Back/Notification Action -->
+<button aria-label="Notificaciones" class="p-2 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: MainScrollContent -->
+<main class="flex-1 px-4 pt-4 pb-28 space-y-6 overflow-y-auto" data-purpose="product-detail-view"><!-- BEGIN: Hero Header Card -->
+<div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex flex-col items-center text-center relative">
+<!-- Product Icon Avatar -->
+<div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 mb-3">
+<span class="material-symbols-outlined" style="font-size: 46px;">local_drink</span>
+</div>
+<!-- Badge Familia arriba -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-1.5 border border-blue-100/80">
+<span class="material-symbols-outlined text-xs">category</span>
+    Lácteos y Derivados
+  </div>
+<!-- Descripción / Nombre del Producto debajo -->
+<h2 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">Leche Deslactosada 1L</h2>
+<p class="text-xs text-slate-400 font-medium mt-1">Marca: <span class="text-slate-700 font-semibold">Lala</span> · ID: #08291</p>
+<!-- Action Buttons Row -->
+<div class="grid grid-cols-3 gap-2 w-full mt-4 pt-4 border-t border-slate-100">
+<button class="inline-flex items-center justify-center gap-1.5 py-2.5 px-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 active:scale-95 transition shadow-sm" type="button">
+<span class="material-symbols-outlined text-base text-slate-500">edit</span>
+      Editar
+    </button>
+<button class="inline-flex items-center justify-center gap-1.5 py-2.5 px-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 active:scale-95 transition shadow-sm" type="button">
+<span class="material-symbols-outlined text-base text-slate-500">content_copy</span>
+      Crear copia
+    </button>
+<button class="inline-flex items-center justify-center gap-1.5 py-2.5 px-2 bg-red-50 border border-red-200/80 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-100/70 active:scale-95 transition shadow-sm" type="button">
+<span class="material-symbols-outlined text-base text-red-500">delete</span>
+      Eliminar
+    </button>
+</div>
+</div>
+<!-- END: Hero Header Card -->
+<!-- BEGIN: Horizontal Square Tabs Navigation -->
+<div>
+<div class="flex items-center justify-between px-1 mb-2.5">
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Secciones</h3>
+<span class="text-[11px] text-slate-400 font-medium">Toca para alternar</span>
+</div>
+<div class="grid gap-2.5 grid-cols-3"><!-- Tab 1: Datos (Inactiva) -->
+<button class="flex flex-col items-center justify-center p-3 rounded-2xl bg-blue-50 border border-blue-100 text-blue-700 hover:bg-blue-100/60 transition active:scale-95 shadow-sm" type="button">
+<span class="material-symbols-outlined text-2xl mb-1 text-blue-600">tune</span>
+<span class="text-xs font-semibold tracking-tight text-slate-800">Datos</span>
+<span class="text-[10px] text-slate-400 font-medium mt-0.5">Ficha</span>
+</button>
+<!-- Tab 2: Stock (Inactiva) -->
+<button class="flex flex-col items-center justify-center p-3 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-700 hover:bg-emerald-100/60 transition active:scale-95 shadow-sm" type="button">
+<span class="material-symbols-outlined text-2xl mb-1 text-emerald-600">inventory_2</span>
+<span class="text-xs font-semibold tracking-tight text-slate-800">Stock</span>
+<span class="text-[10px] text-slate-400 font-medium mt-0.5">4 disp.</span>
+</button>
+<!-- Tab 3: Compra (Activa) -->
+<button class="flex flex-col items-center justify-center p-3 rounded-2xl bg-amber-500 border-2 border-white text-white shadow-md shadow-amber-500/25 ring-2 ring-amber-500 ring-offset-2 transition active:scale-95 relative" type="button">
+<span class="material-symbols-outlined text-2xl mb-1 text-white">shopping_bag</span>
+<span class="text-xs font-bold tracking-tight text-white">Compra</span>
+<span class="text-[10px] text-white/90 font-medium mt-0.5">Precios</span>
+</button></div>
+</div>
+<!-- END: Horizontal Square Tabs Navigation -->
+<!-- BEGIN: Active Tab Content (STOCK) -->
+<div class="space-y-4"><!-- Tarjeta: Información de Compra -->
+<div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-4">
+<div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-600 text-lg">shopping_bag</span>
+<h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Información de compra</h4>
+</div>
+<button class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700" type="button">
+<span class="material-symbols-outlined text-xs">edit</span>
+      Editar
+    </button>
+</div>
+<!-- Proveedor principal -->
+<div class="flex items-center justify-between bg-slate-50/80 rounded-2xl p-3.5 border border-slate-100">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center text-slate-700 shadow-sm">
+<span class="material-symbols-outlined text-xl text-blue-600">storefront</span>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-900">Walmart Supercenter</p>
+<p class="text-[10px] text-slate-400 font-medium">Proveedor principal</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100">Habitual</span>
+</div>
+<!-- Grid de precios -->
+<div class="grid grid-cols-2 gap-3">
+<!-- Card 1: Último precio -->
+<div class="bg-white rounded-3xl p-4 border border-slate-100 shadow-sm flex flex-col justify-between">
+<span class="text-sm font-medium text-slate-500 mb-1">Último precio</span>
+<div class="flex items-baseline gap-1 my-0.5">
+<span class="text-2xl font-black text-slate-900 tracking-tight">$28.50</span>
+<span class="text-xs font-semibold text-slate-500">MXN</span>
+</div>
+<div class="flex items-center gap-1 text-emerald-600 font-semibold text-xs mt-1.5">
+<span class="material-symbols-outlined text-sm">trending_down</span>
+<span class="">-11% vs habitual</span>
+</div>
+</div>
+<!-- Card 2: Precio referencia -->
+<div class="bg-white rounded-3xl p-4 border border-slate-100 shadow-sm flex flex-col justify-between">
+<span class="text-sm font-medium text-slate-500 mb-1">Precio referencia</span>
+<div class="flex items-baseline gap-1 my-0.5 text-slate-400 font-bold text-2xl tracking-tight">
+<span class="line-through">$32.00</span>
+<span class="text-xs font-semibold text-slate-400 no-underline">MXN</span>
+</div>
+<span class="text-xs text-slate-500 font-normal mt-1.5">Máximo sugerido</span>
+</div>
+</div>
+<!-- Grid de fechas y frecuencia -->
+<dl class="grid grid-cols-2 gap-3 pt-1 border-t border-slate-50 text-xs">
+<div>
+<dt class="text-slate-400 font-medium text-[11px]">Última compra</dt>
+<dd class="text-slate-800 font-bold text-xs mt-0.5">12 Oct 2023</dd>
+</div>
+<div>
+<dt class="text-slate-400 font-medium text-[11px]">Frecuencia</dt>
+<dd class="text-slate-800 font-bold text-xs mt-0.5">Semanal</dd>
+</div>
+</dl>
+<!-- Enlace tienda en línea -->
+<a class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-blue-600 font-medium hover:bg-blue-50/60 transition group" href="#">
+<span class="flex items-center gap-1.5 truncate">
+<span class="material-symbols-outlined text-sm text-slate-400 group-hover:text-blue-600">link</span>
+      walmart.com.mx/ip/leche-deslactosada...
+    </span>
+<span class="material-symbols-outlined text-sm text-slate-400 group-hover:text-blue-600">open_in_new</span>
+</a>
+<!-- Botón de acción: Registrar compra -->
+<button class="w-full py-3 px-4 border-2 border-blue-600 rounded-full text-blue-600 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-blue-50/50 active:scale-95 transition shadow-sm" type="button">
+<span class="material-symbols-outlined text-base">add_shopping_cart</span>
+<span class="">Agregar al carrito</span>
+</button>
+</div>
+<!-- Tarjeta: LISTAS ASIGNADAS (COMPRA) matching IMAGE_2 -->
+<div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 space-y-3.5">
+<div class="flex items-center justify-between border-b border-slate-100 pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-600 text-lg">shopping_bag</span>
+<h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">LISTAS ASIGNADAS (COMPRA)</h4>
+</div>
+<button class="text-xs font-semibold text-blue-600 hover:underline flex items-center gap-0.5" type="button">
+<span class="material-symbols-outlined text-sm">add</span>Gestionar
+    </button>
+</div>
+<div class="flex flex-wrap items-center gap-2.5 pt-0.5">
+<div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-blue-50 text-blue-700 text-xs font-semibold border border-blue-100 shadow-sm">
+<span class="material-symbols-outlined text-base text-blue-600">shopping_cart</span>
+<span class="">Súper Semanal</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3 py-2 rounded-2xl border border-dashed border-slate-300 text-slate-600 hover:bg-slate-50 text-xs font-medium transition active:scale-95" type="button">
+<span class="material-symbols-outlined text-base text-slate-400">add</span>
+<span class="">Añadir a lista</span>
+</button>
+</div>
+</div></div>
+<!-- END: Active Tab Content -->
+<!-- BEGIN: Modal Registrar Movimiento -->
+<div class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4" id="modal-movimiento">
+<div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-4 border border-slate-100">
+<div class="flex items-center justify-between pb-2 border-b border-slate-100">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">sync_alt</span>
+</div>
+<h3 class="text-sm font-bold text-slate-800">Registrar Movimiento</h3>
+</div>
+<button class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition" onclick="document.getElementById('modal-movimiento').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-base">close</span>
+</button>
+</div>
+<form class="space-y-3" onsubmit="event.preventDefault(); document.getElementById('modal-movimiento').classList.add('hidden');">
+<div>
+<label class="block text-xs font-semibold text-slate-700 mb-1">Tipo de movimiento</label>
+<div class="grid grid-cols-3 gap-2">
+<label class="flex flex-col items-center justify-center p-2 rounded-xl border-2 border-blue-600 bg-blue-50/50 cursor-pointer text-xs font-bold text-blue-700">
+<input checked="" class="sr-only" name="modal-tipo" type="radio" value="entrada">
+<span class="">+ Entrada</span>
+</label>
+<label class="flex flex-col items-center justify-center p-2 rounded-xl border border-slate-200 bg-white cursor-pointer text-xs font-medium text-slate-600 hover:bg-slate-50">
+<input class="sr-only" name="modal-tipo" type="radio" value="salida">
+<span class="">- Salida</span>
+</label>
+<label class="flex flex-col items-center justify-center p-2 rounded-xl border border-slate-200 bg-white cursor-pointer text-xs font-medium text-slate-600 hover:bg-slate-50">
+<input class="sr-only" name="modal-tipo" type="radio" value="ajuste">
+<span class="">Ajuste</span>
+</label>
+</div>
+</div>
+<div>
+<label class="block text-xs font-medium text-slate-700 mb-1" for="modal-cant">Cantidad</label>
+<input class="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 text-slate-800 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none" id="modal-cant" placeholder="1" type="number">
+</div>
+<div>
+<label class="block text-xs font-medium text-slate-700 mb-1" for="modal-obs">Nota u observación</label>
+<input class="w-full text-sm rounded-xl border border-slate-200 px-3 py-2 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none" id="modal-obs" placeholder="Ej. Compra semanal de despensa" type="text">
+</div>
+<div class="flex items-center gap-2 pt-2">
+<button class="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition" onclick="document.getElementById('modal-movimiento').classList.add('hidden')" type="button">
+          Cancelar
+        </button>
+<button class="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 text-xs font-semibold text-white shadow-sm hover:bg-blue-700 transition" type="submit">
+          Guardar
+        </button>
+</div>
+</form>
+</div>
+</div><div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 hidden" id="modal-editar-compra"><div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-4 border border-slate-100 max-h-[90vh] overflow-y-auto"><div class="flex items-start justify-between pb-3 border-b border-slate-100"><div class="flex items-start gap-2.5"><div class="w-9 h-9 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0 mt-0.5 border border-amber-100"><span class="material-symbols-outlined text-xl">shopping_bag</span></div><div><h3 class="text-sm font-bold text-slate-900">Editar información de compra</h3><p class="text-[11px] text-slate-400 font-medium leading-snug mt-0.5">Ajusta los precios y detalles de adquisición de Leche Deslactosada 1L</p></div></div><button aria-label="Cerrar" class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition flex-shrink-0" onclick="document.getElementById('modal-editar-compra').classList.add('hidden')" type="button"><span class="material-symbols-outlined text-base">close</span></button></div><form class="space-y-3.5" onsubmit="event.preventDefault(); document.getElementById('modal-editar-compra').classList.add('hidden');"><div><label class="block text-xs font-semibold text-slate-700 mb-1" for="edit-proveedor">Proveedor habitual</label><div class="relative"><select class="w-full text-xs rounded-xl border border-slate-200 px-3 py-2 text-slate-800 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none bg-slate-50/50" id="edit-proveedor"><option selected="" value="walmart">Walmart Supercenter</option><option value="soriana">Soriana Híper</option><option value="chedraui">Chedraui</option><option value="costco">Costco</option><option value="tiendita">Tiendita local</option></select></div></div><div class="grid grid-cols-2 gap-2.5"><div><label class="block text-xs font-semibold text-slate-700 mb-1" for="edit-ultimo-precio">Último precio</label><div class="relative flex items-center"><span class="absolute left-3 text-xs font-bold text-slate-400">$</span><input class="w-full text-xs rounded-xl border border-slate-200 pl-6 pr-11 py-2 text-slate-900 font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none" id="edit-ultimo-precio" step="0.01" type="number" value="28.50"><span class="absolute right-2.5 text-[10px] font-bold text-slate-400">MXN</span></div></div><div><label class="block text-xs font-semibold text-slate-700 mb-1" for="edit-precio-ref">Precio referencia</label><div class="relative flex items-center"><span class="absolute left-3 text-xs font-bold text-slate-400">$</span><input class="w-full text-xs rounded-xl border border-slate-200 pl-6 pr-11 py-2 text-slate-900 font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none" id="edit-precio-ref" step="0.01" type="number" value="32.00"><span class="absolute right-2.5 text-[10px] font-bold text-slate-400">MXN</span></div></div></div><div><label class="block text-xs font-semibold text-slate-700 mb-1" for="edit-frecuencia">Frecuencia de compra</label><select class="w-full text-xs rounded-xl border border-slate-200 px-3 py-2 text-slate-800 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none bg-slate-50/50" id="edit-frecuencia"><option selected="" value="semanal">Semanal</option><option value="quincenal">Quincenal</option><option value="mensual">Mensual</option><option value="ocasional">Ocasional</option></select></div><div><label class="block text-xs font-semibold text-slate-700 mb-1" for="edit-enlace">Enlace web / Tienda online</label><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-2.5 text-base text-slate-400 pointer-events-none">link</span><input class="w-full text-xs rounded-xl border border-slate-200 pl-8 pr-3 py-2 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none" id="edit-enlace" type="url" value="https://walmart.com.mx/ip/leche-deslactosada-1l"></div></div><div><label class="block text-xs font-semibold text-slate-700 mb-1" for="edit-notas">Notas o condiciones especiales <span class="font-normal text-slate-400">(opcional)</span></label><textarea class="w-full text-xs rounded-xl border border-slate-200 p-2.5 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none resize-none" id="edit-notas" placeholder="Ej. Comprar en paquete de 6, oferta en martes de frescura" rows="2"></textarea></div><div class="flex items-center gap-2 pt-2 border-t border-slate-100"><button class="flex-1 py-2.5 px-3 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 active:scale-95 transition shadow-sm" onclick="document.getElementById('modal-editar-compra').classList.add('hidden')" type="button">Cancelar</button><button class="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 text-xs font-semibold text-white shadow-sm hover:bg-blue-700 active:scale-95 transition" type="submit">Guardar cambios</button></div></form></div></div><div class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4" id="modal-ver-proveedores"><div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl border border-slate-100 max-h-[90vh] flex flex-col relative"><div class="flex items-start justify-between pb-3 border-b border-slate-100"><div class="flex items-start gap-2.5"><div class="w-9 h-9 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0 mt-0.5 border border-amber-100"><span class="material-symbols-outlined text-xl">storefront</span></div><div><h3 class="text-sm font-bold text-slate-900">Proveedores del producto</h3><p class="text-[11px] text-slate-400 font-medium leading-snug mt-0.5">Comparativa de precios y disponibilidad actual</p><div class="mt-3 bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-center gap-3 shadow-sm"><div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0 shadow-sm"><span class="material-symbols-outlined text-xl">local_drink</span></div><div class="flex-1 min-w-0 text-left"><div class="flex items-center gap-2 flex-wrap"><h4 class="text-xs font-bold text-slate-900 leading-tight truncate">Leche Deslactosada 1L</h4><span class="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100 flex-shrink-0">Lala</span></div><p class="text-[11px] text-slate-400 font-medium mt-0.5">Lácteos y derivados · 1L</p></div></div></div></div><button aria-label="Cerrar" class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-200 transition flex-shrink-0" onclick="document.getElementById('modal-ver-proveedores').classList.add('hidden')" type="button"><span class="material-symbols-outlined text-base">close</span></button></div><div class="space-y-3 overflow-y-auto py-3 pr-0.5"><!-- Card 1: Walmart Supercenter -->
+<div class="rounded-2xl border border-blue-100 bg-blue-50/50 p-3.5 flex flex-col gap-2.5">
+  <div class="flex items-start justify-between">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-600 shadow-sm flex-shrink-0">
+        <span class="material-symbols-outlined text-xl text-blue-600">store</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-1.5">
+          <h4 class="text-xs font-bold text-slate-900">Walmart Supercenter</h4>
+          <span class="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider">PRINCIPAL</span>
+        </div>
+        <p class="text-xs text-slate-500 font-medium mt-0.5">Frecuencia: Semanal</p>
+      </div>
+    </div>
+    <div class="text-right">
+      <span class="text-xs font-black text-slate-900 block">$28.50</span>
+      <span class="text-xs text-slate-400 font-semibold block">MXN</span>
+    </div>
+  </div>
+  <div class="flex items-center justify-between pt-2 border-t border-blue-100/80 text-xs">
+    <a class="inline-flex items-center gap-1 text-blue-600 font-semibold hover:underline" href="#">
+      <span class="material-symbols-outlined text-xs">link</span>walmart.com.mx
+    </a>
+    <button class="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 transition cursor-pointer" type="button">
+      <span class="material-symbols-outlined text-sm">visibility</span>Ver proveedor
+    </button>
+  </div>
+</div>
+
+<!-- Card 2: Bodega Aurrera -->
+<div class="rounded-2xl border border-slate-200/80 bg-white p-3.5 flex flex-col gap-2.5 shadow-sm">
+  <div class="flex items-start justify-between">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm flex-shrink-0">
+        <span class="material-symbols-outlined text-xl text-emerald-600">storefront</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-1.5">
+          <h4 class="text-xs font-bold text-slate-900">Bodega Aurrera</h4>
+          <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-semibold border border-slate-200 uppercase tracking-wider">SECUNDARIO</span>
+        </div>
+        <p class="text-xs text-slate-500 font-medium mt-0.5">Frecuencia: Quincenal</p>
+      </div>
+    </div>
+    <div class="text-right">
+      <span class="text-xs font-black text-emerald-700 block">$27.00</span>
+      <span class="text-xs text-slate-400 font-semibold block">MXN</span>
+    </div>
+  </div>
+  <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+    <a class="inline-flex items-center gap-1 text-blue-600 font-semibold hover:underline" href="#">
+      <span class="material-symbols-outlined text-xs">link</span>bodegaaurrera.com.mx
+    </a>
+    <button class="inline-flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-blue-600 transition cursor-pointer" type="button">
+      <span class="material-symbols-outlined text-sm">edit</span>Editar
+    </button>
+  </div>
+</div>
+
+<!-- Card 3: Chedraui -->
+<div class="rounded-2xl border border-slate-200/80 bg-white p-3.5 flex flex-col gap-2.5 shadow-sm">
+  <div class="flex items-start justify-between">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 shadow-sm flex-shrink-0">
+        <span class="material-symbols-outlined text-xl text-amber-600">shopping_cart</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-1.5">
+          <h4 class="text-xs font-bold text-slate-900">Chedraui</h4>
+          <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-semibold border border-slate-200 uppercase tracking-wider">SECUNDARIO</span>
+        </div>
+        <p class="text-xs text-slate-500 font-medium mt-0.5">Frecuencia: Mensual</p>
+      </div>
+    </div>
+    <div class="text-right">
+      <span class="text-xs font-black text-slate-900 block">$30.00</span>
+      <span class="text-xs text-slate-400 font-semibold block">MXN</span>
+    </div>
+  </div>
+  <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+    <a class="inline-flex items-center gap-1 text-blue-600 font-semibold hover:underline" href="#">
+      <span class="material-symbols-outlined text-xs">link</span>chedraui.com.mx
+    </a>
+    <button class="inline-flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-blue-600 transition cursor-pointer" type="button">
+      <span class="material-symbols-outlined text-sm">edit</span>Editar
+    </button>
+  </div>
+</div>
+
+<!-- Card 4: Costco -->
+<div class="rounded-2xl border border-slate-200/80 bg-white p-3.5 flex flex-col gap-2.5 shadow-sm">
+  <div class="flex items-start justify-between">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 shadow-sm flex-shrink-0">
+        <span class="material-symbols-outlined text-xl text-slate-600">inventory_2</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-1.5">
+          <h4 class="text-xs font-bold text-slate-900">Costco</h4>
+          <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-semibold border border-slate-200 uppercase tracking-wider">SECUNDARIO</span>
+        </div>
+        <p class="text-xs text-slate-500 font-medium mt-0.5">Frecuencia: Por caja / Mensual</p>
+      </div>
+    </div>
+    <div class="text-right">
+      <span class="text-xs font-black text-slate-900 block">$26.50</span>
+      <span class="text-xs text-slate-400 font-semibold block">MXN / u</span>
+    </div>
+  </div>
+  <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+    <a class="inline-flex items-center gap-1 text-blue-600 font-semibold hover:underline" href="#">
+      <span class="material-symbols-outlined text-xs">link</span>costco.com.mx
+    </a>
+    <button class="inline-flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-blue-600 transition cursor-pointer" type="button">
+      <span class="material-symbols-outlined text-sm">edit</span>Editar
+    </button>
+  </div>
+</div>
+
+<!-- Button: Add new provider -->
+<button class="w-full py-2.5 px-3 rounded-2xl border border-dashed border-slate-300 text-slate-600 hover:bg-slate-50 text-xs font-semibold flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer" type="button">
+  <span class="material-symbols-outlined text-base text-slate-400">add_business</span>+ Vincular nuevo proveedor
+</button></div><div class="pt-3 border-t border-slate-100"><button class="w-full py-2.5 px-4 rounded-xl bg-blue-600 text-xs font-semibold text-white shadow-sm hover:bg-blue-700 active:scale-95 transition flex items-center justify-center gap-1" onclick="document.getElementById('modal-ver-proveedores').classList.add('hidden')" type="button">Listo</button></div></div></div>
+<!-- END: Modal Registrar Movimiento --></main>
+<!-- END: MainScrollContent -->
+<!-- BEGIN: BottomNavigation -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[420px] bg-white border-t border-slate-200/80 px-2 py-1.5 z-40 flex items-center justify-around shadow-lg" data-purpose="bottom-tab-bar">
+<!-- Tab: Inicio -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition" href="#inicio">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] tracking-tight mt-1">Inicio</span>
+</a>
+<!-- Tab: Despensa -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition" href="#despensa">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+<path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] tracking-tight mt-1">Despensa</span>
+</a>
+<!-- Tab: Productos (Active) -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-blue-600 transition" href="#productos">
+<svg class="w-5 h-5 stroke-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] font-semibold tracking-tight mt-1">Productos</span>
+</a>
+<!-- Tab: Carritos -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition" href="#carritos">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+<path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] tracking-tight mt-1">Carritos</span>
+</a>
+<!-- Tab: Listas -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition" href="#listas">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+<path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] tracking-tight mt-1">Listas</span>
+</a>
+<!-- Tab: Proveedores -->
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-600 transition" href="#proveedores">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[10px] tracking-tight mt-1">Proveedores</span>
+</a>
+</nav>
+<!-- END: BottomNavigation -->
+</div>
+
+
+
+
+
+
+</body></html>
