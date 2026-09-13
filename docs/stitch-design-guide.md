@@ -171,7 +171,7 @@ White card with fields in this exact order (labels bold small, Spanish) — iden
 1 "Nombre del producto" — text, required (placeholder "Leche" — the generic name; marca/modelo distinguish the variant)
 2 "Marca" — text, placeholder "Lala, Nutri, Alpura…"
 3 "Modelo" — text, placeholder "Descripción o presentación…"
-4 "Contenido" — text, placeholder "Ej. 1 L, 500 g…"
+4 "Contenido" (number, placeholder "1") + "Unidad de medida" (select: L, ml, g, kg, pza, paquete) — side by side, quantity and unit are SEPARATE fields
 5 "Familia" — text with suggestion dropdown, placeholder "Buscar familia..."
 6 "Área" — text with suggestion dropdown, placeholder "Buscar área..."
 7 "Descripción" — textarea, placeholder "Descripción del producto…"
