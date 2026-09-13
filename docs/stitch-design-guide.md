@@ -168,7 +168,7 @@ Removed as a standalone screen (2026-09-12): the catalog is the "Catálogo" view
 ```text
 Full-page form. Title bar with circular back-arrow top-left; title "Nuevo producto" (or "Editar producto").
 White card with fields in this exact order (labels bold small, Spanish) — identity first, classification last:
-1 "Nombre" — text, required (placeholder "Leche entera")
+1 "Nombre del producto" — text, required (placeholder "Leche" — the generic name; marca/modelo distinguish the variant)
 2 "Marca" — text, placeholder "Lala, Nutri, Alpura…"
 3 "Modelo" — text, placeholder "Descripción o presentación…"
 4 "Contenido" — text, placeholder "Ej. 1 L, 500 g…"
