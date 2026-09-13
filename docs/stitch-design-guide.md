@@ -144,7 +144,7 @@ Tone set (closed — 11): Azul suave, Verde menta, Ámbar suave, Naranja suave, 
 
 ```text
 Screen "Inicio". Header: title "Inicio", subtitle "Control de despensa e inventario". No back button.
-KPI card "Stock de tus productos" (full width): stacked horizontal bar with 3 rounded segments proportional to product counts — En inventario (emerald), Bajo mínimo (amber), Sin stock (red) — then 3 breakdown rows, each: colored dot + label + count + share %.
+KPI card "Stock de tus productos" (full width): stacked horizontal bar with 3 rounded segments proportional to product counts — En inventario (emerald), Stock bajo (amber), Sin stock (red) — then 3 breakdown rows, each: colored dot + label + count + share %.
 Row of 2 stat tiles (icon tile + big value + small gray label): "Próxima reposición" (date of the nearest active cart's estimatedDate, blue accent, icon calendar-days) and "Compra estimada" (money, Σ qty×unitPrice of the nearest active cart, green accent, icon shopping-cart).
 Below: "Historial de movimientos" card — header row with link "Ver todos ›", then 2-3 recent movement rows (type · product, quantity transition). No FAB.
 ```
