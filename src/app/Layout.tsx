@@ -1,17 +1,8 @@
 import { type ComponentType, type ReactNode, type SVGProps } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
+import { LayoutGrid, ShoppingCart, Warehouse } from 'lucide-react'
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>
-
-function icon(d: string): IconComponent {
-  return function Icon(props) {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} {...props}>
-        <path strokeLinecap="round" strokeLinejoin="round" d={d} />
-      </svg>
-    )
-  }
-}
 
 /** Brand mark: white logo silhouette on a gradient chip. */
 function LogoMark() {
@@ -39,20 +30,11 @@ function PlusIcon(props: SVGProps<SVGSVGElement>) {
   )
 }
 
-const HomeIcon = icon(
-  'M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25',
-)
-const ProductsIcon = icon(
-  'm21 7.5-9-5.25L3 7.5m18 0-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9',
-)
-const CartsIcon = icon(
-  'M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z',
-)
-
+// Tab icons: Lucide, stroke 1.5 to match the inline SVGs used elsewhere.
 const tabs: { to: string; label: string; end?: boolean; Icon: IconComponent }[] = [
-  { to: '/', label: 'Inicio', end: true, Icon: HomeIcon },
-  { to: '/despensa', label: 'Despensa', Icon: ProductsIcon },
-  { to: '/compras', label: 'Compras', Icon: CartsIcon },
+  { to: '/', label: 'Inicio', end: true, Icon: LayoutGrid },
+  { to: '/despensa', label: 'Despensa', Icon: Warehouse },
+  { to: '/compras', label: 'Compras', Icon: ShoppingCart },
 ]
 
 function fabFor(pathname: string): { to: string; label: string } | null {
@@ -116,7 +98,7 @@ export function Layout({ children }: { children: ReactNode }) {
                           isActive ? 'bg-blue-50 text-blue-600' : ''
                         }`}
                       >
-                        <Icon className="h-5 w-5" aria-hidden="true" />
+                        <Icon className="h-5 w-5" strokeWidth={1.5} aria-hidden="true" />
                       </span>
                       <span
                         className={`mt-0.5 text-[10px] leading-tight ${

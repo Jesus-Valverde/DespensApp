@@ -25,7 +25,7 @@ Mobile app "DespensApp" — a Spanish-language household pantry and inventory ma
 Chrome, every screen:
 - Top brand header, IDENTICAL on every screen: small rounded logo tile with blue gradient + bold wordmark "DespensApp" (dark, near-black) with small gray tagline "Control de despensa" under it, and on the right a notification bell icon with a small blue dot indicator when there are notifications (products under their minimum stock with alerts enabled). Tapping the bell opens the notifications panel. The header NEVER changes between screens — no back button, no screen title inside it.
 - Below the header, each screen renders its own window title bar separated by a thin divider: on tab-root screens the big title + small gray subtitle + a green count pill, NO back button; on form and detail screens a circular back-arrow button at top-left next to the window title (e.g. ← "Nuevo producto") that returns to the previous screen.
-- Bottom tab bar, 3 tabs, fixed, white with top border: "Inicio" (house), "Despensa" (cube), "Compras" (shopping cart). Active tab: blue pill behind icon + bold blue label; inactive slate-500. Despensa hosts the catalog via a "Stock | Catálogo" toggle; Compras hosts Carritos, Listas and Proveedores via a three-way toggle. There are NO Productos, Carritos, Listas, or Proveedores tabs.
+- Bottom tab bar, 3 tabs, fixed, white with top border: "Inicio" (Lucide layout-grid), "Despensa" (Lucide warehouse), "Compras" (Lucide shopping-cart). Active tab: blue pill behind icon + bold blue label; inactive slate-500. Despensa hosts the catalog via a "Stock | Catálogo" toggle; Compras hosts Carritos, Listas and Proveedores via a three-way toggle. There are NO Productos, Carritos, Listas, or Proveedores tabs.
 - Module switch (view selector inside Despensa and Compras): full-width segmented control right under the window title. Container: rounded-xl, slate-100 background, p-1. Segments: equal width; the ACTIVE segment is a white rounded-lg pill with small shadow and bold blue-700 text; inactive segments medium slate-500. There are no tab-panel semantics — segments are links.
   - Despensa switch: "Stock" | "Catálogo" (this is the "Catálogo de productos" access).
   - Compras switch: "Carritos" | "Listas" | "Proveedores" (Listas = shopping lists).
@@ -44,11 +44,11 @@ HARD RULES: Use ONLY the fields, buttons, tabs, and texts listed in this prompt.
 
 ```text
 DespensApp — modules
-├─ Inicio                      (dashboard)
-├─ Despensa                    (module switch: Stock | Catálogo)
+├─ Inicio                      (dashboard — icon: Lucide layout-grid)
+├─ Despensa                    (module switch: Stock | Catálogo — icon: Lucide warehouse)
 │   ├─ Stock                   (default — pantry with area filters + stock badges)
 │   └─ Catálogo                (the product catalog: search + cards)
-└─ Compras                     (module switch: Carritos | Listas | Proveedores)
+└─ Compras                     (module switch: Carritos | Listas | Proveedores — icon: Lucide shopping-cart)
     ├─ Carritos                (default — active carts + history, own FAB)
     ├─ Listas                  (shopping lists)
     └─ Proveedores             (supplier catalog)
