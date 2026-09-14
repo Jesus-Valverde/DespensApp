@@ -37,14 +37,14 @@ describe('InicioScreen', () => {
 
     renderScreen()
 
-    // Regions render before useLiveQuery delivers data; await data-bearing text.
-    const faltantes = screen.getByRole('region', { name: 'Faltantes' })
+    // The screen gates on its live queries; await the regions before asserting.
+    const faltantes = await screen.findByRole('region', { name: 'Faltantes' })
     expect(await within(faltantes).findByText('Frijol')).toBeInTheDocument()
     expect(within(faltantes).getByText(/Faltan 5/)).toBeInTheDocument()
     expect(within(faltantes).queryByText('Arroz')).not.toBeInTheDocument()
     expect(within(faltantes).queryByText('Leche')).not.toBeInTheDocument()
 
-    const bajo = screen.getByRole('region', { name: 'Stock bajo' })
+    const bajo = await screen.findByRole('region', { name: 'Stock bajo' })
     expect(await within(bajo).findByText('Arroz')).toBeInTheDocument()
     expect(within(bajo).getByText(/Quedan 4/)).toBeInTheDocument()
     expect(within(bajo).queryByText('Sal')).not.toBeInTheDocument()
@@ -63,7 +63,7 @@ describe('InicioScreen', () => {
 
     renderScreen()
 
-    const proximas = screen.getByRole('region', { name: 'Próximas compras' })
+    const proximas = await screen.findByRole('region', { name: 'Próximas compras' })
     expect(await within(proximas).findByText('Café')).toBeInTheDocument()
 
     const overdueDate = within(proximas).getByText(/1 de septiembre de 2026/)
@@ -89,15 +89,14 @@ describe('InicioScreen', () => {
     expect(link).toHaveAttribute('href', '/compras/carritos')
   })
 
-  it('shows the empty states and recent movements when nothing is due', async () => {
+  it('shows the first-run welcome card instead of report sections when the pantry is empty', async () => {
     renderScreen()
 
-    expect(await screen.findByText('Sin productos en falta.')).toBeInTheDocument()
-    expect(screen.getByText('Sin alertas de stock bajo.')).toBeInTheDocument()
-    expect(screen.getByText('Sin compras programadas.')).toBeInTheDocument()
-
-    const historial = screen.getByRole('region', { name: 'Historial de movimientos' })
-    expect(await within(historial).findByText('Sin movimientos recientes')).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Empieza tu despensa' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Añadir producto/ })).toHaveAttribute('href', '/products/new')
+    expect(screen.queryByText('Sin productos en falta.')).not.toBeInTheDocument()
+    expect(screen.queryByText('Sin alertas de stock bajo.')).not.toBeInTheDocument()
+    expect(screen.queryByText('Sin compras programadas.')).not.toBeInTheDocument()
   })
 
   it('lists recent movements newest first with product titles', async () => {
@@ -129,7 +128,7 @@ describe('InicioScreen', () => {
 
     renderScreen()
 
-    const historial = screen.getByRole('region', { name: 'Historial de movimientos' })
+    const historial = await screen.findByRole('region', { name: 'Historial de movimientos' })
     expect(await within(historial).findByText('Salida -2 → 4')).toBeInTheDocument()
     const salidaRow = within(historial).getByText('Salida -2 → 4').closest('li')!
     const entradaRow = within(historial).getByText('Entrada +6 → 6').closest('li')!

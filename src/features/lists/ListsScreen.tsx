@@ -31,9 +31,7 @@ export function ListsScreen() {
 
   return (
     <section>
-      <h1 className="text-xl font-semibold">Listas</h1>
-
-      <form onSubmit={handleSubmit} className="mt-4 rounded-lg border border-slate-200 bg-white p-4 text-sm">
+      <form onSubmit={handleSubmit} className="rounded-lg border border-slate-200 bg-white p-4 text-sm">
         <label htmlFor="list-title" className="font-medium">
           Nombre de la lista
         </label>

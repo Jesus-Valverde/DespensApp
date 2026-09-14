@@ -3,16 +3,17 @@
 // Needs sharp: pnpm add -D sharp
 import sharp from 'sharp'
 
-const SRC = 'C:/Users/jesus/OneDrive/Pictures/Logos/DespensApp Logo.svg'
+const SRC = 'C:/Users/jesus/OneDrive/Pictures/Logos/DespensAppSolido negro.svg'
 const OUT = 'public'
 const BRAND = '#2563EB' // blue-600
-const RATIO = 1952 / 2200 // source aspect (w/h)
+const RATIO = 812 / 941 // source aspect (w/h)
 const TONE = process.argv[2] === 'dark' ? null : '#ffffff'
 
 async function make(size, logoFactor, file) {
   const logoH = Math.round(size * logoFactor)
   const logoW = Math.round(logoH * RATIO)
-  let logo = await sharp(SRC).resize(logoW, logoH).png().toBuffer()
+  // trim(): the export leaves the glyph offset in a larger canvas; crop to content first.
+  let logo = await sharp(SRC).trim().resize(logoW, logoH).png().toBuffer()
   if (TONE) {
     // Flat silhouette: solid tone masked by the logo's alpha channel.
     logo = await sharp({ create: { width: logoW, height: logoH, channels: 4, background: TONE } })
@@ -37,7 +38,7 @@ await make(64, 0.86, 'favicon.png')
 if (TONE) {
   const h = 256
   const w = Math.round(h * RATIO)
-  const glyph = await sharp(SRC).resize(w, h).png().toBuffer()
+  const glyph = await sharp(SRC).trim().resize(w, h).png().toBuffer()
   await sharp({ create: { width: w, height: h, channels: 4, background: TONE } })
     .composite([{ input: glyph, blend: 'dest-in' }])
     .png()

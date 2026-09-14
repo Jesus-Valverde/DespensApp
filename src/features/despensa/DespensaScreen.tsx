@@ -6,6 +6,7 @@ import type { Product } from '../../db/types'
 import { useObjectUrl } from '../../lib/useObjectUrl'
 import { iconPath, toneClasses } from '../../lib/icons'
 import { ModuleToggle } from '../../lib/viewToggle'
+import { ListSkeleton } from '../../lib/skeleton'
 import { stockState } from '../inventory/StockSection'
 import { distinctAreas } from '../products/api'
 import { CatalogView } from '../products/ProductList'
@@ -51,7 +52,7 @@ function PantryCard({ product }: { product: Product }) {
       )}
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-slate-800">{product.title}</p>
-        <p className="truncate text-xs text-slate-400">
+        <p className="truncate text-xs text-slate-500">
           {[product.brand, product.family].filter(Boolean).join(' · ') || 'Sin datos'}
         </p>
       </div>
@@ -71,7 +72,8 @@ function PantryCard({ product }: { product: Product }) {
 export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo' }) {
   const [area, setArea] = useState<string>('Todos')
 
-  const products = (useLiveQuery(() => db.products.toArray(), []) ?? [])
+  const productsQuery = useLiveQuery(() => db.products.toArray(), [])
+  const products = (productsQuery ?? [])
     .slice()
     .sort((a, b) => a.title.localeCompare(b.title, 'es'))
   const areas = distinctAreas(products)
@@ -85,8 +87,8 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
           <h1 className="text-2xl font-black tracking-tight leading-tight text-slate-900">
             Despensa
           </h1>
-          <p className="mt-0.5 text-xs font-medium text-slate-400">
-            Control de despensa e inventario
+          <p className="mt-0.5 text-xs font-medium text-slate-500">
+            Stock y catálogo de productos
           </p>
         </div>
         <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/60 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
@@ -109,9 +111,12 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
 
       {view === 'catalogo' ? (
         <CatalogView />
+      ) : productsQuery === undefined ? (
+        <ListSkeleton className="mb-4 mt-4" />
       ) : (
         <>
-          {/* Area filter chips */}
+          {/* Area filter chips (nothing to filter while the catalog is empty) */}
+          {products.length > 0 && (
           <div className="no-scrollbar -mx-1 mb-4 mt-1 flex items-center gap-2 overflow-x-auto px-1 pb-3">
         {['Todos', ...areas].map((chip) => (
           <button
@@ -129,6 +134,7 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
           </button>
         ))}
       </div>
+      )}
 
       {visible.length > 0 ? (
         <ul className="space-y-2.5">
@@ -158,7 +164,7 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
           </div>
           <h2 className="mb-2 text-lg font-bold text-slate-800">Tu despensa está vacía</h2>
           <p className="mb-6 max-w-xs text-sm font-normal leading-relaxed text-slate-500 mx-auto">
-            Sin productos todavía. Toca el botón + para agregar el primero.
+            Sin productos todavía. Agrega el primero para empezar a controlar tu stock.
           </p>
           <Link
             to="/products/new"
@@ -171,7 +177,7 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
           </Link>
         </section>
       ) : (
-        <p className="rounded-2xl border border-slate-200/80 bg-white p-4 text-sm text-slate-400">
+        <p className="rounded-2xl border border-slate-200/80 bg-white p-4 text-sm text-slate-500">
           Sin productos en el área “{area}”.
         </p>
       )}

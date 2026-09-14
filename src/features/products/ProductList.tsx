@@ -64,7 +64,7 @@ function CatalogCard({ product }: { product: Product }) {
         to={`/products/${product.id}/edit`}
         aria-label={`Editar ${product.title}`}
         title={`Editar ${product.title}`}
-        className="ml-2 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+        className="ml-2 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
       >
         <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
           <circle cx="12" cy="5" r="1" />
@@ -94,7 +94,7 @@ export function CatalogView() {
   return (
     <section>
       <div className="relative mb-5">
-        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
             <circle cx="11" cy="11" r="7" />
             <line strokeLinecap="round" x1="21" x2="16.65" y1="21" y2="16.65" />
@@ -113,12 +113,12 @@ export function CatalogView() {
       {products.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-center">
           <p className="text-sm font-semibold text-slate-800">Sin productos todavía.</p>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-500">
             Toca el botón + para agregar el primero al catálogo.
           </p>
         </div>
       ) : visible.length === 0 ? (
-        <p className="rounded-2xl border border-slate-200/80 bg-white p-4 text-sm text-slate-400">
+        <p className="rounded-2xl border border-slate-200/80 bg-white p-4 text-sm text-slate-500">
           Sin resultados para “{query.trim()}”.
         </p>
       ) : (

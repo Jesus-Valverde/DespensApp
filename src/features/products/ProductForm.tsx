@@ -22,7 +22,7 @@ const EMPTY_FIELDS: TextFieldState = { title: '', brand: '', contentSize: '', ar
 
 const labelClass = 'font-semibold text-slate-800 text-sm mb-1.5 block'
 const inputClass =
-  'w-full px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-400'
+  'w-full px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-500'
 
 function SearchGlyph() {
   return (
@@ -56,7 +56,7 @@ function ComboField({
         {label}
       </label>
       <div className="relative flex items-center">
-        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
           <SearchGlyph />
         </span>
         <input
@@ -67,7 +67,7 @@ function ComboField({
           placeholder={placeholder}
           className={`${inputClass} pl-10 pr-10`}
         />
-        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400">
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-500">
           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
@@ -156,7 +156,7 @@ function VisualPicker({
             <span className="text-sm font-semibold text-slate-700 transition-colors group-hover:text-blue-600">
               {image ? 'Cambiar imagen' : 'Toca para agregar imagen'}
             </span>
-            <span className="mt-0.5 text-xs text-slate-400">PNG, JPG hasta 5MB o selecciona un ícono</span>
+            <span className="mt-0.5 text-xs text-slate-500">PNG, JPG hasta 5MB o selecciona un ícono</span>
           </label>
           {imageUrl && (
             <div className="mt-2 flex items-center gap-3">
@@ -174,7 +174,7 @@ function VisualPicker({
       ) : (
         <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
           <div className="relative flex items-center">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
               <SearchGlyph />
             </span>
             <input
@@ -227,7 +227,7 @@ function VisualPicker({
           <div className="flex flex-col gap-2 border-t border-slate-200/80 pt-2.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-700">Color de fondo</span>
-              <span className="text-[11px] font-medium text-slate-400">{currentTone.label}</span>
+              <span className="text-[11px] font-medium text-slate-500">{currentTone.label}</span>
             </div>
             <div className="no-scrollbar flex items-center justify-between gap-1 overflow-x-auto py-1">
               {ICON_TONES.map((tone) => {
@@ -348,15 +348,23 @@ export function ProductForm({ product }: { product?: Product }) {
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
-        <ComboField
-          id="product-family"
-          label="Familia"
-          value={fields.family}
-          onChange={setField('family')}
-          placeholder="Buscar familia..."
-          listId="product-families"
-          options={families}
-        />
+        <div>
+          {/* Required marker as a CSS pseudo-element: stays out of the label's
+              accessible name; validation lives in the API and surfaces via the
+              alert below (native `required` would show a browser-locale tooltip). */}
+          <label
+            htmlFor="product-title"
+            className={`${labelClass} after:ml-0.5 after:content-['*'] after:text-red-500`}
+          >
+            Nombre
+          </label>
+          <input
+            id="product-title"
+            value={fields.title}
+            onChange={setField('title')}
+            className={inputClass}
+          />
+        </div>
         <div>
           <label htmlFor="product-brand" className={labelClass}>
             Marca
@@ -369,12 +377,15 @@ export function ProductForm({ product }: { product?: Product }) {
             className={inputClass}
           />
         </div>
-        <div>
-          <label htmlFor="product-title" className={labelClass}>
-            Nombre
-          </label>
-          <input id="product-title" value={fields.title} onChange={setField('title')} className={inputClass} />
-        </div>
+        <ComboField
+          id="product-family"
+          label="Familia"
+          value={fields.family}
+          onChange={setField('family')}
+          placeholder="Buscar familia..."
+          listId="product-families"
+          options={families}
+        />
         <div>
           <label htmlFor="product-model" className={labelClass}>
             Modelo

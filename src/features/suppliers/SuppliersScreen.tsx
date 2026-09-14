@@ -76,9 +76,7 @@ export function SuppliersScreen() {
 
   return (
     <section>
-      <h1 className="text-xl font-semibold">Proveedores</h1>
-
-      <form onSubmit={handleSubmit} className="mt-4 space-y-3 rounded-lg border border-slate-200 bg-white p-4">
+      <form onSubmit={handleSubmit} className="space-y-3 rounded-lg border border-slate-200 bg-white p-4">
         <div>
           <label htmlFor="supplier-name" className="text-sm font-medium">
             Nombre

@@ -68,7 +68,7 @@ const TYPE_OPTIONS: {
 const QUICK_NOTES = ['Compra súper', 'Consumo diario', 'Caducado/Merma']
 
 const inputClass =
-  'w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-medium text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20'
+  'w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs font-medium text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20'
 
 /** Movement modal (Stitch design): segmented type control, quantity stepper
  * with a live "existencias resultantes" pill, quick reason chips. The date row
@@ -148,7 +148,7 @@ export function MovementModal({ product, onClose }: { product: Product; onClose:
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto">
           <div className="space-y-4 px-5 py-4">
             <div>
-              <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-500">
                 Tipo de movimiento
               </span>
               <div className="grid grid-cols-3 gap-1.5 rounded-2xl bg-slate-100 p-1">
@@ -168,7 +168,7 @@ export function MovementModal({ product, onClose }: { product: Product; onClose:
                         <Glyph d={option.glyph} className={`h-3.5 w-3.5 ${option.accent}`} strokeWidth={2.5} />
                         {option.label}
                       </span>
-                      <span className="text-[9px] font-normal text-slate-400">{option.hint}</span>
+                      <span className="text-[9px] font-normal text-slate-500">{option.hint}</span>
                     </button>
                   )
                 })}
@@ -179,7 +179,7 @@ export function MovementModal({ product, onClose }: { product: Product; onClose:
               <div className="mb-2 flex items-center justify-between">
                 <label
                   htmlFor="movement-qty"
-                  className="text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                  className="text-[11px] font-bold uppercase tracking-wider text-slate-500"
                 >
                   {type === 'ajuste' ? 'Cantidad a dejar' : 'Cantidad a ingresar'}
                 </label>
@@ -206,7 +206,7 @@ export function MovementModal({ product, onClose }: { product: Product; onClose:
                     placeholder="0"
                     className="w-16 border-0 bg-transparent p-0 text-center text-3xl font-black tracking-tight text-slate-900 outline-none placeholder:text-slate-300"
                   />
-                  <span className="text-xs font-semibold text-slate-400">ud.</span>
+                  <span className="text-xs font-semibold text-slate-500">ud.</span>
                 </div>
                 <button
                   type="button"
@@ -232,7 +232,7 @@ export function MovementModal({ product, onClose }: { product: Product; onClose:
             <div>
               <label
                 htmlFor="movement-note"
-                className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-400"
+                className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-slate-500"
               >
                 Motivo o detalle (opcional)
               </label>

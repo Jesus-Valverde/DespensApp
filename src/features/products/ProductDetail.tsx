@@ -209,7 +209,7 @@ export function ProductDetail() {
       'Área asignada',
       current.area && (
         <span className="flex items-center justify-end gap-1">
-          <Glyph d={GLYPHS.lugar} className="h-3.5 w-3.5 text-slate-400" />
+          <Glyph d={GLYPHS.lugar} className="h-3.5 w-3.5 text-slate-500" />
           {current.area}
         </span>
       ),
@@ -218,7 +218,7 @@ export function ProductDetail() {
     [
       'Descripción',
       current.description ?? (
-        <span key="desc-empty" className="font-medium text-slate-400">
+        <span key="desc-empty" className="font-medium text-slate-500">
           —
         </span>
       ),
@@ -270,7 +270,7 @@ export function ProductDetail() {
           </span>
         )}
         <h1 className="text-2xl font-black leading-snug tracking-tight text-slate-900">{current.title}</h1>
-        <p className="mt-1 text-xs font-medium text-slate-400">
+        <p className="mt-1 text-xs font-medium text-slate-500">
           {current.brand && (
             <>
               Marca: <span className="font-semibold text-slate-700">{current.brand}</span> ·{' '}
@@ -301,8 +301,8 @@ export function ProductDetail() {
 
       <div>
         <div className="mb-2.5 flex items-center justify-between px-1">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Secciones</h3>
-          <span className="text-[11px] font-medium text-slate-400">Toca para alternar</span>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">Secciones</h3>
+          <span className="text-[11px] font-medium text-slate-500">Toca para alternar</span>
         </div>
         <nav aria-label="Secciones del producto" className="grid grid-cols-3 gap-2.5">
           {TABS.map((tab) => {
@@ -325,7 +325,7 @@ export function ProductDetail() {
                 >
                   {tab.label}
                 </span>
-                <span className={`mt-0.5 text-[10px] font-medium ${active ? 'text-white/90' : 'text-slate-400'}`}>
+                <span className={`mt-0.5 text-[10px] font-medium ${active ? 'text-white/90' : 'text-slate-500'}`}>
                   {subtitle}
                 </span>
               </button>
@@ -752,7 +752,7 @@ function HistoryModal({
                   </span>
                   <div>
                     <p className="text-xs font-bold text-slate-800">{m.note || describeMovement(m)}</p>
-                    <p className="mt-0.5 text-[11px] text-slate-400">{historyDateFormatter.format(new Date(m.date))}</p>
+                    <p className="mt-0.5 text-[11px] text-slate-500">{historyDateFormatter.format(new Date(m.date))}</p>
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
@@ -816,7 +816,7 @@ function RecentMovements({
         </button>
       </div>
       {latest.length === 0 ? (
-        <p className="pt-1 text-xs text-slate-400">Sin movimientos todavía.</p>
+        <p className="pt-1 text-xs text-slate-500">Sin movimientos todavía.</p>
       ) : (
         <div className="space-y-2.5 pt-1">
           {latest.map((movement) => (
@@ -834,7 +834,7 @@ function RecentMovements({
                 </span>
                 <div>
                   <p className="font-semibold text-slate-800">{describeMovement(movement)}</p>
-                  <p className="text-[10px] text-slate-400">
+                  <p className="text-[10px] text-slate-500">
                     {recentDateFormatter.format(new Date(movement.date))}
                     {movement.note ? ` · ${movement.note}` : ''}
                   </p>

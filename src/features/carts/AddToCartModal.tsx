@@ -133,7 +133,7 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
                   {product.family}
                 </span>
               )}
-              <span className="truncate text-[11px] font-medium text-slate-400">
+              <span className="truncate text-[11px] font-medium text-slate-500">
                 {[product.brand, product.purchase.lastPrice != null ? formatMoney(product.purchase.lastPrice) : null]
                   .filter(Boolean)
                   .join(' · ')}
@@ -176,13 +176,13 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
           </div>
         </div>
 
-        <h4 className="mb-2 mt-4 shrink-0 text-xs font-bold uppercase tracking-wider text-slate-400">
+        <h4 className="mb-2 mt-4 shrink-0 text-xs font-bold uppercase tracking-wider text-slate-500">
           Carritos activos
         </h4>
 
         <div className="flex-1 space-y-2.5 overflow-y-auto">
           {carts.length === 0 && (
-            <p className="py-4 text-center text-sm text-slate-400">No tienes carritos activos. Crea uno abajo.</p>
+            <p className="py-4 text-center text-sm text-slate-500">No tienes carritos activos. Crea uno abajo.</p>
           )}
           {carts.map((cart, index) => {
             const selected = cart.id === pickedId
@@ -222,7 +222,7 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
                     </span>
                     <span
                       className={`block truncate text-[10px] font-medium ${
-                        selected ? 'text-blue-700/80' : 'text-slate-400'
+                        selected ? 'text-blue-700/80' : 'text-slate-500'
                       }`}
                     >
                       Proveedor: {supplier} · {cart.items.length} arts. · Est.{' '}
@@ -249,7 +249,7 @@ export function AddToCartModal({ product, onClose }: { product: Product; onClose
           onClick={() => setCreating(true)}
           className="mt-2.5 flex w-full shrink-0 items-center justify-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2.5 text-xs font-semibold text-slate-600 transition active:scale-95 hover:bg-slate-50"
         >
-          <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-400" />
+          <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-500" />
           Crear nuevo carrito
         </button>
 
@@ -329,7 +329,7 @@ export function CreateCartModal({
 
   const labelClass = 'mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700'
   const inputClass =
-    'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-1 focus:ring-blue-600'
+    'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-800 shadow-sm outline-none transition placeholder:text-slate-500 focus:border-blue-600 focus:ring-1 focus:ring-blue-600'
 
   return (
     <div
@@ -378,7 +378,7 @@ export function CreateCartModal({
                 Presupuesto (opc.)
               </label>
               <div className="relative flex items-center">
-                <span className="absolute left-3 text-xs font-bold text-slate-400">$</span>
+                <span className="absolute left-3 text-xs font-bold text-slate-500">$</span>
                 <input
                   id="cart-budget"
                   type="number"
@@ -389,7 +389,7 @@ export function CreateCartModal({
                   placeholder="0.00"
                   className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-6 pr-10 text-xs font-bold text-slate-800 shadow-sm outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                 />
-                <span className="absolute right-2.5 text-[10px] font-semibold text-slate-400">MXN</span>
+                <span className="absolute right-2.5 text-[10px] font-semibold text-slate-500">MXN</span>
               </div>
             </div>
             <div>

@@ -22,7 +22,7 @@ export function BitacoraList({ productId }: { productId: number }) {
 
   return (
     <section aria-label="Bitácora" className="mt-6">
-      <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Bitácora</h2>
+      <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">Bitácora</h2>
 
       {movements.length === 0 ? (
         <p className="mt-2 text-sm text-slate-500">Sin movimientos todavía.</p>

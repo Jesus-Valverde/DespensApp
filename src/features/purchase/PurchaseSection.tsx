@@ -108,14 +108,14 @@ function ModalHeader({
         </span>
         <div>
           <h3 className="text-sm font-bold text-slate-900">{title}</h3>
-          <p className="mt-0.5 text-[11px] font-medium leading-snug text-slate-400">{subtitle}</p>
+          <p className="mt-0.5 text-[11px] font-medium leading-snug text-slate-500">{subtitle}</p>
         </div>
       </div>
       <button
         type="button"
         aria-label="Cerrar"
         onClick={onClose}
-        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition hover:bg-slate-200 hover:text-slate-600"
+        className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200 hover:text-slate-600"
       >
         <Glyph d={GLYPHS.cerrar} className="h-4 w-4" />
       </button>
@@ -153,7 +153,7 @@ function ProductChip({ product }: { product: Product }) {
       )}
       <div className="min-w-0 flex-1">
         <p className="truncate text-xs font-bold leading-tight text-slate-900">{product.title}</p>
-        <p className="mt-0.5 truncate text-[11px] font-medium text-slate-400">
+        <p className="mt-0.5 truncate text-[11px] font-medium text-slate-500">
           {product.brand && <>Marca: {product.brand} · </>}
           {product.family && <span className="font-semibold text-blue-600">{product.family}</span>}
         </p>
@@ -209,7 +209,7 @@ function SuppliersModal({
 
       <div className="space-y-3 overflow-y-auto py-3">
         {cards.length === 0 && (
-          <p className="py-4 text-center text-sm text-slate-400">Sin proveedores vinculados.</p>
+          <p className="py-4 text-center text-sm text-slate-500">Sin proveedores vinculados.</p>
         )}
         {cards.map(({ supplier, principal }, index) => {
           const meta = linkFor(supplier.id!)
@@ -258,7 +258,7 @@ function SuppliersModal({
                       <span className="block text-xs font-black text-slate-900">
                         {formatMoney(price).replace(' MXN', '')}
                       </span>
-                      <span className="block text-xs font-semibold text-slate-400">MXN</span>
+                      <span className="block text-xs font-semibold text-slate-500">MXN</span>
                     </>
                   ) : (
                     <span className="block text-xs font-black text-slate-300">—</span>
@@ -307,7 +307,7 @@ function SuppliersModal({
           onClick={onLink}
           className="flex w-full items-center justify-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2.5 text-xs font-semibold text-slate-600 transition active:scale-95 hover:bg-slate-50"
         >
-          <Glyph d={GLYPHS.business} className="h-4 w-4 text-slate-400" />
+          <Glyph d={GLYPHS.business} className="h-4 w-4 text-slate-500" />
           + Vincular nuevo proveedor
         </button>
       </div>
@@ -429,7 +429,7 @@ function VincularModal({
             Seleccionar proveedor
           </label>
           {suppliers.length === 0 ? (
-            <p className="mt-1.5 text-xs text-slate-400">
+            <p className="mt-1.5 text-xs text-slate-500">
               Aún no hay proveedores. Créalos en la pestaña Proveedores.
             </p>
           ) : (
@@ -513,7 +513,7 @@ function VincularModal({
 
         <div>
           <label htmlFor="vincular-url" className="font-medium">
-            Enlace web / URL producto <span className="font-normal text-slate-400">(opcional)</span>
+            Enlace web / URL producto <span className="font-normal text-slate-500">(opcional)</span>
           </label>
           <input
             id="vincular-url"
@@ -527,7 +527,7 @@ function VincularModal({
 
         <div>
           <label htmlFor="vincular-notes" className="font-medium">
-            Notas o presentación <span className="font-normal text-slate-400">(opcional)</span>
+            Notas o presentación <span className="font-normal text-slate-500">(opcional)</span>
           </label>
           <input
             id="vincular-notes"
@@ -621,21 +621,21 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
       <ProductChip product={product} />
 
       <div className="mt-3 flex items-center justify-between">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Tus listas de compra</h4>
-        <span className="text-[11px] font-medium text-slate-400">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Tus listas de compra</h4>
+        <span className="text-[11px] font-medium text-slate-500">
           {selectedCount} {selectedCount === 1 ? 'seleccionada' : 'seleccionadas'}
         </span>
       </div>
 
       <div className="relative shrink-0">
-        <Glyph d={GLYPHS.buscar} className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <Glyph d={GLYPHS.buscar} className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
         <input
           type="search"
           aria-label="Buscar lista"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Buscar lista…"
-          className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-xs font-medium text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20"
+          className="w-full rounded-2xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-xs font-medium text-slate-800 outline-none transition placeholder:text-slate-500 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20"
         />
       </div>
 
@@ -645,7 +645,7 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
           const visible = query ? lists.filter((list) => list.title.toLowerCase().includes(query)) : lists
           if (visible.length === 0) {
             return (
-              <p className="py-4 text-center text-sm text-slate-400">
+              <p className="py-4 text-center text-sm text-slate-500">
                 {query ? 'Ninguna lista coincide con la búsqueda.' : 'Aún no tienes listas. Créalas abajo.'}
               </p>
             )
@@ -679,7 +679,7 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-xs font-bold text-slate-900">{list.title}</span>
-                  <span className="block text-[11px] text-slate-400">
+                  <span className="block text-[11px] text-slate-500">
                     {list.productIds.length} {list.productIds.length === 1 ? 'artículo' : 'artículos'}
                   </span>
                 </span>
@@ -699,7 +699,7 @@ function ListsModal({ product, onClose }: { product: Product; onClose: () => voi
         onClick={() => setCreating(true)}
         className="flex w-full shrink-0 items-center justify-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2.5 text-xs font-semibold text-slate-600 transition active:scale-95 hover:bg-slate-50"
       >
-        <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-400" />
+        <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-500" />
         Crear nueva lista
       </button>
 
@@ -820,7 +820,7 @@ export function PurchaseSection({ product }: { product: Product }) {
             </span>
             <span>
               <span className="block text-xs font-bold text-slate-900">{primaryName ?? 'Sin proveedor'}</span>
-              <span className="block text-[10px] font-medium text-slate-400">Proveedor principal</span>
+              <span className="block text-[10px] font-medium text-slate-500">Proveedor principal</span>
             </span>
           </span>
           {primaryName && (
@@ -862,11 +862,11 @@ export function PurchaseSection({ product }: { product: Product }) {
           </div>
           <div className="flex flex-col justify-between rounded-3xl border border-slate-100 bg-white p-4 shadow-sm">
             <span className="mb-1 text-sm font-medium text-slate-500">Precio referencia</span>
-            <div className="my-0.5 flex items-baseline gap-1 text-2xl font-bold tracking-tight text-slate-400">
+            <div className="my-0.5 flex items-baseline gap-1 text-2xl font-bold tracking-tight text-slate-500">
               {referencePrice != null ? (
                 <>
                   <span>{formatMoney(referencePrice).replace(' MXN', '')}</span>
-                  <span className="text-xs font-semibold text-slate-400">MXN</span>
+                  <span className="text-xs font-semibold text-slate-500">MXN</span>
                 </>
               ) : (
                 <span className="text-slate-300">—</span>
@@ -878,20 +878,20 @@ export function PurchaseSection({ product }: { product: Product }) {
 
         <dl className="grid grid-cols-2 gap-3 border-t border-slate-50 pt-3 text-xs">
           <div>
-            <dt className="text-[11px] font-medium text-slate-400">Última compra</dt>
+            <dt className="text-[11px] font-medium text-slate-500">Última compra</dt>
             <dd className="mt-0.5 text-xs font-bold text-slate-800">
               {purchase.lastPurchaseDate ? formatDate(purchase.lastPurchaseDate) : '—'}
             </dd>
           </div>
           <div>
-            <dt className="text-[11px] font-medium text-slate-400">Frecuencia</dt>
+            <dt className="text-[11px] font-medium text-slate-500">Frecuencia</dt>
             <dd className="mt-0.5 text-xs font-bold text-slate-800">
               {effectiveFrequency ? PERIOD_LABEL[effectiveFrequency] : '—'}
             </dd>
           </div>
           {purchase.nextPurchaseDate && (
             <div>
-              <dt className="text-[11px] font-medium text-slate-400">Próxima compra</dt>
+              <dt className="text-[11px] font-medium text-slate-500">Próxima compra</dt>
               <dd className="mt-0.5 text-xs font-bold text-slate-800">
                 {formatDate(purchase.nextPurchaseDate)}
               </dd>
@@ -908,10 +908,10 @@ export function PurchaseSection({ product }: { product: Product }) {
             className="group flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 p-2.5 text-xs font-medium text-blue-600 transition hover:bg-blue-50/60"
           >
             <span className="flex min-w-0 items-center gap-1.5">
-              <Glyph d={GLYPHS.link} className="h-3.5 w-3.5 shrink-0 text-slate-400 group-hover:text-blue-600" />
+              <Glyph d={GLYPHS.link} className="h-3.5 w-3.5 shrink-0 text-slate-500 group-hover:text-blue-600" />
               <span className="truncate">{firstLink.url}</span>
             </span>
-            <Glyph d={GLYPHS.open} className="h-3.5 w-3.5 shrink-0 text-slate-400 group-hover:text-blue-600" />
+            <Glyph d={GLYPHS.open} className="h-3.5 w-3.5 shrink-0 text-slate-500 group-hover:text-blue-600" />
           </a>
         )}
 
@@ -957,7 +957,7 @@ export function PurchaseSection({ product }: { product: Product }) {
               onClick={() => setListPickerOpen(true)}
               className="inline-flex items-center gap-1.5 rounded-2xl border border-dashed border-slate-300 px-3 py-2 text-xs font-medium text-slate-600 transition active:scale-95 hover:bg-slate-50"
             >
-              <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-400" />
+              <Glyph d={GLYPHS.add} className="h-4 w-4 text-slate-500" />
               Añadir a lista
             </button>
           )}
@@ -1059,7 +1059,7 @@ function CreateListModal({
 
   const labelClass = 'block text-xs font-bold uppercase tracking-wider text-slate-600'
   const inputClass =
-    'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
+    'w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm outline-none transition placeholder:text-slate-500 focus:border-blue-600 focus:ring-2 focus:ring-blue-100'
 
   return (
     <div
@@ -1073,7 +1073,7 @@ function CreateListModal({
           type="button"
           aria-label="Cerrar modal"
           onClick={onCancel}
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition hover:bg-slate-200 hover:text-slate-600 active:scale-95"
+          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200 hover:text-slate-600 active:scale-95"
         >
           <Glyph d={GLYPHS.cerrar} className="h-4 w-4" />
         </button>
@@ -1163,7 +1163,7 @@ function CreateListModal({
                 })}
                 <label
                   aria-label="Color personalizado"
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-slate-300 text-xs font-bold text-slate-400 transition-colors hover:border-slate-400 hover:text-slate-600"
+                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-2 border-dashed border-slate-300 text-xs font-bold text-slate-500 transition-colors hover:border-slate-400 hover:text-slate-600"
                   style={customColor ? { backgroundColor: customColor } : undefined}
                 >
                   {!customColor && '+'}
@@ -1175,7 +1175,7 @@ function CreateListModal({
                   />
                 </label>
               </div>
-              <p className="mt-3 text-center text-[11px] text-slate-400">
+              <p className="mt-3 text-center text-[11px] text-slate-500">
                 El color destacará los productos y accesos directos de esta lista
               </p>
             </div>

@@ -55,9 +55,9 @@ function CartCard({ cart, tint }: { cart: Cart; tint: string }) {
       </span>
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-bold text-slate-900">{cart.name}</span>
-        <span className="block truncate text-xs text-slate-400">{cartSubtitle(cart)}</span>
+        <span className="block truncate text-xs text-slate-500">{cartSubtitle(cart)}</span>
         {(cart.budget != null || cart.estimatedDate) && (
-          <span className="block truncate text-[11px] font-medium text-slate-400">
+          <span className="block truncate text-[11px] font-medium text-slate-500">
             {cart.budget != null && <>Presupuesto: {formatMoney(cart.budget)} · </>}
             {cart.estimatedDate && <>Estimado: {cart.estimatedDate}</>}
           </span>
@@ -68,7 +68,7 @@ function CartCard({ cart, tint }: { cart: Cart; tint: string }) {
           <span className="block text-xs font-bold text-slate-800">
             {formatMoney(estimate).replace(' MXN', '')}
           </span>
-          <span className="block text-[10px] font-medium text-slate-400">estimado</span>
+          <span className="block text-[10px] font-medium text-slate-500">estimado</span>
         </span>
       )}
     </Link>
@@ -106,15 +106,6 @@ export function CartsScreen() {
 
   return (
     <section>
-      <div className="mb-1 flex items-center justify-between">
-        <h1 className="text-2xl font-black tracking-tight text-slate-900">Carritos</h1>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-100/60 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-          {active.length} Activos
-        </span>
-      </div>
-      <p className="mb-5 text-xs font-medium text-slate-400">Gestión de compras y pedidos</p>
-
       {notice && (
         <p role="alert" className="mb-4 rounded-xl border border-slate-100 bg-white p-3 text-sm text-slate-600 shadow-sm">
           {notice}
@@ -173,15 +164,17 @@ export function CartsScreen() {
 
       {history.length > 0 && (
         <section aria-label="Historial" className="mt-6 space-y-2.5">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Historial</h2>
+          <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">Historial</h2>
           {history.map((cart, index) => (
             <CartCard key={cart.id} cart={cart} tint={cartGlyph(index)} />
           ))}
         </section>
       )}
 
-      {/* Screen-level FAB (the Layout FAB is suppressed on /carts). */}
-      <button
+      {/* Screen-level FAB (the Layout FAB is suppressed on /carts). Hidden
+          while the empty state is up: it already carries the create CTA. */}
+      {active.length > 0 && (
+        <button
         type="button"
         aria-label="Nuevo carrito"
         onClick={() => setCreating(true)}
@@ -200,6 +193,7 @@ export function CartsScreen() {
           <path d="M5 12h14" />
         </svg>
       </button>
+      )}
     </section>
   )
 }

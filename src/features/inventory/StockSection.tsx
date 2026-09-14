@@ -183,7 +183,7 @@ function LevelsModal({ product, onClose }: { product: Product; onClose: () => vo
             type="button"
             aria-label="Cerrar modal"
             onClick={onClose}
-            className="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100/80 text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-600"
+            className="ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100/80 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-600"
           >
             <Glyph d={PATHS.cerrar} className="h-4 w-4" />
           </button>
@@ -234,7 +234,7 @@ function LevelsModal({ product, onClose }: { product: Product; onClose: () => vo
             </button>
           </div>
 
-          <p className="px-1 text-center text-[11px] text-slate-400">
+          <p className="px-1 text-center text-[11px] text-slate-500">
             Los cambios afectan el cálculo del estado de inventario en tiempo real.
           </p>
 
@@ -304,7 +304,7 @@ export function StockSection({
       </div>
       {product.stock.location && (
         <p className="flex items-center gap-1 text-xs font-medium text-slate-500">
-          <Glyph d={PATHS.place} className="h-3.5 w-3.5 text-slate-400" />
+          <Glyph d={PATHS.place} className="h-3.5 w-3.5 text-slate-500" />
           {product.stock.location}
         </p>
       )}

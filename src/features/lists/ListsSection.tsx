@@ -43,7 +43,7 @@ export function ListsSection({ productId }: { productId: number }) {
 
   return (
     <section className="mt-6" aria-label="Listas">
-      <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Listas</h2>
+      <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">Listas</h2>
 
       {memberships.length > 0 ? (
         <ul className="mt-2 space-y-2">
