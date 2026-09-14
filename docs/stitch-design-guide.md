@@ -171,12 +171,12 @@ White card with fields in this exact order (labels bold small, Spanish) — iden
 1 "Nombre del producto" — text, required (placeholder "Leche" — the generic name; marca/modelo distinguish the variant)
 2 "Marca" — text, placeholder "Lala, Nutri, Alpura…"
 3 "Modelo" — text, placeholder "Descripción o presentación…"
-4 "Contenido" (number, placeholder "1") + "Unidad de medida" (select: L, ml, g, kg, pza, paquete) — side by side, quantity and unit are SEPARATE fields
+4 "Contenido" (number, placeholder "1") + "Unidad de medida" (select showing "symbol - name": "L - Litros", "ml - Mililitros", "g - Gramos", "kg - Kilogramos", "pza - Piezas", "paq - Paquete") — side by side, quantity and unit are SEPARATE fields
 5 "Familia" — text with suggestion dropdown, placeholder "Buscar familia..."
 6 "Área" — text with suggestion dropdown, placeholder "Buscar área..."
 7 "Descripción" — textarea, placeholder "Descripción del producto…"
 Section "Propiedades personalizadas": repeatable rows of two inputs "Propiedad" and "Valor" with a "Quitar" button; add button "Agregar propiedad".
-Section "Visual del producto": segmented control "Tipo de visual" with "Imagen" / "Ícono". Imagen: dashed dropzone "Toca para agregar imagen" (or "Cambiar imagen"), subtext "PNG, JPG hasta 5MB o selecciona un ícono", button "Quitar imagen". Ícono: search "Buscar ícono... leche, fruta, pan, limpieza", 5-column grid of pantry icons, then "Color de fondo" with 11 round pastel swatches. Choosing one clears the other.
+Section "Visual del producto": segmented control "Tipo de visual" with "Imagen" / "Ícono". Imagen: dashed dropzone "Toca para agregar imagen" (or "Cambiar imagen"), subtext "PNG, JPG hasta 5MB o selecciona un ícono", button "Quitar imagen". Ícono: search "Buscar ícono... leche, fruta, pan, limpieza", 5-column grid showing the FULL 25-category icon set (5 rows, selected cell gets blue ring), then "Color de fondo" with 11 round pastel swatches. Choosing one clears the other.
 Footer buttons: filled blue "Guardar" + outline "Cancelar". Validation text: "El nombre del producto es obligatorio".
 ```
 
