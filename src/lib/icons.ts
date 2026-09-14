@@ -12,6 +12,8 @@ export interface IconTone {
   label: string
   chip: string
   fg: string
+  /** Vivid representative color for the picker swatch (the tile stays pastel). */
+  swatch: string
 }
 
 export const PRODUCT_ICONS: ProductIcon[] = [
@@ -43,17 +45,24 @@ export const PRODUCT_ICONS: ProductIcon[] = [
 ]
 
 export const ICON_TONES: IconTone[] = [
-  { key: 'azul', label: 'Azul suave', chip: 'bg-blue-50', fg: 'text-blue-600' },
-  { key: 'menta', label: 'Verde menta', chip: 'bg-emerald-50', fg: 'text-emerald-600' },
-  { key: 'ambar', label: 'Ámbar suave', chip: 'bg-amber-100', fg: 'text-amber-700' },
-  { key: 'naranja', label: 'Naranja suave', chip: 'bg-orange-50', fg: 'text-orange-600' },
-  { key: 'coral', label: 'Coral pastel', chip: 'bg-rose-50', fg: 'text-rose-500' },
-  { key: 'rosa', label: 'Rosa suave', chip: 'bg-pink-50', fg: 'text-pink-600' },
-  { key: 'lavanda', label: 'Lavanda', chip: 'bg-violet-50', fg: 'text-violet-600' },
-  { key: 'indigo', label: 'Índigo suave', chip: 'bg-indigo-50', fg: 'text-indigo-600' },
-  { key: 'cian', label: 'Cian cielo', chip: 'bg-cyan-50', fg: 'text-cyan-600' },
-  { key: 'lima', label: 'Lima pastel', chip: 'bg-lime-50', fg: 'text-lime-600' },
-  { key: 'gris', label: 'Gris neutro', chip: 'bg-slate-100', fg: 'text-slate-500' },
+  { key: 'azul', label: 'Azul suave', chip: 'bg-blue-50', fg: 'text-blue-600', swatch: 'bg-blue-500' },
+  { key: 'menta', label: 'Verde menta', chip: 'bg-emerald-50', fg: 'text-emerald-600', swatch: 'bg-emerald-500' },
+  { key: 'ambar', label: 'Ámbar suave', chip: 'bg-amber-100', fg: 'text-amber-700', swatch: 'bg-amber-500' },
+  { key: 'naranja', label: 'Naranja suave', chip: 'bg-orange-50', fg: 'text-orange-600', swatch: 'bg-orange-500' },
+  { key: 'coral', label: 'Coral pastel', chip: 'bg-rose-50', fg: 'text-rose-500', swatch: 'bg-rose-500' },
+  { key: 'rosa', label: 'Rosa suave', chip: 'bg-pink-50', fg: 'text-pink-600', swatch: 'bg-pink-500' },
+  { key: 'lavanda', label: 'Lavanda', chip: 'bg-violet-50', fg: 'text-violet-600', swatch: 'bg-violet-500' },
+  { key: 'indigo', label: 'Índigo suave', chip: 'bg-indigo-50', fg: 'text-indigo-600', swatch: 'bg-indigo-500' },
+  { key: 'cian', label: 'Cian cielo', chip: 'bg-cyan-50', fg: 'text-cyan-600', swatch: 'bg-cyan-500' },
+  { key: 'lima', label: 'Lima pastel', chip: 'bg-lime-50', fg: 'text-lime-600', swatch: 'bg-lime-500' },
+  { key: 'gris', label: 'Gris neutro', chip: 'bg-slate-100', fg: 'text-slate-500', swatch: 'bg-slate-400' },
+  { key: 'amarillo', label: 'Amarillo', chip: 'bg-yellow-50', fg: 'text-yellow-600', swatch: 'bg-yellow-500' },
+  { key: 'fucsia', label: 'Fucsia', chip: 'bg-fuchsia-50', fg: 'text-fuchsia-600', swatch: 'bg-fuchsia-500' },
+  { key: 'turquesa', label: 'Turquesa', chip: 'bg-teal-50', fg: 'text-teal-600', swatch: 'bg-teal-500' },
+  { key: 'morado', label: 'Morado', chip: 'bg-purple-50', fg: 'text-purple-600', swatch: 'bg-purple-500' },
+  { key: 'verde', label: 'Verde', chip: 'bg-green-50', fg: 'text-green-600', swatch: 'bg-green-500' },
+  { key: 'rojo', label: 'Rojo suave', chip: 'bg-red-50', fg: 'text-red-600', swatch: 'bg-red-500' },
+  { key: 'cielo', label: 'Cielo', chip: 'bg-sky-50', fg: 'text-sky-600', swatch: 'bg-sky-500' },
 ]
 
 /** Icon path for a key, falling back to the pantry box for unknown keys. */

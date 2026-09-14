@@ -11,9 +11,9 @@ describe('icons', () => {
     }
   })
 
-  it('covers the Stitch picker set (25 icons, 11 tones)', () => {
+  it('covers the Stitch picker set (25 icons, 18 tones)', () => {
     expect(PRODUCT_ICONS).toHaveLength(25)
-    expect(ICON_TONES).toHaveLength(11)
+    expect(ICON_TONES).toHaveLength(18)
   })
 
   it('has unique tone keys with bg and fg classes', () => {
@@ -22,6 +22,7 @@ describe('icons', () => {
     for (const tone of ICON_TONES) {
       expect(tone.chip).toMatch(/^bg-/)
       expect(tone.fg).toMatch(/^text-/)
+      expect(tone.swatch).toMatch(/^bg-/)
     }
   })
 

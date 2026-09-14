@@ -109,7 +109,7 @@ describe('ProductForm', () => {
       </MemoryRouter>,
     )
 
-    await user.type(screen.getByLabelText('Nombre'), 'Leche entera')
+    await user.type(screen.getByLabelText('Nombre del producto'), 'Leche entera')
     await user.click(screen.getByRole('button', { name: 'Ícono' }))
     await user.type(screen.getByLabelText('Buscar ícono'), 'láct')
     await user.click(screen.getByRole('button', { name: 'Lácteos' }))

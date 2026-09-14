@@ -229,7 +229,7 @@ function VisualPicker({
               <span className="text-xs font-semibold text-slate-700">Color de fondo</span>
               <span className="text-[11px] font-medium text-slate-500">{currentTone.label}</span>
             </div>
-            <div className="no-scrollbar flex items-center justify-between gap-1 overflow-x-auto py-1">
+            <div className="grid grid-cols-9 gap-2 py-1">
               {ICON_TONES.map((tone) => {
                 const selected = tone.key === iconTone
                 return (
@@ -239,9 +239,9 @@ function VisualPicker({
                     aria-label={tone.label}
                     aria-pressed={selected}
                     onClick={() => onPickTone(tone.key)}
-                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-all ${
+                    className={`flex h-6 w-6 items-center justify-center rounded-full transition-all ${
                       selected ? 'border-2 border-blue-600 shadow-xs' : 'border border-slate-200 hover:border-slate-400'
-                    } ${tone.chip}`}
+                    } ${tone.swatch}`}
                   />
                 )
               })}
@@ -356,12 +356,13 @@ export function ProductForm({ product }: { product?: Product }) {
             htmlFor="product-title"
             className={`${labelClass} after:ml-0.5 after:content-['*'] after:text-red-500`}
           >
-            Nombre
+            Nombre del producto
           </label>
           <input
             id="product-title"
             value={fields.title}
             onChange={setField('title')}
+            placeholder="Leche"
             className={inputClass}
           />
         </div>
@@ -377,15 +378,6 @@ export function ProductForm({ product }: { product?: Product }) {
             className={inputClass}
           />
         </div>
-        <ComboField
-          id="product-family"
-          label="Familia"
-          value={fields.family}
-          onChange={setField('family')}
-          placeholder="Buscar familia..."
-          listId="product-families"
-          options={families}
-        />
         <div>
           <label htmlFor="product-model" className={labelClass}>
             Modelo
@@ -396,19 +388,6 @@ export function ProductForm({ product }: { product?: Product }) {
             onChange={setField('model')}
             placeholder="Descripción o presentación…"
             className={inputClass}
-          />
-        </div>
-        <div>
-          <label htmlFor="product-description" className={labelClass}>
-            Descripción
-          </label>
-          <textarea
-            id="product-description"
-            value={fields.description}
-            onChange={setField('description')}
-            placeholder="Descripción del producto…"
-            rows={3}
-            className={`${inputClass} resize-y`}
           />
         </div>
         <div>
@@ -424,6 +403,15 @@ export function ProductForm({ product }: { product?: Product }) {
           />
         </div>
         <ComboField
+          id="product-family"
+          label="Familia"
+          value={fields.family}
+          onChange={setField('family')}
+          placeholder="Buscar familia..."
+          listId="product-families"
+          options={families}
+        />
+        <ComboField
           id="product-area"
           label="Área"
           value={fields.area}
@@ -432,6 +420,19 @@ export function ProductForm({ product }: { product?: Product }) {
           listId="product-areas"
           options={areas}
         />
+        <div>
+          <label htmlFor="product-description" className={labelClass}>
+            Descripción
+          </label>
+          <textarea
+            id="product-description"
+            value={fields.description}
+            onChange={setField('description')}
+            placeholder="Descripción del producto…"
+            rows={3}
+            className={`${inputClass} resize-y`}
+          />
+        </div>
 
         <fieldset>
           <legend className={`${labelClass} mb-2`}>Propiedades personalizadas</legend>
