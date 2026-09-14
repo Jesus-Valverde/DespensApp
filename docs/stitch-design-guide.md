@@ -279,6 +279,12 @@ Section "Unidades válidas": rows with blue symbol + "—" + name: L — Litros,
 Footer: single filled blue button "Descargar plantilla".
 ```
 
+### 18. Modal — respaldo de datos (from Inicio link)
+
+```text
+Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último respaldo: {fecha}" or "Nunca has respaldado tus datos". Body explains Exportar (downloads everything) / Restaurar (replaces current data). Footer buttons: outline "Restaurar" + filled blue "Exportar". Restore uses the system file picker (.json) and asks for confirmation before replacing.
+```
+
 ---
 
 ## Current design status
