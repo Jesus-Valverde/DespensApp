@@ -1,0 +1,5 @@
+﻿Nombre,Marca,Modelo,Contenido,Unidad,Familia,Área,Descripción,Stock actual,Stock mínimo,Stock máximo,Ubicación,Precio referencia,Frecuencia
+Leche,Lala,100 Entera,1,L,Lácteo,Refri,Leche entera pasteurizada,6,2,12,Refri,28.00,Semanal
+Frijol negro,Isadora,500 g,500,g,Granos,Alacena,,2,1,6,Alacena,22.50,Quincenal
+Atún,Dolores,3 pack,3,pza,Enlatados,Alacena,Lata 3 piezas,,,,,,
+Detergente,Ariel,3.5 L,3.5,L,Limpieza,Lavandería,Detergente líquido,0,1,4,Lavandería,65.00,Mensual
