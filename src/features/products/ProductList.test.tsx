@@ -31,7 +31,8 @@ describe('ProductList', () => {
     expect(leche).toHaveAttribute('href', `/products/${lecheId}`)
     expect(screen.getByRole('link', { name: /^Detergente/ })).toBeInTheDocument()
     expect(screen.getByText(/Alpura/)).toBeInTheDocument()
-    expect(screen.getByText(/Lavandería/)).toBeInTheDocument()
+    // The area also appears as a filter chip — any match is fine here.
+    expect(screen.getAllByText(/Lavandería/).length).toBeGreaterThan(0)
 
     expect(screen.getByRole('link', { name: 'Editar Leche entera' })).toHaveAttribute(
       'href',

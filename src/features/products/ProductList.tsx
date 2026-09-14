@@ -5,6 +5,7 @@ import { db } from '../../db/db'
 import type { Product } from '../../db/types'
 import { useObjectUrl } from '../../lib/useObjectUrl'
 import { iconPath, toneClasses } from '../../lib/icons'
+import { distinctAreas } from './api'
 
 // Deterministic soft tones so catalog rows feel varied like the Stitch design.
 const ICON_TONES = [
@@ -82,19 +83,41 @@ function CatalogCard({ product }: { product: Product }) {
  * inside the Despensa screen's "Catálogo" view (there is no Productos tab). */
 export function CatalogView() {
   const [query, setQuery] = useState('')
+  const [area, setArea] = useState('Todos')
   const products = useLiveQuery(() => db.products.orderBy('title').toArray(), []) ?? []
+  const areas = distinctAreas(products)
 
   const needle = query.trim().toLowerCase()
-  const visible = needle
-    ? products.filter((p) =>
-        [p.title, p.brand, p.family, p.area]
-          .filter(Boolean)
-          .some((value) => value!.toLowerCase().includes(needle)),
-      )
-    : products
+  const visible = products
+    .filter((p) => area === 'Todos' || p.area === area)
+    .filter((p) =>
+      needle
+        ? [p.title, p.brand, p.family, p.area]
+            .filter(Boolean)
+            .some((value) => value!.toLowerCase().includes(needle))
+        : true,
+    )
 
   return (
     <section>
+      <p className="text-[11px] font-semibold text-slate-500">Área</p>
+      <div className="no-scrollbar -mx-1 mb-4 flex items-center gap-2 overflow-x-auto px-1 pb-2">
+        {['Todos', ...areas].map((chip) => (
+          <button
+            key={chip}
+            type="button"
+            onClick={() => setArea(chip)}
+            aria-pressed={area === chip}
+            className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs ${
+              area === chip
+                ? 'bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/20'
+                : 'border border-slate-200/70 bg-white font-medium text-slate-500 hover:border-slate-300'
+            }`}
+          >
+            {chip}
+          </button>
+        ))}
+      </div>
       <div className="relative mb-5">
         <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
