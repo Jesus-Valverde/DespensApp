@@ -1,6 +1,9 @@
-import { type ComponentType, type ReactNode, type SVGProps } from 'react'
+import { useState, type ComponentType, type ReactNode, type SVGProps } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
+import { useLiveQuery } from 'dexie-react-hooks'
 import { LayoutGrid, ShoppingCart, Warehouse } from 'lucide-react'
+import { db } from '../db/db'
+import { NotificationsPanel } from './NotificationsPanel'
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>
 
@@ -48,19 +51,55 @@ function fabFor(pathname: string): { to: string; label: string } | null {
 export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
   const fab = fabFor(pathname)
+  const [bellOpen, setBellOpen] = useState(false)
+
+  // Notifications: products under their minimum stock with alerts enabled.
+  const notifications = useLiveQuery(
+    () =>
+      db.products
+        .filter(
+          (p) =>
+            p.stock.alerts === true &&
+            p.stock.min != null &&
+            p.stock.current <= p.stock.min,
+        )
+        .toArray(),
+    [],
+  )
+  const notificationCount = notifications?.length ?? 0
 
   return (
     // Phone frame: centered 430px column with edge borders (Stitch design).
     <div className="flex min-h-dvh justify-center bg-slate-100 selection:bg-blue-100 selection:text-blue-700">
       <div className="relative flex min-h-dvh w-full max-w-[430px] flex-col overflow-x-hidden border-x border-slate-200/60 bg-slate-50 text-slate-900 shadow-2xl">
-        <header className="sticky top-0 z-20 border-b border-slate-200/50 bg-slate-50/90 px-5 pb-2 pt-[max(env(safe-area-inset-top),12px)] backdrop-blur-md">
+        <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 px-5 pb-2 pt-[max(env(safe-area-inset-top),12px)] shadow-[0_1px_6px_0_rgba(15,23,42,0.06)] backdrop-blur-md">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <LogoMark />
-              <span className="text-xl font-bold tracking-tight text-blue-600">DespensApp</span>
+              <div className="leading-none">
+                <span className="text-xl font-bold tracking-tight text-slate-900">DespensApp</span>
+                <span className="mt-0.5 block text-[10px] font-medium text-slate-400">Control de despensa</span>
+              </div>
             </div>
+            <button
+              type="button"
+              onClick={() => setBellOpen(true)}
+              aria-label={`Notificaciones${notificationCount > 0 ? ` (${notificationCount})` : ''}`}
+              className="pressable relative flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+              </svg>
+              {notificationCount > 0 && (
+                <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-blue-600" aria-hidden="true" />
+              )}
+            </button>
           </div>
         </header>
+
+        {bellOpen && (
+          <NotificationsPanel products={notifications ?? []} onClose={() => setBellOpen(false)} />
+        )}
 
         <main className="flex-1 px-5 pt-5 pb-28">{children}</main>
 
