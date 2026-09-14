@@ -1,10 +1,12 @@
+import { useState } from 'react'
 import { Link } from 'react-router'
+import { BackupModal } from '../../app/BackupModal'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
 import { formatDate } from '../../lib/dates'
 import { formatMoney } from '../../lib/money'
 import { ListSkeleton } from '../../lib/skeleton'
-import type { Product } from '../../db/types'
+import type { Cart, Product } from '../../db/types'
 import type { MovementType } from '../../db/types'
 
 const MAX_ITEMS = 5
@@ -38,13 +40,14 @@ function stockBuckets(products: Product[]): StockBucket[] {
 }
 
 /** The next active cart: earliest estimated date first, then earliest created. */
-function nextCart(carts: { estimatedDate?: string; createdAt: string }[]) {
+function nextCart(carts: Cart[]) {
   return [...carts].sort((a, b) => (a.estimatedDate ?? '9999').localeCompare(b.estimatedDate ?? '9999') || a.createdAt.localeCompare(b.createdAt))[0]
 }
 
 /** / — the Inicio dashboard: the stock KPI card, the next-restock and
  * estimated-purchase tiles, and recent movements (design contract, block 1). */
 export function InicioScreen() {
+  const [backupOpen, setBackupOpen] = useState(false)
   const productsQuery = useLiveQuery(() => db.products.toArray(), [])
   const products = productsQuery ?? []
   const activeCartsQuery = useLiveQuery(() => db.carts.where('status').equals('active').toArray(), [])
@@ -222,6 +225,18 @@ export function InicioScreen() {
           </section>
         </>
       )}
+
+      <button
+        type="button"
+        onClick={() => setBackupOpen(true)}
+        className="pressable mx-auto mt-8 flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-slate-600"
+      >
+        <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 0 1-.88-7.903A5 5 0 1 1 15.9 6H16a5 5 0 0 1 1 9.9M9 19l3 3m0 0 3-3m-3 3V9" />
+        </svg>
+        Respaldo de datos
+      </button>
+      {backupOpen && <BackupModal onClose={() => setBackupOpen(false)} />}
     </section>
   )
 }
