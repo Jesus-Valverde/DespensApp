@@ -29,64 +29,61 @@ function renderScreen() {
 }
 
 describe('InicioScreen', () => {
-  it('splits Faltantes (sin stock) from Stock bajo, excluding products above min or without one', async () => {
-    await makeProduct({ title: 'Frijol', stock: { current: 0, min: 5, max: null } })
-    await makeProduct({ title: 'Arroz', stock: { current: 4, min: 5, max: null } })
-    await makeProduct({ title: 'Leche', stock: { current: 10, min: 2, max: null } }) // above min
-    await makeProduct({ title: 'Sal', stock: { current: 0, min: null, max: null } }) // no threshold
+  it('shows the stock KPI breakdown splitting sin stock, stock bajo and en inventario', async () => {
+    await makeProduct({ title: 'Frijol', stock: { current: 0, min: 5, max: null } }) // sin stock
+    await makeProduct({ title: 'Arroz', stock: { current: 4, min: 5, max: null } }) // stock bajo
+    await makeProduct({ title: 'Leche', stock: { current: 10, min: 2, max: null } }) // en inventario
+    await makeProduct({ title: 'Sal', stock: { current: 0, min: null, max: null } }) // sin stock (sin umbral)
 
     renderScreen()
 
-    // The screen gates on its live queries; await the regions before asserting.
-    const faltantes = await screen.findByRole('region', { name: 'Faltantes' })
-    expect(await within(faltantes).findByText('Frijol')).toBeInTheDocument()
-    expect(within(faltantes).getByText(/Faltan 5/)).toBeInTheDocument()
-    expect(within(faltantes).queryByText('Arroz')).not.toBeInTheDocument()
-    expect(within(faltantes).queryByText('Leche')).not.toBeInTheDocument()
-
-    const bajo = await screen.findByRole('region', { name: 'Stock bajo' })
-    expect(await within(bajo).findByText('Arroz')).toBeInTheDocument()
-    expect(within(bajo).getByText(/Quedan 4/)).toBeInTheDocument()
-    expect(within(bajo).queryByText('Sal')).not.toBeInTheDocument()
+    const kpi = await screen.findByRole('region', { name: 'Stock de tus productos' })
+    expect(await within(kpi).findByText('Stock de tus productos')).toBeInTheDocument()
+    const enInventario = within(kpi).getByText('En inventario').closest('li')!
+    expect(enInventario).toHaveTextContent('1')
+    const stockBajo = within(kpi).getByText('Stock bajo').closest('li')!
+    expect(stockBajo).toHaveTextContent('1')
+    const sinStock = within(kpi).getByText('Sin stock').closest('li')!
+    expect(sinStock).toHaveTextContent('2')
   })
 
-  it('shows upcoming purchases by next date ascending with overdue first, excluding unscheduled ones', async () => {
-    await makeProduct({
-      title: 'Café',
-      purchase: { secondarySupplierIds: [], period: 'mensual', links: [], nextPurchaseDate: '2026-09-01' },
+  it('shows próxima reposición and compra estimada from the nearest active cart', async () => {
+    await makeProduct({ title: 'Leche', stock: { current: 5, min: 2, max: null } })
+    await makeProduct({ title: 'Atún', stock: { current: 3, min: null, max: null } })
+    const base = { origin: 'manual' as const, status: 'active' as const }
+    await db.carts.add({
+      ...base,
+      name: 'Lejano',
+      createdAt: '2026-09-01T00:00:00.000Z',
+      estimatedDate: '2026-09-20',
+      items: [{ productId: 1, title: 'Leche', qty: 1, unitPrice: 1000, supplierId: null, supplierName: 'X' }],
     })
-    await makeProduct({
-      title: 'Galletas',
-      purchase: { secondarySupplierIds: [], period: 'semanal', links: [], nextPurchaseDate: '2026-09-10' },
+    await db.carts.add({
+      ...base,
+      name: 'Cercano',
+      createdAt: '2026-09-02T00:00:00.000Z',
+      estimatedDate: '2026-09-15',
+      items: [
+        { productId: 1, title: 'Leche', qty: 2, unitPrice: 2800, supplierId: null, supplierName: 'X' },
+        { productId: 2, title: 'Atún', qty: 1, unitPrice: 2200, supplierId: null, supplierName: 'X' },
+      ],
     })
-    await makeProduct({ title: 'Sal' }) // unscheduled
 
     renderScreen()
 
-    const proximas = await screen.findByRole('region', { name: 'Próximas compras' })
-    expect(await within(proximas).findByText('Café')).toBeInTheDocument()
-
-    const overdueDate = within(proximas).getByText(/1 de septiembre de 2026/)
-    const upcomingDate = within(proximas).getByText(/10 de septiembre de 2026/)
-    expect(overdueDate.compareDocumentPosition(upcomingDate) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-
-    // The 2026-09-01 item is always overdue (today or earlier), so it carries the marker.
-    const cafeRow = within(proximas).getByText('Café').closest('li')!
-    expect(within(cafeRow).getByText('Vencida')).toBeInTheDocument()
-    expect(within(proximas).queryByText('Sal')).not.toBeInTheDocument()
+    expect(await screen.findByText('15 de septiembre de 2026')).toBeInTheDocument()
+    // Σ qty × unitPrice of the nearest cart: 2×$28.00 + 1×$22.00 = $78.00
+    expect(screen.getByText('$78.00')).toBeInTheDocument()
   })
 
-  it('links to the carts section with the count of active carts', async () => {
-    const base = { items: [] as [], origin: 'manual' as const }
-    await db.carts.add({ ...base, name: 'Súper', status: 'active', createdAt: '2026-09-01T00:00:00.000Z' })
-    await db.carts.add({ ...base, name: 'Fiesta', status: 'active', createdAt: '2026-09-02T00:00:00.000Z' })
-    await db.carts.add({ ...base, name: 'Viejo', status: 'purchased', createdAt: '2026-08-01T00:00:00.000Z', purchasedAt: '2026-08-02T00:00:00.000Z' })
+  it('shows em dashes when there is no active cart', async () => {
+    await makeProduct({ title: 'Leche', stock: { current: 10, min: 2, max: null } })
 
     renderScreen()
 
-    const link = await screen.findByRole('link', { name: /Carritos/ })
-    expect(link).toHaveTextContent('activos')
-    expect(link).toHaveAttribute('href', '/compras/carritos')
+    expect(await screen.findByText('Stock de tus productos')).toBeInTheDocument()
+    expect(screen.getByText('Próxima reposición').closest('div')!.textContent).toContain('—')
+    expect(screen.getByText('Compra estimada').closest('div')!.textContent).toContain('—')
   })
 
   it('shows the first-run welcome card instead of report sections when the pantry is empty', async () => {
@@ -94,9 +91,7 @@ describe('InicioScreen', () => {
 
     expect(await screen.findByRole('heading', { name: 'Empieza tu despensa' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Añadir producto/ })).toHaveAttribute('href', '/products/new')
-    expect(screen.queryByText('Sin productos en falta.')).not.toBeInTheDocument()
-    expect(screen.queryByText('Sin alertas de stock bajo.')).not.toBeInTheDocument()
-    expect(screen.queryByText('Sin compras programadas.')).not.toBeInTheDocument()
+    expect(screen.queryByText('Stock de tus productos')).not.toBeInTheDocument()
   })
 
   it('lists recent movements newest first with product titles', async () => {
