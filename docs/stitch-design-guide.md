@@ -156,6 +156,7 @@ Screen "Despensa" with an internal segmented toggle right under the title: two t
 STOCK VIEW (below toggle): search bar ("Buscar en catálogo..."), then area filter chips labeled "Área" (first chip "Todos"; active chip solid blue with white text), then a SECOND chip row labeled "Stock" filtering by stock status: "Todos" (active), "Stock bajo", "Stock normal", "Sin stock". Product rows: thumbnail (image, or pantry icon on its pastel tone, or a soft tinted fallback), title, stock badge pill ("En inventario" emerald / "Bajo mínimo" amber / "Sin stock" red / "Sobre máximo" amber) with the current quantity under it as small text "x{n}". No FAB on this view.
 CATÁLOGO VIEW (below toggle): SAME search bar and SAME area chips as the Stock view. Product cards: same thumbnail, title, gray subtitle "{contenido} • {marca} • {área}", kebab menu linking to edit. This view HAS the gradient "+" FAB (new product).
 PRODUCT ICON CONTINUITY: each product keeps the SAME icon and pastel tone across all windows (Stock, Catálogo, detail, carts). Never vary colors per view.
+CATÁLOGO ENTRY: below the search bar, a blue text link "Cómo llenar la plantilla de importación" opens the CSV tutorial modal (screen block 17).
 Empty state (Stock, no products): centered white card with floating gradient illustration tile, title "Tu despensa está vacía", body "Sin productos todavía. Toca el botón + para agregar el primero.", soft-blue button "Añadir a Despensa". Filter with no matches: "Sin productos en el área “{area}”.". Catálogo without results: "Sin resultados para “{query}”."
 ```
 
@@ -267,6 +268,15 @@ Removed as a standalone screen (2026-09-12): Proveedores is a view of the Compra
 ```text
 Modal "Notificaciones", subtitle "Productos bajo su stock mínimo", bell icon chip.
 List rows: product thumbnail, bold title, amber badge "Bajo mínimo", meta "Mín: {n} · Actual: {m}", each row links to the product detail. Empty: "Sin notificaciones." + "Todos tus productos están por encima de su stock mínimo." Single footer button "Cerrar".
+```
+
+### 17. Modal — tutorial CSV (import guide)
+
+```text
+Modal "Cómo importar tu catálogo", subtitle "Llena la plantilla y súbela a Despensa", info icon chip.
+Numbered steps (blue circle + bold title + gray body): 1 "Descarga la plantilla" (link to plantilla-catalogo.csv); 2 "Llena una fila por producto" (Nombre obligatorio; Contenido numérico; Unidad de la lista; stock/precio/frecuencia opcionales); 3 "Sube el archivo" (errores por fila antes de confirmar).
+Section "Unidades válidas": rows with blue symbol + "—" + name: L — Litros, ml — Mililitros, g — Gramos, kg — Kilogramos, pza — Piezas, paq — Paquete.
+Footer: single filled blue button "Descargar plantilla".
 ```
 
 ---
