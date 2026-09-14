@@ -176,7 +176,7 @@ White card with fields in this exact order (labels bold small, Spanish) — iden
 6 "Área" — text with suggestion dropdown, placeholder "Buscar área..."
 7 "Descripción" — textarea, placeholder "Descripción del producto…"
 Section "Propiedades personalizadas": repeatable rows of two inputs "Propiedad" and "Valor" with a "Quitar" button; add button "Agregar propiedad".
-Section "Visual del producto": segmented control "Tipo de visual" with "Imagen" / "Ícono". Imagen: dashed dropzone "Toca para agregar imagen" (or "Cambiar imagen"), subtext "PNG, JPG hasta 5MB o selecciona un ícono", button "Quitar imagen". Ícono: search "Buscar ícono... leche, fruta, pan, limpieza", 5-column grid showing the FULL 25-category icon set (5 rows, selected cell gets blue ring), then "Color de fondo" with 18 round pastel swatches (2 rows of 9). Choosing one clears the other.
+Section "Visual del producto": segmented control "Tipo de visual" with "Imagen" / "Ícono". Imagen: dashed dropzone "Toca para agregar imagen" (or "Cambiar imagen"), subtext "PNG, JPG hasta 5MB o selecciona un ícono", button "Quitar imagen". Ícono: search "Buscar ícono... leche, fruta, pan, limpieza", 5-column grid showing the FULL 25-category icon set (5 rows, selected cell gets blue ring), then "Color de fondo" with 18 round swatches in 2 rows of 9, shown in their VIVID representative colors (not pastel). Choosing one clears the other.
 Footer buttons: filled blue "Guardar" + outline "Cancelar". Validation text: "El nombre del producto es obligatorio".
 ```
 
