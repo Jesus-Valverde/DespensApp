@@ -9,7 +9,7 @@ import { ModuleToggle } from '../../lib/viewToggle'
 import { ListSkeleton } from '../../lib/skeleton'
 import { stockState } from '../inventory/StockSection'
 import { distinctAreas } from '../products/api'
-import { CatalogView } from '../products/ProductList'
+import { CatalogView, toneFor } from '../products/ProductList'
 
 const TONE_CLASSES: Record<string, string> = {
   ok: 'bg-emerald-50 text-emerald-700 border-emerald-200/60',
@@ -41,8 +41,8 @@ function PantryCard({ product }: { product: Product }) {
           </svg>
         </div>
       ) : (
-        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50 text-slate-300">
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
+        <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${toneFor(product.title)}`}>
+          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="m7.5 4.27 9 5.15" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="m3.3 7 8.7 5 8.7-5" />
@@ -71,6 +71,8 @@ function PantryCard({ product }: { product: Product }) {
  * Productos tab). The chosen view is remembered (see routes in App). */
 export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo' }) {
   const [area, setArea] = useState<string>('Todos')
+  const [query, setQuery] = useState('')
+  const [status, setStatus] = useState<string>('Todos')
 
   const productsQuery = useLiveQuery(() => db.products.toArray(), [])
   const products = (productsQuery ?? [])
@@ -78,7 +80,20 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
     .sort((a, b) => a.title.localeCompare(b.title, 'es'))
   const areas = distinctAreas(products)
 
-  const visible = area === 'Todos' ? products : products.filter((p) => p.area === area)
+  const STATUS_FILTERS: Record<string, (p: Product) => boolean> = {
+    'Stock normal': (p) => p.stock.current > 0 && (p.stock.min == null || p.stock.current > p.stock.min),
+    'Stock bajo': (p) => p.stock.current > 0 && p.stock.min != null && p.stock.current <= p.stock.min,
+    'Sin stock': (p) => p.stock.current === 0,
+  }
+  const needle = query.trim().toLowerCase()
+  const matches = needle
+    ? (p: Product) =>
+        [p.title, p.brand, p.family, p.area].filter(Boolean).some((v) => v!.toLowerCase().includes(needle))
+    : () => true
+  const visible = products
+    .filter((p) => area === 'Todos' || p.area === area)
+    .filter((p) => status === 'Todos' || (STATUS_FILTERS[status]?.(p) ?? true))
+    .filter(matches)
 
   return (
     <section>
@@ -115,9 +130,27 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
         <ListSkeleton className="mb-4 mt-4" />
       ) : (
         <>
-          {/* Area filter chips (nothing to filter while the catalog is empty) */}
+          {/* Search + labeled filter rows: Área and Stock (design contract) */}
           {products.length > 0 && (
-          <div className="no-scrollbar -mx-1 mb-4 mt-1 flex items-center gap-2 overflow-x-auto px-1 pb-3">
+          <>
+          <div className="relative mb-1 mt-1">
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <line strokeLinecap="round" x1="21" x2="16.65" y1="21" y2="16.65" />
+              </svg>
+            </span>
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Buscar en catálogo..."
+              aria-label="Buscar en catálogo"
+              className="w-full rounded-xl border border-slate-200/80 bg-white py-3 pl-10 pr-4 text-sm text-slate-800 placeholder-slate-400 shadow-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            />
+          </div>
+          <p className="text-[11px] font-semibold text-slate-500">Área</p>
+          <div className="no-scrollbar -mx-1 flex items-center gap-2 overflow-x-auto px-1 pb-3">
         {['Todos', ...areas].map((chip) => (
           <button
             key={chip}
@@ -134,6 +167,25 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
           </button>
         ))}
       </div>
+          <p className="text-[11px] font-semibold text-slate-500">Stock</p>
+          <div className="no-scrollbar -mx-1 mb-4 flex items-center gap-2 overflow-x-auto px-1 pb-1">
+        {['Todos', 'Stock bajo', 'Stock normal', 'Sin stock'].map((chip) => (
+          <button
+            key={chip}
+            type="button"
+            onClick={() => setStatus(chip)}
+            aria-pressed={status === chip}
+            className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs ${
+              status === chip
+                ? 'bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/20'
+                : 'border border-slate-200/70 bg-white font-medium text-slate-500 hover:border-slate-300'
+            }`}
+          >
+            {chip}
+          </button>
+        ))}
+      </div>
+          </>
       )}
 
       {visible.length > 0 ? (

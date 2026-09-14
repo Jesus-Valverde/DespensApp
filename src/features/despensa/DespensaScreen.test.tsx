@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { DespensaScreen } from './DespensaScreen'
@@ -46,8 +46,10 @@ describe('DespensaScreen', () => {
 
     expect(await screen.findByText('Leche Lala')).toBeInTheDocument()
     expect(screen.getByText('Arroz')).toBeInTheDocument()
-    expect(screen.getByText('Sin stock')).toBeInTheDocument()
-    expect(screen.getByText('En inventario')).toBeInTheDocument()
+    // 'Sin stock'/'En inventario' also exist as filter chips — scope to the rows list.
+    const rows = screen.getByRole('list')
+    expect(within(rows).getAllByText('Sin stock').length).toBeGreaterThan(0)
+    expect(within(rows).getAllByText('En inventario').length).toBeGreaterThan(0)
     expect(screen.getByText(/2 Artículos/)).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Catálogo' })).toHaveAttribute(
       'href',
@@ -71,7 +73,8 @@ describe('DespensaScreen', () => {
     expect(screen.getByText('Jabón')).toBeInTheDocument()
     expect(screen.queryByText('Leche Lala')).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Todos' }))
+    // Both filter rows have a 'Todos' chip — the first row is Área.
+    await user.click(screen.getAllByRole('button', { name: 'Todos' })[0])
     expect(screen.getByText('Leche Lala')).toBeInTheDocument()
     expect(screen.getByText('Jabón')).toBeInTheDocument()
   })

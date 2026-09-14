@@ -18,7 +18,9 @@ const ICON_TONES = [
   'bg-sky-50 text-sky-600',
 ]
 
-function toneFor(title: string): string {
+/** Deterministic pastel tone for a product title — shared so the same product
+ * keeps the same color across Stock, Catálogo and detail (icon continuity). */
+export function toneFor(title: string): string {
   let hash = 0
   for (const ch of title) hash = (hash + ch.charCodeAt(0)) % 997
   return ICON_TONES[hash % ICON_TONES.length]
