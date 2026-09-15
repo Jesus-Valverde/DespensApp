@@ -1,9 +1,15 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { db } from '../../db/db'
-import { createProduct, updateProduct, deleteProduct, duplicateProduct, getProduct, distinctAreas, distinctFamilies } from './api'
+import { createProduct, updateProduct, deleteProduct, duplicateProduct, getProduct, distinctAreas, distinctBrands, distinctFamilies, getProductDef } from './api'
 
 beforeEach(async () => {
-  await Promise.all([db.products.clear(), db.movements.clear(), db.carts.clear(), db.lists.clear()])
+  await Promise.all([
+    db.products.clear(),
+    db.productDefs.clear(),
+    db.movements.clear(),
+    db.carts.clear(),
+    db.lists.clear(),
+  ])
 })
 
 describe('createProduct', () => {
@@ -19,7 +25,8 @@ describe('createProduct', () => {
       purchase: { secondarySupplierIds: [], links: [], period: null },
     })
     expect(stored?.brand).toBeUndefined()
-    expect(stored?.contentSize).toBeUndefined()
+    expect(stored?.content).toBeUndefined()
+    expect(stored?.unit).toBeUndefined()
     expect(stored?.area).toBeUndefined()
     expect(stored?.createdAt).toEqual(expect.any(String))
   })
@@ -166,7 +173,8 @@ describe('duplicateProduct', () => {
     const id = await createProduct({
       title: 'Detergente',
       brand: 'Ace',
-      contentSize: '1 L',
+      content: '1',
+      unit: 'L',
       area: 'Lavandería',
       customProps: [{ key: 'Pagar con tarjeta', value: 'sí' }],
       image,
@@ -199,7 +207,8 @@ describe('duplicateProduct', () => {
     const copy = await getProduct(copyId)
     expect(copy?.title).toBe('Detergente (copia)')
     expect(copy?.brand).toBe('Ace')
-    expect(copy?.contentSize).toBe('1 L')
+    expect(copy?.content).toBe('1')
+    expect(copy?.unit).toBe('L')
     expect(copy?.area).toBe('Lavandería')
     expect(copy?.customProps).toEqual([{ key: 'Pagar con tarjeta', value: 'sí' }])
     expect(copy?.image?.type).toBe('image/jpeg')
@@ -303,5 +312,48 @@ describe('product icon', () => {
     const id = await createProduct({ title: 'Leche', iconKey: 'lacteos', iconTone: 'azul', customProps: [] })
     const copyId = await duplicateProduct(id)
     expect(await getProduct(copyId)).toMatchObject({ iconKey: 'lacteos', iconTone: 'azul' })
+  })
+})
+
+describe('product name definitions (props templates)', () => {
+  it('createProduct registers the name and its props as a def', async () => {
+    await createProduct({ title: 'Leche', customProps: [{ key: 'Sabor', value: 'Entera' }] })
+
+    const def = await getProductDef('Leche')
+    expect(def?.title).toBe('Leche')
+    expect(def?.props).toEqual([{ key: 'Sabor', value: 'Entera' }])
+  })
+
+  it('a product without props registers the name but never clobbers an existing template', async () => {
+    await createProduct({ title: 'Leche', customProps: [{ key: 'Sabor', value: 'Entera' }] })
+    // CSV imports (and prop-less saves) keep the name registered but leave
+    // the template untouched.
+    await createProduct({ title: 'Leche', brand: 'Lala', customProps: [] })
+
+    const defs = await db.productDefs.where('title').equals('Leche').toArray()
+    expect(defs).toHaveLength(1)
+    expect(defs[0]?.props).toEqual([{ key: 'Sabor', value: 'Entera' }])
+  })
+
+  it('updateProduct refreshes the template when the product ships props', async () => {
+    const id = await createProduct({ title: 'Café', customProps: [] })
+    await updateProduct(id, { title: 'Café', customProps: [{ key: 'Tostación', value: 'Oscura' }] })
+
+    expect((await getProductDef('Café'))?.props).toEqual([{ key: 'Tostación', value: 'Oscura' }])
+  })
+
+  it('rejects an invalid unit with a Spanish error', async () => {
+    await expect(
+      createProduct({ title: 'Leche', content: '1', unit: 'galón', customProps: [] }),
+    ).rejects.toThrow('Unidad no válida')
+  })
+})
+
+describe('distinctBrands', () => {
+  it('returns unique non-empty brands sorted alphabetically', () => {
+    expect(distinctBrands([{ brand: 'Lala' }, { brand: 'Alpura' }, { brand: 'Lala' }, { brand: '  ' }, {}])).toEqual([
+      'Alpura',
+      'Lala',
+    ])
   })
 })

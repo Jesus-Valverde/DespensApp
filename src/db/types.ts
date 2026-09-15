@@ -47,7 +47,10 @@ export interface Product {
   id?: number
   title: string
   brand?: string
-  contentSize?: string
+  /** Pack size value, e.g. "500" — displayed joined with `unit`. */
+  content?: string
+  /** Pack size unit symbol; one of the canonical units in features/products. */
+  unit?: string
   area?: string
   /** Variant family, e.g. "Leche" groups Lala/Nutri/Alpura products. */
   family?: string
@@ -61,6 +64,16 @@ export interface Product {
   stock: ProductStock
   purchase: ProductPurchase
   createdAt: string
+  updatedAt: string
+}
+
+/** Name template: one row per known product name, holding the custom props
+ * suggested when that name is picked in the form. Joined to products by
+ * `title` (no FK); props are only refreshed when a product ships some. */
+export interface ProductDef {
+  id?: number
+  title: string
+  props: CustomProp[]
   updatedAt: string
 }
 
