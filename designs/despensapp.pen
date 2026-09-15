@@ -2218,7 +2218,43 @@
                   "fill": "$--primary"
                 },
                 "cmpLR_Title": {
-                  "content": "Leche"
+                  "type": "frame",
+                  "id": "trbzoqu",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pil1vokk",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t88qbf",
+                          "content": "#1",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "ttiwon",
+                      "content": "Leche",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "1 L • Lala • Refri"
@@ -2262,7 +2298,43 @@
                   "fill": "$--success"
                 },
                 "cmpLR_Title": {
-                  "content": "Frijol negro"
+                  "type": "frame",
+                  "id": "tryj9kc",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pil2vdcc",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t4f1no",
+                          "content": "#2",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "tuxwwl",
+                      "content": "Frijol negro",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "1 kg • Alacena"
@@ -2306,7 +2378,43 @@
                   "fill": "$--destructive"
                 },
                 "cmpLR_Title": {
-                  "content": "Detergente"
+                  "type": "frame",
+                  "id": "tra4qt9",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pilgisy7",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t3uoeq",
+                          "content": "#3",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "tkzruq",
+                      "content": "Detergente",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "3.5 L • Lavandería"
@@ -2350,7 +2458,43 @@
                   "fill": "$--warning"
                 },
                 "cmpLR_Title": {
-                  "content": "Atún"
+                  "type": "frame",
+                  "id": "trh4dgd",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pil5z31c",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tv56gd",
+                          "content": "#4",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "th3q34",
+                      "content": "Atún",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "3 pack • Alacena"
@@ -2394,7 +2538,43 @@
                   "fill": "$--warning"
                 },
                 "cmpLR_Title": {
-                  "content": "Café molido"
+                  "type": "frame",
+                  "id": "trxtlxh",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pili1c5y",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t6jbxv",
+                          "content": "#5",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "t0w6us",
+                      "content": "Café molido",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "500 g • Alacena"
@@ -2676,7 +2856,43 @@
                   "fill": "$--primary"
                 },
                 "cmpLR_Title": {
-                  "content": "#1 - Leche"
+                  "type": "frame",
+                  "id": "trhw8xf",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pilatim7",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "trok6h",
+                          "content": "#1",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "ttgrce",
+                      "content": "Leche",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "100 Entera - 1 L - Lala"
@@ -2716,7 +2932,43 @@
                   "fill": "$--success"
                 },
                 "cmpLR_Title": {
-                  "content": "#2 - Frijol negro"
+                  "type": "frame",
+                  "id": "trv99r7",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pil3u5b5",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tkf5q9",
+                          "content": "#2",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "tvldae",
+                      "content": "Frijol negro",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "Volteado - 500 g - Isadora"
@@ -2756,7 +3008,43 @@
                   "fill": "$--destructive"
                 },
                 "cmpLR_Title": {
-                  "content": "#3 - Detergente"
+                  "type": "frame",
+                  "id": "trurjin",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pil3ac47",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tfissj",
+                          "content": "#3",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "t3wkjc",
+                      "content": "Detergente",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "Polvo - 1 kg - Ace"
@@ -2796,7 +3084,43 @@
                   "fill": "$--warning"
                 },
                 "cmpLR_Title": {
-                  "content": "#4 - Atún"
+                  "type": "frame",
+                  "id": "trba9qh",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pil4tpjl",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tw6577",
+                          "content": "#4",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "t97bxf",
+                      "content": "Atún",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "En agua - 140 g - Dolores"
@@ -2836,7 +3160,43 @@
                   "fill": "$--warning"
                 },
                 "cmpLR_Title": {
-                  "content": "#5 - Café molido"
+                  "type": "frame",
+                  "id": "trv4vfp",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pilgicgc",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t5crxp",
+                          "content": "#5",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "t9xd16",
+                      "content": "Café molido",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "Veracruz - 230 g - Café Oro"
@@ -3530,7 +3890,43 @@
                   "fill": "$--primary"
                 },
                 "cmpLR_Title": {
-                  "content": "Leche"
+                  "type": "frame",
+                  "id": "trohafb",
+                  "name": "Title Row",
+                  "gap": 6,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "pilxmmto",
+                      "name": "Id Pill",
+                      "fill": "#f1f5f9",
+                      "cornerRadius": 8,
+                      "padding": [
+                        3,
+                        8
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t49ogw",
+                          "content": "#1",
+                          "fill": "#0f172a",
+                          "fontSize": 12,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "taruqh",
+                      "content": "Leche",
+                      "fill": "$--text-strong",
+                      "fontSize": 14,
+                      "fontWeight": "600"
+                    }
+                  ]
                 },
                 "cmpLR_Sub": {
                   "content": "1 L • Lala • Refri"
