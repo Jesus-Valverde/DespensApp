@@ -37,7 +37,9 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     setupFiles: ['src/test/setup.ts'],
-    // Heavy Dexie+DOM tests exceed the 5s default under full-suite parallel load.
+    // Heavy Dexie+DOM tests exceed the 5s default under full-suite parallel load,
+    // and one-worker-per-file contention makes liveQuery renders flake.
     testTimeout: 15000,
+    maxWorkers: 8,
   },
 })
