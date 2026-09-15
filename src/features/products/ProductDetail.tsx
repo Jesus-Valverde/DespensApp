@@ -5,6 +5,7 @@ import { db } from '../../db/db'
 import type { CustomProp, Product } from '../../db/types'
 import { iconPath, toneClasses } from '../../lib/icons'
 import { useObjectUrl } from '../../lib/useObjectUrl'
+import { BackButton } from '../../lib/backButton'
 import { StockSection } from '../inventory/StockSection'
 import { MovementModal } from '../inventory/MovementForm'
 import { describeMovement } from '../inventory/BitacoraList'
@@ -178,7 +179,8 @@ export function ProductDetail() {
       await updateProduct(current.id!, {
         title: current.title,
         brand: current.brand,
-        contentSize: current.contentSize,
+        content: current.content,
+        unit: current.unit,
         area: current.area,
         family: current.family,
         model: current.model,
@@ -204,7 +206,7 @@ export function ProductDetail() {
     ['Nombre', current.title || '—'],
     ['Familia', current.family],
     ['Marca', current.brand],
-    ['Contenido', current.contentSize],
+    ['Contenido', [current.content, current.unit].filter(Boolean).join(' ') || undefined],
     [
       'Área asignada',
       current.area && (
@@ -232,6 +234,9 @@ export function ProductDetail() {
 
   return (
     <section className="space-y-5">
+      <div className="flex">
+        <BackButton label="Volver" />
+      </div>
       {error && (
         <p role="alert" className="rounded-xl border border-red-100 bg-red-50 p-3 text-sm text-red-700">
           {error}

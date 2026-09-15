@@ -36,7 +36,8 @@ describe('ProductDetail', () => {
     const id = await createProduct({
       title: 'Detergente',
       brand: 'Ace',
-      contentSize: '1 L',
+      content: '1',
+      unit: 'L',
       area: 'Lavandería',
       customProps: [{ key: 'Pagar con tarjeta', value: 'sí' }],
     })

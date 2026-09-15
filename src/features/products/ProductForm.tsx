@@ -1,84 +1,98 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react'
-import { Link, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../../db/db'
 import type { CustomProp, Product } from '../../db/types'
 import { downscaleImage } from '../../lib/image'
 import { useObjectUrl } from '../../lib/useObjectUrl'
 import { ICON_TONES, PRODUCT_ICONS } from '../../lib/icons'
-import { createProduct, updateProduct, distinctAreas, distinctFamilies } from './api'
+import { Combobox } from '../../lib/Combobox'
+import { BackButton } from '../../lib/backButton'
+import {
+  createProduct,
+  updateProduct,
+  distinctAreas,
+  distinctBrands,
+  distinctFamilies,
+  UNIT_OPTIONS,
+} from './api'
 
 interface TextFieldState {
   title: string
   brand: string
-  contentSize: string
+  content: string
+  unit: string
   area: string
   family: string
   model: string
   description: string
 }
 
-const EMPTY_FIELDS: TextFieldState = { title: '', brand: '', contentSize: '', area: '', family: '', model: '', description: '' }
+const EMPTY_FIELDS: TextFieldState = {
+  title: '',
+  brand: '',
+  content: '',
+  unit: '',
+  area: '',
+  family: '',
+  model: '',
+  description: '',
+}
 
-const labelClass = 'font-semibold text-slate-800 text-sm mb-1.5 block'
+const labelClass = 'font-semibold text-slate-800 text-sm'
 const inputClass =
   'w-full px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-slate-500'
 
-function SearchGlyph() {
+/** Field label with an optional help marker that toggles a short fill-in tip. */
+function FieldLabel({
+  htmlFor,
+  label,
+  help,
+  required,
+}: {
+  htmlFor: string
+  label: string
+  help?: string
+  required?: boolean
+}) {
   return (
-    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-    </svg>
+    <span className="mb-1.5 flex items-center gap-1.5">
+      {/* Required marker as a CSS pseudo-element: stays out of the label's
+          accessible name; validation lives in the API and surfaces via the
+          alert in the form (native `required` would show a browser tooltip). */}
+      <label
+        htmlFor={htmlFor}
+        className={`${labelClass} ${required ? "after:ml-0.5 after:content-['*'] after:text-red-500" : ''}`}
+      >
+        {label}
+      </label>
+      {help && <FieldHelp label={label} text={help} />}
+    </span>
   )
 }
 
-/** Text input with datalist, styled as the Stitch combobox (search + chevron). */
-function ComboField({
-  id,
-  label,
-  value,
-  onChange,
-  placeholder,
-  listId,
-  options,
-}: {
-  id: string
-  label: string
-  value: string
-  onChange: (event: { target: { value: string } }) => void
-  placeholder: string
-  listId: string
-  options: string[]
-}) {
+function FieldHelp({ label, text }: { label: string; text: string }) {
+  const [open, setOpen] = useState(false)
   return (
-    <div>
-      <label htmlFor={id} className={labelClass}>
-        {label}
-      </label>
-      <div className="relative flex items-center">
-        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
-          <SearchGlyph />
+    <span className="relative inline-flex">
+      <button
+        type="button"
+        aria-label={`Ayuda: ${label}`}
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+        className="flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 text-[10px] font-bold leading-none text-slate-500 transition-colors hover:border-blue-400 hover:text-blue-600"
+      >
+        ?
+      </button>
+      {open && (
+        <span
+          role="note"
+          className="absolute left-1/2 top-6 z-30 w-56 -translate-x-1/2 rounded-lg bg-slate-800 px-3 py-2 text-left text-xs font-normal leading-snug text-white shadow-lg"
+        >
+          {text}
         </span>
-        <input
-          id={id}
-          list={listId}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          className={`${inputClass} pl-10 pr-10`}
-        />
-        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-500">
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        </span>
-      </div>
-      <datalist id={listId}>
-        {options.map((option) => (
-          <option key={option} value={option} />
-        ))}
-      </datalist>
-    </div>
+      )}
+    </span>
   )
 }
 
@@ -87,6 +101,7 @@ function VisualPicker({
   image,
   imageUrl,
   onImageChange,
+  onDropImage,
   onClearImage,
   iconKey,
   iconTone,
@@ -96,6 +111,7 @@ function VisualPicker({
   image: Blob | undefined
   imageUrl: string | undefined
   onImageChange: (event: ChangeEvent<HTMLInputElement>) => void
+  onDropImage: (file: File | undefined) => void
   onClearImage: () => void
   iconKey: string
   iconTone: string
@@ -103,6 +119,7 @@ function VisualPicker({
   onPickTone: (key: string) => void
 }) {
   const [tab, setTab] = useState<'imagen' | 'icono'>(iconKey ? 'icono' : 'imagen')
+  const [dragOver, setDragOver] = useState(false)
   const [iconQuery, setIconQuery] = useState('')
 
   const needle = iconQuery.trim().toLowerCase()
@@ -138,7 +155,21 @@ function VisualPicker({
         <>
           <label
             htmlFor="product-image"
-            className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50/70 p-5 text-center transition-all hover:border-blue-400 hover:bg-blue-50/30"
+            onDragOver={(event) => {
+              event.preventDefault()
+              setDragOver(true)
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={(event) => {
+              event.preventDefault()
+              setDragOver(false)
+              onDropImage(event.dataTransfer.files?.[0])
+            }}
+            className={`group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-5 text-center transition-all ${
+              dragOver
+                ? 'border-blue-500 bg-blue-50/60'
+                : 'border-slate-300 bg-slate-50/70 hover:border-blue-400 hover:bg-blue-50/30'
+            }`}
           >
             <input
               id="product-image"
@@ -149,12 +180,12 @@ function VisualPicker({
             />
             <span className="mb-2 flex h-11 w-11 items-center justify-center rounded-full border border-slate-200/70 bg-white text-blue-600 shadow-xs transition-transform group-hover:scale-105">
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0118.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </span>
             <span className="text-sm font-semibold text-slate-700 transition-colors group-hover:text-blue-600">
-              {image ? 'Cambiar imagen' : 'Toca para agregar imagen'}
+              {image ? 'Cambiar imagen' : 'Toca o arrastra para agregar imagen'}
             </span>
             <span className="mt-0.5 text-xs text-slate-500">PNG, JPG hasta 5MB o selecciona un ícono</span>
           </label>
@@ -175,7 +206,9 @@ function VisualPicker({
         <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
           <div className="relative flex items-center">
             <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-              <SearchGlyph />
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
             </span>
             <input
               type="text"
@@ -260,7 +293,8 @@ export function ProductForm({ product }: { product?: Product }) {
       ? {
           title: product.title,
           brand: product.brand ?? '',
-          contentSize: product.contentSize ?? '',
+          content: product.content ?? '',
+          unit: product.unit ?? '',
           area: product.area ?? '',
           family: product.family ?? '',
           model: product.model ?? '',
@@ -278,8 +312,11 @@ export function ProductForm({ product }: { product?: Product }) {
   const imageUrl = useObjectUrl(image)
 
   const products = useLiveQuery(() => db.products.toArray(), []) ?? []
+  const defs = useLiveQuery(() => db.productDefs.toArray(), []) ?? []
   const areas = distinctAreas(products)
+  const brands = distinctBrands(products)
   const families = distinctFamilies(products)
+  const defTitles = defs.map((def) => def.title).sort((a, b) => a.localeCompare(b, 'es'))
 
   function setField(field: keyof TextFieldState) {
     return (event: { target: { value: string } }) =>
@@ -292,9 +329,13 @@ export function ProductForm({ product }: { product?: Product }) {
     )
   }
 
-  async function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    event.target.value = ''
+  /** Picking an existing name explicitly loads its saved props as a template. */
+  function handlePickName(name: string) {
+    const def = defs.find((candidate) => candidate.title === name)
+    if (def) setCustomProps(def.props.map((prop) => ({ ...prop })))
+  }
+
+  async function acceptFile(file: File | undefined) {
     if (!file) return
     setError('')
     try {
@@ -303,6 +344,12 @@ export function ProductForm({ product }: { product?: Product }) {
     } catch {
       setError('No se pudo procesar la imagen')
     }
+  }
+
+  async function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    await acceptFile(file)
   }
 
   function handlePickIcon(key: string) {
@@ -316,7 +363,8 @@ export function ProductForm({ product }: { product?: Product }) {
     const datos = {
       title: fields.title,
       brand: fields.brand.trim() || undefined,
-      contentSize: fields.contentSize.trim() || undefined,
+      content: fields.content.trim() || undefined,
+      unit: fields.unit || undefined,
       area: fields.area.trim() || undefined,
       family: fields.family.trim() || undefined,
       model: fields.model.trim() || undefined,
@@ -343,45 +391,42 @@ export function ProductForm({ product }: { product?: Product }) {
 
   return (
     <section>
-      <h1 className="mb-4 text-2xl font-bold tracking-tight text-slate-900">
-        {product ? 'Editar producto' : 'Nuevo producto'}
-      </h1>
+      <div className="mb-4 flex items-center gap-3">
+        <BackButton label="Volver a productos" />
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          {product ? 'Editar producto' : 'Nuevo producto'}
+        </h1>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
+        {product?.id != null && (
+          <p className="inline-block rounded-full bg-slate-100 px-3 py-1 font-mono text-xs font-semibold text-slate-600">
+            Id: #{product.id}
+          </p>
+        )}
         <div>
-          {/* Required marker as a CSS pseudo-element: stays out of the label's
-              accessible name; validation lives in the API and surfaces via the
-              alert below (native `required` would show a browser-locale tooltip). */}
-          <label
+          <FieldLabel
             htmlFor="product-title"
-            className={`${labelClass} after:ml-0.5 after:content-['*'] after:text-red-500`}
-          >
-            Nombre del producto
-          </label>
-          <input
+            label="Nombre del producto"
+            required
+            help="Nombre genérico del producto, ej. Aceite, Leche, Detergente. Si eliges uno existente, sus propiedades se cargan solas."
+          />
+          <Combobox
             id="product-title"
             value={fields.title}
-            onChange={setField('title')}
+            onChange={(value) => setFields((current) => ({ ...current, title: value }))}
+            onPick={handlePickName}
+            options={defTitles}
             placeholder="Leche"
-            className={inputClass}
+            ariaLabel="Nombre del producto"
           />
         </div>
         <div>
-          <label htmlFor="product-brand" className={labelClass}>
-            Marca
-          </label>
-          <input
-            id="product-brand"
-            value={fields.brand}
-            onChange={setField('brand')}
-            placeholder="Lala, Nutri, Alpura…"
-            className={inputClass}
+          <FieldLabel
+            htmlFor="product-model"
+            label="Modelo"
+            help="Presentación o variante, ej. Puro de soya, 100 Entera."
           />
-        </div>
-        <div>
-          <label htmlFor="product-model" className={labelClass}>
-            Modelo
-          </label>
           <input
             id="product-model"
             value={fields.model}
@@ -390,40 +435,90 @@ export function ProductForm({ product }: { product?: Product }) {
             className={inputClass}
           />
         </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <FieldLabel
+              htmlFor="product-brand"
+              label="Marca"
+              help="Marca comercial, ej. Lala, Nutri, Alpura. Puedes escribir una nueva."
+            />
+            <Combobox
+              id="product-brand"
+              value={fields.brand}
+              onChange={(value) => setFields((current) => ({ ...current, brand: value }))}
+              options={brands}
+              placeholder="Lala, Nutri, Alpura…"
+              ariaLabel="Marca"
+            />
+          </div>
+          <div className="flex items-end gap-2">
+            <div className="min-w-0 flex-1">
+              <FieldLabel
+                htmlFor="product-content"
+                label="Contenido"
+                help="Cantidad del empaquetado, ej. 500, 1, 3."
+              />
+              <input
+                id="product-content"
+                value={fields.content}
+                onChange={setField('content')}
+                placeholder="Ej. 500"
+                className={inputClass}
+              />
+            </div>
+            <div className="w-24 shrink-0">
+              <FieldLabel
+                htmlFor="product-unit"
+                label="Unidad"
+                help="Unidad del contenido: L, ml, g, kg, pza o paq."
+              />
+              <select id="product-unit" value={fields.unit} onChange={setField('unit')} className={inputClass}>
+                <option value="">—</option>
+                {UNIT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
         <div>
-          <label htmlFor="product-content" className={labelClass}>
-            Contenido
-          </label>
-          <input
-            id="product-content"
-            value={fields.contentSize}
-            onChange={setField('contentSize')}
-            placeholder="Ej. 1 L, 500 g…"
-            className={inputClass}
+          <FieldLabel
+            htmlFor="product-family"
+            label="Familia"
+            help="Categoría que agrupa variantes, ej. Lácteo, Bebida, Limpiador."
+          />
+          <Combobox
+            id="product-family"
+            value={fields.family}
+            onChange={(value) => setFields((current) => ({ ...current, family: value }))}
+            options={families}
+            placeholder="Buscar familia..."
+            ariaLabel="Familia"
           />
         </div>
-        <ComboField
-          id="product-family"
-          label="Familia"
-          value={fields.family}
-          onChange={setField('family')}
-          placeholder="Buscar familia..."
-          listId="product-families"
-          options={families}
-        />
-        <ComboField
-          id="product-area"
-          label="Área"
-          value={fields.area}
-          onChange={setField('area')}
-          placeholder="Buscar área..."
-          listId="product-areas"
-          options={areas}
-        />
         <div>
-          <label htmlFor="product-description" className={labelClass}>
-            Descripción
-          </label>
+          <FieldLabel
+            htmlFor="product-area"
+            label="Área"
+            help="Categoría de la despensa, ej. Bebidas, Abarrotes, Limpieza. No es el anaquel físico."
+          />
+          <Combobox
+            id="product-area"
+            value={fields.area}
+            onChange={(value) => setFields((current) => ({ ...current, area: value }))}
+            options={areas}
+            placeholder="Buscar área..."
+            ariaLabel="Área"
+          />
+        </div>
+        <div>
+          <FieldLabel
+            htmlFor="product-description"
+            label="Descripción"
+            help="Notas libres sobre el producto."
+          />
           <textarea
             id="product-description"
             value={fields.description}
@@ -435,7 +530,10 @@ export function ProductForm({ product }: { product?: Product }) {
         </div>
 
         <fieldset>
-          <legend className={`${labelClass} mb-2`}>Propiedades personalizadas</legend>
+          <legend className={`${labelClass} mb-2`}>
+            Propiedades personalizadas
+            <FieldHelp label="Propiedades personalizadas" text="Pares propiedad-valor del producto, ej. Sabor: Vainilla. Los nombres conocidos las sugieren solas." />
+          </legend>
           <ul className="space-y-2">
             {customProps.map((prop, index) => (
               <li key={index} className="flex items-end gap-2">
@@ -481,6 +579,7 @@ export function ProductForm({ product }: { product?: Product }) {
           image={image}
           imageUrl={imageUrl}
           onImageChange={handleImageChange}
+          onDropImage={acceptFile}
           onClearImage={() => setImage(undefined)}
           iconKey={iconKey}
           iconTone={iconTone}
@@ -497,12 +596,13 @@ export function ProductForm({ product }: { product?: Product }) {
           >
             Guardar
           </button>
-          <Link
-            to="/products"
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
             className="pressable whitespace-nowrap rounded-xl border border-slate-200 bg-white px-5 py-3 text-center text-sm font-semibold text-slate-600 transition-all hover:bg-slate-50"
           >
             Cancelar
-          </Link>
+          </button>
         </div>
       </form>
     </section>
