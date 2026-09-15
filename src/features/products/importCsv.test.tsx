@@ -24,7 +24,13 @@ const INVALID = [
 ].join('\r\n')
 
 beforeEach(async () => {
-  await Promise.all([db.products.clear(), db.suppliers.clear(), db.carts.clear(), db.movements.clear()])
+  await Promise.all([
+    db.products.clear(),
+    db.productDefs.clear(),
+    db.suppliers.clear(),
+    db.carts.clear(),
+    db.movements.clear(),
+  ])
 })
 
 function renderModal() {
@@ -41,14 +47,15 @@ async function upload(user: ReturnType<typeof userEvent.setup>, text: string) {
 }
 
 describe('parseCatalogCsv', () => {
-  it('parses valid rows into product drafts composing contenido + unidad', () => {
+  it('parses valid rows into product drafts with content and unit split', () => {
     const { rows, errors } = parseCatalogCsv(SAMPLE)
     expect(errors).toEqual([])
     expect(rows).toHaveLength(2)
     expect(rows[0]).toMatchObject({
       title: 'Leche',
       brand: 'Lala',
-      contentSize: '1 L',
+      content: '1',
+      unit: 'L',
       family: 'Lácteo',
       area: 'Refri',
       stock: { current: 6, min: 2, max: 12, location: 'Refri' },
@@ -56,7 +63,8 @@ describe('parseCatalogCsv', () => {
     })
     expect(rows[1]).toMatchObject({
       title: 'Atún',
-      contentSize: '3 pza',
+      content: '3',
+      unit: 'pza',
       stock: { current: 0, min: null, max: null },
     })
   })
@@ -78,7 +86,7 @@ describe('parseCatalogCsv', () => {
     const text = 'Nombre;Marca;Contenido;Unidad\nLeche;Lala;1;L'
     const { rows, errors } = parseCatalogCsv(text)
     expect(errors).toEqual([])
-    expect(rows[0]).toMatchObject({ title: 'Leche', brand: 'Lala', contentSize: '1 L' })
+    expect(rows[0]).toMatchObject({ title: 'Leche', brand: 'Lala', content: '1', unit: 'L' })
   })
 })
 
@@ -93,10 +101,14 @@ describe('ImportCsvModal', () => {
 
     expect(await screen.findByText('Se importaron 2 productos.')).toBeInTheDocument()
     const leche = await db.products.where('title').equals('Leche').first()
-    expect(leche).toMatchObject({ contentSize: '1 L', stock: { current: 6, min: 2, max: 12 } })
+    expect(leche).toMatchObject({ content: '1', unit: 'L', stock: { current: 6, min: 2, max: 12 } })
     expect(leche?.purchase.originalPrice).toBe(2800)
     expect(leche?.purchase.period).toBe('semanal')
     expect(await db.products.where('title').equals('Atún').count()).toBe(1)
+    // The import registers each product name as a def (props stay empty: the
+    // CSV has no props column and must not clobber existing templates).
+    const lecheDef = await db.productDefs.where('title').equals('Leche').first()
+    expect(lecheDef).toMatchObject({ title: 'Leche', props: [] })
   })
 
   it('shows per-row errors and imports nothing when every row is invalid', async () => {

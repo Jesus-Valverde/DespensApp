@@ -66,19 +66,25 @@ Storage identifiers are English; labels below are the exact Spanish UI strings. 
 | Field | Type | Req | UI label | Appears on |
 |---|---|---|---|---|
 | title | string | ✔ | "Nombre" | form, catalog card, detail hero |
-| family | string | — | "Familia" (category, e.g. "Lácteo"; suggestions from existing families) | form (datalist), detail badge, search |
-| brand | string | — | "Marca" | form, card subtitle, detail |
-| model | string | — | "Modelo" (variant, e.g. "100 Entera") | form, detail row "Modelo / Variante" |
+| family | string | — | "Familia" (category, e.g. "Lácteo"; suggestions from existing families) | form (combobox), detail badge, search |
+| brand | string | — | "Marca" (suggestions from existing brands) | form (combobox), card subtitle, detail |
+| model | string | — | "Modelo" (variant, e.g. "100 Entera") | form, card subtitle, detail row "Modelo / Variante" |
 | description | string | — | "Descripción" | form (textarea), detail |
-| contentSize | string | — | "Contenido" (e.g. "1 L, 500 g") | form, card subtitle |
-| area | string | — | "Área" (suggestions from existing areas) | form (datalist), card subtitle, Despensa filters |
-| image | blob | — | VisualPicker tab "Imagen" (downscaled ≤5MB, removable) | form, cards, detail |
+| content | string | — | "Contenido" (pack value, e.g. "500") | form, card subtitle, detail (displayed joined with unit: "500 ml") |
+| unit | string | — | "Unidad" (select; canonical symbols: L, ml, g, kg, pza, paq) | form, card subtitle, detail |
+| area | string | — | "Área" (PANTRY CATEGORY e.g. "Bebidas", NOT the physical spot; suggestions from existing areas) | form (combobox), Despensa filters |
+| image | blob | — | VisualPicker tab "Imagen" (downscaled ≤5MB, removable, tap OR drag & drop) | form, cards, detail |
 | iconKey / iconTone | string | — | VisualPicker tab "Ícono" + "Color de fondo" (mutually exclusive with image) | form, cards, detail |
 | customProps | {key,value}[] | ✔ | "Propiedades personalizadas" | form fieldset, detail modal |
 | stock | ProductStock | ✔ | — | Stock tab |
 | purchase | ProductPurchase | ✔ | — | Compra tab |
 
-Example product: Nombre "Leche", Familia "Lácteo", Marca "Lala", Modelo "100 Entera", Contenido "1 L".
+Product name templates (`productDefs` table, joined by title, no FK): one row per known product
+name holding the custom props suggested when that name is picked in the form. Picking an
+existing name in the form loads its template props automatically; every product save/import
+upserts its name (template props only refresh when the product ships props).
+
+Example product: Nombre "Leche", Familia "Lácteo", Marca "Lala", Modelo "100 Entera", Contenido "1" + Unidad "L" (displayed "1 L").
 
 ### ProductStock (Stock tab)
 | Field | UI label | Notes |
@@ -153,8 +159,8 @@ Below: "Historial de movimientos" card — header row with link "Ver todos ›",
 
 ```text
 Screen "Despensa" with an internal segmented toggle right under the title: two tabs "Stock" and "Catálogo" (remembered selection). Header: title "Despensa", subtitle "Control de despensa e inventario", right side a green pill "{n} Artículos" with a pulsing emerald dot.
-STOCK VIEW (below toggle): search bar ("Buscar en catálogo..."), then area filter chips labeled "Área" (first chip "Todos"; active chip solid blue with white text), then a SECOND chip row labeled "Stock" filtering by stock status: "Todos" (active), "Stock bajo", "Stock normal", "Sin stock". Product rows: thumbnail (image, or pantry icon on its pastel tone, or a soft tinted fallback), title, stock badge pill ("En inventario" emerald / "Bajo mínimo" amber / "Sin stock" red / "Sobre máximo" amber) with the current quantity under it as small text "x{n}". No FAB on this view.
-CATÁLOGO VIEW (below toggle): SAME search bar and SAME area chips as the Stock view. Product cards: same thumbnail, title, gray subtitle "{contenido} • {marca} • {área}", kebab menu linking to edit. This view HAS the gradient "+" FAB (new product).
+STOCK VIEW (below toggle): FIRST the area filter chips labeled "Área" (first chip "Todos"; active chip solid blue with white text), THEN a SECOND chip row labeled "Stock" filtering by stock status: "Todos", "Stock bajo", "Stock normal", "Sin stock" — the SELECTED chip wears its status color ("Stock bajo" amber, "Stock normal" emerald, "Sin stock" red, "Todos" blue), unselected chips stay outline. THEN the search bar ("Buscar en catálogo...") BELOW the filter rows. Product rows: thumbnail (image, or pantry icon on its pastel tone, or a soft tinted fallback), title, stock badge pill ("En inventario" emerald / "Bajo mínimo" amber / "Sin stock" red / "Sobre máximo" amber) with the current quantity under it as small text "x{n}". No FAB on this view.
+CATÁLOGO VIEW (below toggle): area chips (same as Stock view) then search bar. Product cards: same thumbnail, bold title line "#{id} - {título}" and gray subtitle "{modelo} - {contenido} {unidad} - {marca}" (empty parts omitted); right side an EYE button linking to the product DETAIL (edit lives inside detail). This view HAS the gradient "+" FAB (new product).
 PRODUCT ICON CONTINUITY: each product keeps the SAME icon and pastel tone across all windows (Stock, Catálogo, detail, carts). Never vary colors per view.
 CATÁLOGO ENTRY: below the search bar, a blue text link "Cómo llenar la plantilla de importación" opens the CSV tutorial modal (screen block 17).
 Empty state (Stock, no products): centered white card with floating gradient illustration tile, title "Tu despensa está vacía", body "Sin productos todavía. Toca el botón + para agregar el primero.", soft-blue button "Añadir a Despensa". Filter with no matches: "Sin productos en el área “{area}”.". Catálogo without results: "Sin resultados para “{query}”."
@@ -167,17 +173,16 @@ Removed as a standalone screen (2026-09-12): the catalog is the "Catálogo" view
 ### 4. Producto — form (new/edit)
 
 ```text
-Full-page form. Title bar with circular back-arrow top-left; title "Nuevo producto" (or "Editar producto").
-White card with fields in this exact order (labels bold small, Spanish) — identity first, classification last:
-1 "Nombre del producto" — text, required (placeholder "Leche" — the generic name; marca/modelo distinguish the variant)
-2 "Marca" — text, placeholder "Lala, Nutri, Alpura…"
-3 "Modelo" — text, placeholder "Descripción o presentación…"
-4 "Contenido" (number, placeholder "1") + "Unidad de medida" (select showing "symbol - name": "L - Litros", "ml - Mililitros", "g - Gramos", "kg - Kilogramos", "pza - Piezas", "paq - Paquete") — side by side, quantity and unit are SEPARATE fields
-5 "Familia" — text with suggestion dropdown, placeholder "Buscar familia..."
-6 "Área" — text with suggestion dropdown, placeholder "Buscar área..."
-7 "Descripción" — textarea, placeholder "Descripción del producto…"
-Section "Propiedades personalizadas": repeatable rows of two inputs "Propiedad" and "Valor" with a "Quitar" button; add button "Agregar propiedad".
-Section "Visual del producto": segmented control "Tipo de visual" with "Imagen" / "Ícono". Imagen: dashed dropzone "Toca para agregar imagen" (or "Cambiar imagen"), subtext "PNG, JPG hasta 5MB o selecciona un ícono", button "Quitar imagen". Ícono: search "Buscar ícono... leche, fruta, pan, limpieza", 5-column grid showing the FULL 25-category icon set (5 rows, selected cell gets blue ring), then "Color de fondo" with 18 round swatches in 2 rows of 9, shown in their VIVID representative colors (not pastel). Choosing one clears the other.
+Full-page form. Title bar: circular back-arrow top-left next to the title "Nuevo producto" (or "Editar producto").
+White card. EDIT shows a mono chip "Id: #{id}" at the top. Fields in this exact order (labels bold small, Spanish; each label has a small "?" help marker with a fill-in tip) — identity first, classification last:
+1 "Nombre del producto" — styled combobox (custom dropdown, NOT native datalist) listing known product names; picking an existing one loads its template props; required (placeholder "Leche" — the generic name; marca/modelo distinguish the variant)
+2 "Modelo" — text, placeholder "Descripción o presentación…"
+3 "Marca" (combobox with existing brands, free text allowed, placeholder "Lala, Nutri, Alpura…") + "Contenido" (text, placeholder "Ej. 500") + "Unidad" (select showing "symbol - name": "L - Litros", "ml - Mililitros", "g - Gramos", "kg - Kilogramos", "pza - Piezas", "paq - Paquete") — one row: marca left half, contenido + unidad right half; quantity and unit are SEPARATE fields
+4 "Familia" — combobox, placeholder "Buscar familia..."
+5 "Área" — combobox, placeholder "Buscar área..." (help clarifies: pantry category like "Bebidas", NOT the physical spot)
+6 "Descripción" — textarea, placeholder "Descripción del producto…"
+Section "Propiedades personalizadas": repeatable rows of two inputs "Propiedad" and "Valor" with a "Quitar" button; add button "Agregar propiedad". Choosing an existing Nombre loads its saved props here automatically.
+Section "Visual del producto": segmented control "Tipo de visual" with "Imagen" / "Ícono". Imagen: dashed dropzone "Toca o arrastra para agregar imagen" (or "Cambiar imagen"), subtext "PNG, JPG hasta 5MB o selecciona un ícono", button "Quitar imagen" — tap AND drag & drop both accepted. Ícono: search "Buscar ícono... leche, fruta, pan, limpieza", 5-column grid showing the FULL 25-category icon set (5 rows, selected cell gets blue ring), then "Color de fondo" with 18 round swatches in 2 rows of 9, shown in their VIVID representative colors (not pastel). Choosing one clears the other.
 Footer buttons: filled blue "Guardar" + outline "Cancelar". Validation text: "El nombre del producto es obligatorio".
 ```
 
@@ -296,12 +301,12 @@ Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último res
 | Despensa | ✅ Stitched — 🆕 2026-09-12: now hosts Catalog via "Stock | Catálogo" toggle |
 | Productos catalog | ✅ Stitched — relocated as Despensa's Catálogo view |
 | Compras module | 🆕 2026-09-12: hosts Carritos + Listas + Proveedores via three-way toggle (blocks 10, 13, 14 unchanged) |
-| Product form + VisualPicker | ✅ Stitched |
+| Product form + VisualPicker | ✅ Stitched — 🆕 2026-09-14: id chip, name defs + auto props, content/unit split, comboboxes, help tips, drag & drop image |
 | Product detail + tabs + all modals (props, delete, levels, movement, history, suppliers, vincular, lists, add-to-cart) | ✅ Stitched |
 | Carritos (Compras view: status badge, empty state, own FAB) | ✅ Stitched |
 | Carrito detail | ⬜ legacy — next restyle target |
 | Cart create modal | ✅ Stitched (in-screen) |
 | Listas / List detail / Create list modal | ⬜ legacy — next restyle targets |
 | Proveedores screen | ⬜ legacy — next restyle target |
-| Back-arrow title bars on forms/details | 🆕 NEW RULE from this guide — implement when adapting each screen |
+| Back-arrow title bars on forms/details | ✅ 2026-09-14 implemented on product form + detail (remaining screens adopt when adapted) |
 | Header bell + notifications panel | 🆕 designed in guide — feature pending (in-app only, no OS push) |
