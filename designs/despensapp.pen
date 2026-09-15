@@ -2024,55 +2024,6 @@
             },
             {
               "type": "frame",
-              "id": "ytzMa",
-              "name": "Search",
-              "width": "fill_container",
-              "fill": "$--card",
-              "cornerRadius": "$--radius-m",
-              "stroke": "$--border",
-              "strokeWidth": 1,
-              "strokeAlignment": "inner",
-              "effect": {
-                "type": "shadow",
-                "shadowType": "outer",
-                "color": "#0f172a0d",
-                "offset": {
-                  "x": 0,
-                  "y": 1
-                },
-                "blur": 3
-              },
-              "gap": 8,
-              "padding": [
-                10,
-                12
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "eQCMp",
-                  "name": "Search Icon",
-                  "width": 18,
-                  "height": 18,
-                  "icon": "search",
-                  "library": "lucide",
-                  "fill": "$--faint"
-                },
-                {
-                  "type": "text",
-                  "id": "sa9au",
-                  "name": "Placeholder",
-                  "fill": "$--faint",
-                  "content": "Buscar en catálogo...",
-                  "fontFamily": "$--font-primary",
-                  "fontSize": 14,
-                  "fontWeight": "500"
-                }
-              ]
-            },
-            {
-              "type": "frame",
               "id": "F1vO6",
               "name": "Area Filter",
               "width": "fill_container",
@@ -2203,6 +2154,55 @@
                       }
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ytzMa",
+              "name": "Search",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": "$--radius-m",
+              "stroke": "$--border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#0f172a0d",
+                "offset": {
+                  "x": 0,
+                  "y": 1
+                },
+                "blur": 3
+              },
+              "gap": 8,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "eQCMp",
+                  "name": "Search Icon",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "search",
+                  "library": "lucide",
+                  "fill": "$--faint"
+                },
+                {
+                  "type": "text",
+                  "id": "sa9au",
+                  "name": "Placeholder",
+                  "fill": "$--faint",
+                  "content": "Buscar en catálogo...",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 14,
+                  "fontWeight": "500"
                 }
               ]
             },
@@ -2555,55 +2555,6 @@
             },
             {
               "type": "frame",
-              "id": "XpgRX",
-              "name": "Search",
-              "width": "fill_container",
-              "fill": "$--card",
-              "cornerRadius": "$--radius-m",
-              "stroke": "$--border",
-              "strokeWidth": 1,
-              "strokeAlignment": "inner",
-              "effect": {
-                "type": "shadow",
-                "shadowType": "outer",
-                "color": "#0f172a0d",
-                "offset": {
-                  "x": 0,
-                  "y": 1
-                },
-                "blur": 3
-              },
-              "gap": 8,
-              "padding": [
-                10,
-                12
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "UegPH",
-                  "name": "Search Icon",
-                  "width": 18,
-                  "height": 18,
-                  "icon": "search",
-                  "library": "lucide",
-                  "fill": "$--faint"
-                },
-                {
-                  "type": "text",
-                  "id": "uZlz3",
-                  "name": "Placeholder",
-                  "fill": "$--faint",
-                  "content": "Buscar en catálogo...",
-                  "fontFamily": "$--font-primary",
-                  "fontSize": 14,
-                  "fontWeight": "500"
-                }
-              ]
-            },
-            {
-              "type": "frame",
               "id": "ye8gf",
               "name": "Area Filter",
               "width": "fill_container",
@@ -2665,6 +2616,55 @@
               ]
             },
             {
+              "type": "frame",
+              "id": "XpgRX",
+              "name": "Search",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": "$--radius-m",
+              "stroke": "$--border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#0f172a0d",
+                "offset": {
+                  "x": 0,
+                  "y": 1
+                },
+                "blur": 3
+              },
+              "gap": 8,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "UegPH",
+                  "name": "Search Icon",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "search",
+                  "library": "lucide",
+                  "fill": "$--faint"
+                },
+                {
+                  "type": "text",
+                  "id": "uZlz3",
+                  "name": "Placeholder",
+                  "fill": "$--faint",
+                  "content": "Buscar en catálogo...",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
               "id": "mRuFr",
               "type": "ref",
               "ref": "cmpListRow",
@@ -2676,15 +2676,15 @@
                   "fill": "$--primary"
                 },
                 "cmpLR_Title": {
-                  "content": "Leche"
+                  "content": "#1 - Leche"
                 },
                 "cmpLR_Sub": {
-                  "content": "1 L • Lala • Refri"
+                  "content": "100 Entera - 1 L - Lala"
                 },
                 "cmpLR_Badge": {
                   "type": "frame",
                   "id": "TaYVS",
-                  "name": "Kebab",
+                  "name": "Eye",
                   "width": 32,
                   "height": 32,
                   "justifyContent": "center",
@@ -2693,10 +2693,10 @@
                     {
                       "type": "icon",
                       "id": "q3hMwh",
-                      "name": "Dots",
+                      "name": "Eye Icon",
                       "width": 18,
                       "height": 18,
-                      "icon": "ellipsis-vertical",
+                      "icon": "eye",
                       "library": "lucide",
                       "fill": "$--muted-foreground"
                     }
@@ -2716,15 +2716,15 @@
                   "fill": "$--success"
                 },
                 "cmpLR_Title": {
-                  "content": "Frijol negro"
+                  "content": "#2 - Frijol negro"
                 },
                 "cmpLR_Sub": {
-                  "content": "1 kg • Alacena"
+                  "content": "Volteado - 500 g - Isadora"
                 },
                 "cmpLR_Badge": {
                   "type": "frame",
                   "id": "xvoNu",
-                  "name": "Kebab",
+                  "name": "Eye",
                   "width": 32,
                   "height": 32,
                   "justifyContent": "center",
@@ -2733,10 +2733,10 @@
                     {
                       "type": "icon",
                       "id": "y3I8S",
-                      "name": "Dots",
+                      "name": "Eye Icon",
                       "width": 18,
                       "height": 18,
-                      "icon": "ellipsis-vertical",
+                      "icon": "eye",
                       "library": "lucide",
                       "fill": "$--muted-foreground"
                     }
@@ -2756,15 +2756,15 @@
                   "fill": "$--destructive"
                 },
                 "cmpLR_Title": {
-                  "content": "Detergente"
+                  "content": "#3 - Detergente"
                 },
                 "cmpLR_Sub": {
-                  "content": "3.5 L • Lavandería"
+                  "content": "Polvo - 1 kg - Ace"
                 },
                 "cmpLR_Badge": {
                   "type": "frame",
                   "id": "kgHyT",
-                  "name": "Kebab",
+                  "name": "Eye",
                   "width": 32,
                   "height": 32,
                   "justifyContent": "center",
@@ -2773,10 +2773,10 @@
                     {
                       "type": "icon",
                       "id": "fSvaV",
-                      "name": "Dots",
+                      "name": "Eye Icon",
                       "width": 18,
                       "height": 18,
-                      "icon": "ellipsis-vertical",
+                      "icon": "eye",
                       "library": "lucide",
                       "fill": "$--muted-foreground"
                     }
@@ -2796,15 +2796,15 @@
                   "fill": "$--warning"
                 },
                 "cmpLR_Title": {
-                  "content": "Atún"
+                  "content": "#4 - Atún"
                 },
                 "cmpLR_Sub": {
-                  "content": "3 pack • Alacena"
+                  "content": "En agua - 140 g - Dolores"
                 },
                 "cmpLR_Badge": {
                   "type": "frame",
                   "id": "DrnHU",
-                  "name": "Kebab",
+                  "name": "Eye",
                   "width": 32,
                   "height": 32,
                   "justifyContent": "center",
@@ -2813,10 +2813,10 @@
                     {
                       "type": "icon",
                       "id": "kwNFh",
-                      "name": "Dots",
+                      "name": "Eye Icon",
                       "width": 18,
                       "height": 18,
-                      "icon": "ellipsis-vertical",
+                      "icon": "eye",
                       "library": "lucide",
                       "fill": "$--muted-foreground"
                     }
@@ -2836,15 +2836,15 @@
                   "fill": "$--warning"
                 },
                 "cmpLR_Title": {
-                  "content": "Café molido"
+                  "content": "#5 - Café molido"
                 },
                 "cmpLR_Sub": {
-                  "content": "500 g • Alacena"
+                  "content": "Veracruz - 230 g - Café Oro"
                 },
                 "cmpLR_Badge": {
                   "type": "frame",
                   "id": "vKfMs",
-                  "name": "Kebab",
+                  "name": "Eye",
                   "width": 32,
                   "height": 32,
                   "justifyContent": "center",
@@ -2853,10 +2853,10 @@
                     {
                       "type": "icon",
                       "id": "DN6bg",
-                      "name": "Dots",
+                      "name": "Eye Icon",
                       "width": 18,
                       "height": 18,
-                      "icon": "ellipsis-vertical",
+                      "icon": "eye",
                       "library": "lucide",
                       "fill": "$--muted-foreground"
                     }
@@ -3002,55 +3002,6 @@
             },
             {
               "type": "frame",
-              "id": "NBvts",
-              "name": "Search",
-              "width": "fill_container",
-              "fill": "$--card",
-              "cornerRadius": "$--radius-m",
-              "stroke": "$--border",
-              "strokeWidth": 1,
-              "strokeAlignment": "inner",
-              "effect": {
-                "type": "shadow",
-                "shadowType": "outer",
-                "color": "#0f172a0d",
-                "offset": {
-                  "x": 0,
-                  "y": 1
-                },
-                "blur": 3
-              },
-              "gap": 8,
-              "padding": [
-                10,
-                12
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "XypMD",
-                  "name": "Search Icon",
-                  "width": 18,
-                  "height": 18,
-                  "icon": "search",
-                  "library": "lucide",
-                  "fill": "$--faint"
-                },
-                {
-                  "type": "text",
-                  "id": "VPlFE",
-                  "name": "Value",
-                  "fill": "$--text-strong",
-                  "content": "zzz",
-                  "fontFamily": "$--font-primary",
-                  "fontSize": 14,
-                  "fontWeight": "500"
-                }
-              ]
-            },
-            {
-              "type": "frame",
               "id": "c5R32",
               "name": "Area Filter",
               "width": "fill_container",
@@ -3108,6 +3059,55 @@
                       }
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NBvts",
+              "name": "Search",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": "$--radius-m",
+              "stroke": "$--border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#0f172a0d",
+                "offset": {
+                  "x": 0,
+                  "y": 1
+                },
+                "blur": 3
+              },
+              "gap": 8,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "XypMD",
+                  "name": "Search Icon",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "search",
+                  "library": "lucide",
+                  "fill": "$--faint"
+                },
+                {
+                  "type": "text",
+                  "id": "VPlFE",
+                  "name": "Value",
+                  "fill": "$--text-strong",
+                  "content": "zzz",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 14,
+                  "fontWeight": "500"
                 }
               ]
             },
@@ -3283,55 +3283,6 @@
             },
             {
               "type": "frame",
-              "id": "AeFML",
-              "name": "Search",
-              "width": "fill_container",
-              "fill": "$--card",
-              "cornerRadius": "$--radius-m",
-              "stroke": "$--border",
-              "strokeWidth": 1,
-              "strokeAlignment": "inner",
-              "effect": {
-                "type": "shadow",
-                "shadowType": "outer",
-                "color": "#0f172a0d",
-                "offset": {
-                  "x": 0,
-                  "y": 1
-                },
-                "blur": 3
-              },
-              "gap": 8,
-              "padding": [
-                10,
-                12
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "icon",
-                  "id": "iDikj",
-                  "name": "Search Icon",
-                  "width": 18,
-                  "height": 18,
-                  "icon": "search",
-                  "library": "lucide",
-                  "fill": "$--faint"
-                },
-                {
-                  "type": "text",
-                  "id": "rqsrP",
-                  "name": "Placeholder",
-                  "fill": "$--faint",
-                  "content": "Buscar en catálogo...",
-                  "fontFamily": "$--font-primary",
-                  "fontSize": 14,
-                  "fontWeight": "500"
-                }
-              ]
-            },
-            {
-              "type": "frame",
               "id": "yWsql",
               "name": "Area Filter",
               "width": "fill_container",
@@ -3389,6 +3340,181 @@
                       }
                     }
                   ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "sf5xxlw",
+              "name": "Status Filter",
+              "layout": "vertical",
+              "width": "fill_container",
+              "gap": 6,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "zXd8b",
+                  "name": "Filter Label",
+                  "fill": "$--muted-foreground",
+                  "content": "Stock",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 11,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "scpc4sl",
+                  "name": "Status Chips",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Chip/Inactive",
+                      "fill": "$--card",
+                      "cornerRadius": "$--radius-pill",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "padding": [
+                        6,
+                        14
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cmpChipInactiveLabel",
+                          "name": "Label",
+                          "fill": "$--muted-foreground",
+                          "content": "Todos",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Chip Stock bajo (activa)",
+                      "fill": "#f59e0b",
+                      "cornerRadius": "$--radius-pill",
+                      "padding": [
+                        6,
+                        14
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cmpChipActiveLabel",
+                          "name": "Label",
+                          "fill": "#ffffff",
+                          "content": "Stock bajo",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Chip/Inactive",
+                      "fill": "$--card",
+                      "cornerRadius": "$--radius-pill",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "padding": [
+                        6,
+                        14
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cmpChipInactiveLabel",
+                          "name": "Label",
+                          "fill": "$--muted-foreground",
+                          "content": "Stock normal",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Chip/Inactive",
+                      "fill": "$--card",
+                      "cornerRadius": "$--radius-pill",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "strokeAlignment": "inner",
+                      "padding": [
+                        6,
+                        14
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cmpChipInactiveLabel",
+                          "name": "Label",
+                          "fill": "$--muted-foreground",
+                          "content": "Sin stock",
+                          "fontFamily": "$--font-primary",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AeFML",
+              "name": "Search",
+              "width": "fill_container",
+              "fill": "$--card",
+              "cornerRadius": "$--radius-m",
+              "stroke": "$--border",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#0f172a0d",
+                "offset": {
+                  "x": 0,
+                  "y": 1
+                },
+                "blur": 3
+              },
+              "gap": 8,
+              "padding": [
+                10,
+                12
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon",
+                  "id": "iDikj",
+                  "name": "Search Icon",
+                  "width": 18,
+                  "height": 18,
+                  "icon": "search",
+                  "library": "lucide",
+                  "fill": "$--faint"
+                },
+                {
+                  "type": "text",
+                  "id": "rqsrP",
+                  "name": "Placeholder",
+                  "fill": "$--faint",
+                  "content": "Buscar en catálogo...",
+                  "fontFamily": "$--font-primary",
+                  "fontSize": 14,
+                  "fontWeight": "500"
                 }
               ]
             },
@@ -3518,131 +3644,683 @@
               "padding": 16,
               "children": [
                 {
-                  "id": "f7G7W",
-                  "type": "ref",
-                  "ref": "cmpInput",
-                  "name": "Field Nombre del producto",
-                  "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Nombre del producto"
-                    },
-                    "cmpInputPh": {
-                      "content": "Leche"
-                    }
-                  }
-                },
-                {
-                  "id": "Qnn4p",
-                  "type": "ref",
-                  "ref": "cmpInput",
-                  "name": "Field Marca",
-                  "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Marca"
-                    },
-                    "cmpInputPh": {
-                      "content": "Lala, Nutri, Alpura…"
-                    }
-                  }
-                },
-                {
-                  "id": "DN2hE",
-                  "type": "ref",
-                  "ref": "cmpInput",
-                  "name": "Field Modelo",
-                  "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Modelo"
-                    },
-                    "cmpInputPh": {
-                      "content": "Descripción o presentación…"
-                    }
-                  }
-                },
-                {
                   "type": "frame",
-                  "id": "e9112",
-                  "name": "Contenido Row",
+                  "id": "fld6lq4i",
+                  "name": "Field Nombre del producto",
+                  "layout": "vertical",
+                  "gap": 6,
                   "width": "fill_container",
-                  "gap": 8,
                   "children": [
                     {
-                      "id": "YDFZF",
-                      "type": "ref",
-                      "ref": "cmpInput",
-                      "name": "Field Contenido",
-                      "width": "fill_container",
-                      "descendants": {
-                        "cmpInputLabel": {
-                          "content": "Contenido"
+                      "type": "frame",
+                      "id": "lrlxb7k",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t9240v",
+                          "content": "Nombre del producto",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
                         },
-                        "cmpInputPh": {
-                          "content": "1"
+                        {
+                          "type": "frame",
+                          "id": "hlpmeyel",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "twc03a",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
                         }
-                      }
+                      ]
                     },
                     {
-                      "id": "mnbN4",
-                      "type": "ref",
-                      "ref": "cmpSelect",
-                      "name": "Field Unidad",
+                      "type": "frame",
+                      "id": "boxv27tt",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
                       "width": "fill_container",
-                      "descendants": {
-                        "cmpSelectLabel": {
-                          "content": "Unidad de medida"
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tljm7p",
+                          "content": "Leche",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "width": "fill_container"
                         },
-                        "cmpSelectValue": {
-                          "content": "L - Litros",
-                          "fill": "$--text-strong"
+                        {
+                          "type": "icon",
+                          "id": "icnwb8x",
+                          "name": "Chevron",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "chevron-down",
+                          "library": "lucide",
+                          "fill": "$--faint"
                         }
-                      }
+                      ],
+                      "justifyContent": "space-between"
                     }
                   ]
                 },
                 {
-                  "id": "CUKnr",
-                  "type": "ref",
-                  "ref": "cmpInput",
+                  "type": "frame",
+                  "id": "fldzjs3q",
+                  "name": "Field Modelo",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lrymm2q",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t0fjw5",
+                          "content": "Modelo",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlppuqjx",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tuzcdm",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "box407qo",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
+                      "width": "fill_container",
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "to1l7b",
+                          "content": "Descripción o presentación…",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rowglekg",
+                  "name": "Datos Row",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "fld2y33f",
+                      "name": "Field Marca",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "width": 140,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "lrfl2qk",
+                          "name": "Label Row",
+                          "gap": 4,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "td8tm7",
+                              "content": "Marca",
+                              "fill": "$--text-strong",
+                              "fontSize": 13,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "hlp8girj",
+                              "name": "Help",
+                              "width": 14,
+                              "height": 14,
+                              "fill": "$--card",
+                              "stroke": "$--border",
+                              "strokeWidth": 1,
+                              "cornerRadius": "$--radius-pill",
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "tzpfbg",
+                                  "content": "?",
+                                  "fill": "$--muted-foreground",
+                                  "fontSize": 9,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "boxfqjoh",
+                          "name": "Box",
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-m",
+                          "width": "fill_container",
+                          "padding": [
+                            10,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tk9uwr",
+                              "content": "Lala, Nutri, Alpura…",
+                              "fill": "$--faint",
+                              "fontSize": 14,
+                              "fontWeight": "500",
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "icbsbfd",
+                              "name": "Chevron",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "chevron-down",
+                              "library": "lucide",
+                              "fill": "$--faint"
+                            }
+                          ],
+                          "justifyContent": "space-between"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "cunwape",
+                      "name": "Contenido Unidad",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "fld0s8qz",
+                          "name": "Field Contenido",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "lrvi9g8",
+                              "name": "Label Row",
+                              "gap": 4,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "txpz9x",
+                                  "content": "Contenido",
+                                  "fill": "$--text-strong",
+                                  "fontSize": 13,
+                                  "fontWeight": "600"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "hlpoqh7r",
+                                  "name": "Help",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$--card",
+                                  "stroke": "$--border",
+                                  "strokeWidth": 1,
+                                  "cornerRadius": "$--radius-pill",
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "twgo9t",
+                                      "content": "?",
+                                      "fill": "$--muted-foreground",
+                                      "fontSize": 9,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "box4kmq4",
+                              "name": "Box",
+                              "fill": "$--card",
+                              "stroke": "$--border",
+                              "strokeWidth": 1,
+                              "cornerRadius": "$--radius-m",
+                              "width": "fill_container",
+                              "padding": [
+                                10,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "to6943",
+                                  "content": "Ej. 500",
+                                  "fill": "$--faint",
+                                  "fontSize": 14,
+                                  "fontWeight": "500"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "fldl63oe",
+                          "name": "Field Unidad",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "width": 108,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "lrpu625",
+                              "name": "Label Row",
+                              "gap": 4,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "tnesb1",
+                                  "content": "Unidad",
+                                  "fill": "$--text-strong",
+                                  "fontSize": 13,
+                                  "fontWeight": "600"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "hlpmaemm",
+                                  "name": "Help",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$--card",
+                                  "stroke": "$--border",
+                                  "strokeWidth": 1,
+                                  "cornerRadius": "$--radius-pill",
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "tyenoc",
+                                      "content": "?",
+                                      "fill": "$--muted-foreground",
+                                      "fontSize": 9,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "box8hbbs",
+                              "name": "Box",
+                              "fill": "$--card",
+                              "stroke": "$--border",
+                              "strokeWidth": 1,
+                              "cornerRadius": "$--radius-m",
+                              "width": "fill_container",
+                              "padding": [
+                                10,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "t2ywyn",
+                                  "content": "—",
+                                  "fill": "$--faint",
+                                  "fontSize": 14,
+                                  "fontWeight": "500",
+                                  "width": "fill_container"
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "icn0m74",
+                                  "name": "Chevron",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "chevron-down",
+                                  "library": "lucide",
+                                  "fill": "$--faint"
+                                }
+                              ],
+                              "justifyContent": "space-between"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "fld7e4dw",
                   "name": "Field Familia",
+                  "layout": "vertical",
+                  "gap": 6,
                   "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Familia"
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lrkr3h5",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tcw2bq",
+                          "content": "Familia",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlpxse02",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tc1ou4",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
                     },
-                    "cmpInputPh": {
-                      "content": "Buscar familia..."
+                    {
+                      "type": "frame",
+                      "id": "box0o4nc",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
+                      "width": "fill_container",
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tm4kxv",
+                          "content": "Buscar familia...",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "width": "fill_container"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "ic51422",
+                          "name": "Chevron",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "chevron-down",
+                          "library": "lucide",
+                          "fill": "$--faint"
+                        }
+                      ],
+                      "justifyContent": "space-between"
                     }
-                  }
+                  ]
                 },
                 {
-                  "id": "bJWEf",
-                  "type": "ref",
-                  "ref": "cmpInput",
+                  "type": "frame",
+                  "id": "fld9z4r4",
                   "name": "Field Área",
+                  "layout": "vertical",
+                  "gap": 6,
                   "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Área"
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lry9wu6",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tj9dg6",
+                          "content": "Área",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlpbf1po",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tykqvi",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
                     },
-                    "cmpInputPh": {
-                      "content": "Buscar área..."
+                    {
+                      "type": "frame",
+                      "id": "boxzru6c",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
+                      "width": "fill_container",
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tnjztc",
+                          "content": "Buscar área...",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "width": "fill_container"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "ic0s92r",
+                          "name": "Chevron",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "chevron-down",
+                          "library": "lucide",
+                          "fill": "$--faint"
+                        }
+                      ],
+                      "justifyContent": "space-between"
                     }
-                  }
+                  ]
                 },
                 {
-                  "id": "e9odb",
-                  "type": "ref",
-                  "ref": "cmpTextarea",
+                  "type": "frame",
+                  "id": "fld1ih7y",
                   "name": "Field Descripción",
+                  "layout": "vertical",
+                  "gap": 6,
                   "width": "fill_container",
-                  "descendants": {
-                    "cmpTextareaLabel": {
-                      "content": "Descripción"
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lr6ylcg",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tnhzv5",
+                          "content": "Descripción",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlpg6jr3",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tmo0ll",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "boxxzjw0",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
+                      "width": "fill_container",
+                      "height": 64,
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "start",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "thbyho",
+                          "content": "Descripción del producto…",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
                     }
-                  }
+                  ]
                 },
                 {
                   "type": "frame",
@@ -3653,14 +4331,44 @@
                   "gap": 8,
                   "children": [
                     {
-                      "type": "text",
-                      "id": "PvhwL",
-                      "name": "Legend",
-                      "fill": "$--text-strong",
-                      "content": "Propiedades personalizadas",
-                      "fontFamily": "$--font-primary",
-                      "fontSize": 13,
-                      "fontWeight": "700"
+                      "type": "frame",
+                      "id": "lghbjaw",
+                      "name": "Legend Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tgmf3f",
+                          "content": "Propiedades personalizadas",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlp7l67c",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tm78xn",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
                     },
                     {
                       "type": "frame",
@@ -3909,7 +4617,7 @@
                           "id": "k5CYWK",
                           "name": "T",
                           "fill": "$--faint",
-                          "content": "Toca para agregar imagen",
+                          "content": "Toca o arrastra para agregar imagen",
                           "fontFamily": "$--font-primary",
                           "fontSize": 12,
                           "fontWeight": "500"
@@ -5785,140 +6493,729 @@
               "padding": 16,
               "children": [
                 {
-                  "id": "CXBk6",
-                  "type": "ref",
-                  "ref": "cmpInput",
-                  "name": "Field Nombre del producto",
-                  "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Nombre del producto"
-                    },
-                    "cmpInputPh": {
-                      "content": "Leche",
-                      "fill": "$--text-strong"
-                    }
-                  }
-                },
-                {
-                  "id": "u38nI",
-                  "type": "ref",
-                  "ref": "cmpInput",
-                  "name": "Field Marca",
-                  "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Marca"
-                    },
-                    "cmpInputPh": {
-                      "content": "Lala",
-                      "fill": "$--text-strong"
-                    }
-                  }
-                },
-                {
-                  "id": "vHPLB",
-                  "type": "ref",
-                  "ref": "cmpInput",
-                  "name": "Field Modelo",
-                  "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Modelo"
-                    },
-                    "cmpInputPh": {
-                      "content": "100 Entera",
-                      "fill": "$--text-strong"
-                    }
-                  }
-                },
-                {
                   "type": "frame",
-                  "id": "NGTte",
-                  "name": "Contenido Row",
-                  "width": "fill_container",
-                  "gap": 8,
+                  "id": "chiptr2to",
+                  "name": "Id Chip",
+                  "fill": "#f1f5f9",
+                  "cornerRadius": "$--radius-pill",
+                  "padding": [
+                    4,
+                    10
+                  ],
                   "children": [
                     {
-                      "id": "q9SeiT",
-                      "type": "ref",
-                      "ref": "cmpInput",
-                      "name": "Field Contenido",
-                      "width": "fill_container",
-                      "descendants": {
-                        "cmpInputLabel": {
-                          "content": "Contenido"
-                        },
-                        "cmpInputPh": {
-                          "content": "1"
-                        }
-                      }
-                    },
-                    {
-                      "id": "mj1mH",
-                      "type": "ref",
-                      "ref": "cmpSelect",
-                      "name": "Field Unidad",
-                      "width": "fill_container",
-                      "descendants": {
-                        "cmpSelectLabel": {
-                          "content": "Unidad de medida"
-                        },
-                        "cmpSelectValue": {
-                          "content": "L - Litros",
-                          "fill": "$--text-strong"
-                        }
-                      }
+                      "type": "text",
+                      "id": "tshxet",
+                      "content": "Id: #1",
+                      "fill": "$--muted-foreground",
+                      "fontSize": 12,
+                      "fontWeight": "600"
                     }
                   ]
                 },
                 {
-                  "id": "V65Ub",
-                  "type": "ref",
-                  "ref": "cmpInput",
+                  "type": "frame",
+                  "id": "fldgpvc5",
+                  "name": "Field Nombre del producto",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lruepei",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tltp64",
+                          "content": "Nombre del producto",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlp3vhor",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ty3ryd",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "boxr956c",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
+                      "width": "fill_container",
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tkiog2",
+                          "content": "Leche",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "width": "fill_container"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "ic36pf4",
+                          "name": "Chevron",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "chevron-down",
+                          "library": "lucide",
+                          "fill": "$--faint"
+                        }
+                      ],
+                      "justifyContent": "space-between"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "fldigwjt",
+                  "name": "Field Modelo",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "width": "fill_container",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lro2jkb",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t8rtr9",
+                          "content": "Modelo",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlp940em",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "t2pp03",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "boxeja0e",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
+                      "width": "fill_container",
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "thghz2",
+                          "content": "100 Entera",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rowe5cvs",
+                  "name": "Datos Row",
+                  "width": "fill_container",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "fldxlnx0",
+                      "name": "Field Marca",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "width": 140,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "lr2pztx",
+                          "name": "Label Row",
+                          "gap": 4,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tzqvxa",
+                              "content": "Marca",
+                              "fill": "$--text-strong",
+                              "fontSize": 13,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "hlp3zn4y",
+                              "name": "Help",
+                              "width": 14,
+                              "height": 14,
+                              "fill": "$--card",
+                              "stroke": "$--border",
+                              "strokeWidth": 1,
+                              "cornerRadius": "$--radius-pill",
+                              "justifyContent": "center",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "tlxu48",
+                                  "content": "?",
+                                  "fill": "$--muted-foreground",
+                                  "fontSize": 9,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "boxq9an4",
+                          "name": "Box",
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-m",
+                          "width": "fill_container",
+                          "padding": [
+                            10,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "te677p",
+                              "content": "Lala",
+                              "fill": "$--faint",
+                              "fontSize": 14,
+                              "fontWeight": "500",
+                              "width": "fill_container"
+                            },
+                            {
+                              "type": "icon",
+                              "id": "iclwpox",
+                              "name": "Chevron",
+                              "width": 16,
+                              "height": 16,
+                              "icon": "chevron-down",
+                              "library": "lucide",
+                              "fill": "$--faint"
+                            }
+                          ],
+                          "justifyContent": "space-between"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "cub10sh",
+                      "name": "Contenido Unidad",
+                      "width": "fill_container",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "fld09qa8",
+                          "name": "Field Contenido",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "width": "fill_container",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "lr68s5u",
+                              "name": "Label Row",
+                              "gap": 4,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "t8wb6t",
+                                  "content": "Contenido",
+                                  "fill": "$--text-strong",
+                                  "fontSize": 13,
+                                  "fontWeight": "600"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "hlprmotx",
+                                  "name": "Help",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$--card",
+                                  "stroke": "$--border",
+                                  "strokeWidth": 1,
+                                  "cornerRadius": "$--radius-pill",
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "ttv6r2",
+                                      "content": "?",
+                                      "fill": "$--muted-foreground",
+                                      "fontSize": 9,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "boxc07zw",
+                              "name": "Box",
+                              "fill": "$--card",
+                              "stroke": "$--border",
+                              "strokeWidth": 1,
+                              "cornerRadius": "$--radius-m",
+                              "width": "fill_container",
+                              "padding": [
+                                10,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "tb89w0",
+                                  "content": "1",
+                                  "fill": "$--faint",
+                                  "fontSize": 14,
+                                  "fontWeight": "500"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "fldp1vo1",
+                          "name": "Field Unidad",
+                          "layout": "vertical",
+                          "gap": 6,
+                          "width": 108,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "lrk4dev",
+                              "name": "Label Row",
+                              "gap": 4,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "t7q35h",
+                                  "content": "Unidad",
+                                  "fill": "$--text-strong",
+                                  "fontSize": 13,
+                                  "fontWeight": "600"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "hlpb2kne",
+                                  "name": "Help",
+                                  "width": 14,
+                                  "height": 14,
+                                  "fill": "$--card",
+                                  "stroke": "$--border",
+                                  "strokeWidth": 1,
+                                  "cornerRadius": "$--radius-pill",
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "tjb2ql",
+                                      "content": "?",
+                                      "fill": "$--muted-foreground",
+                                      "fontSize": 9,
+                                      "fontWeight": "700"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "box1sll1",
+                              "name": "Box",
+                              "fill": "$--card",
+                              "stroke": "$--border",
+                              "strokeWidth": 1,
+                              "cornerRadius": "$--radius-m",
+                              "width": "fill_container",
+                              "padding": [
+                                10,
+                                12
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "t2e0up",
+                                  "content": "L - Litros",
+                                  "fill": "$--foreground",
+                                  "fontSize": 14,
+                                  "fontWeight": "500",
+                                  "width": "fill_container"
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "ic3qkcw",
+                                  "name": "Chevron",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "chevron-down",
+                                  "library": "lucide",
+                                  "fill": "$--faint"
+                                }
+                              ],
+                              "justifyContent": "space-between"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "fldxnmzz",
                   "name": "Field Familia",
+                  "layout": "vertical",
+                  "gap": 6,
                   "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Familia"
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lr3su34",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tfdiu7",
+                          "content": "Familia",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlpfc2de",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tu09a0",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
                     },
-                    "cmpInputPh": {
-                      "content": "Lácteo",
-                      "fill": "$--text-strong"
+                    {
+                      "type": "frame",
+                      "id": "boxn0pdt",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
+                      "width": "fill_container",
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t3pziw",
+                          "content": "Lácteo",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "width": "fill_container"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "icgcqpq",
+                          "name": "Chevron",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "chevron-down",
+                          "library": "lucide",
+                          "fill": "$--faint"
+                        }
+                      ],
+                      "justifyContent": "space-between"
                     }
-                  }
+                  ]
                 },
                 {
-                  "id": "vHNOX",
-                  "type": "ref",
-                  "ref": "cmpInput",
+                  "type": "frame",
+                  "id": "flduvmph",
                   "name": "Field Área",
+                  "layout": "vertical",
+                  "gap": 6,
                   "width": "fill_container",
-                  "descendants": {
-                    "cmpInputLabel": {
-                      "content": "Área"
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lrdfhxg",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t70s3u",
+                          "content": "Área",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlpgcvwt",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "t05gw5",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
                     },
-                    "cmpInputPh": {
-                      "content": "Refri",
-                      "fill": "$--text-strong"
+                    {
+                      "type": "frame",
+                      "id": "boxn8dfr",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
+                      "width": "fill_container",
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t5vq1r",
+                          "content": "Refri",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500",
+                          "width": "fill_container"
+                        },
+                        {
+                          "type": "icon",
+                          "id": "ic42f4c",
+                          "name": "Chevron",
+                          "width": 16,
+                          "height": 16,
+                          "icon": "chevron-down",
+                          "library": "lucide",
+                          "fill": "$--faint"
+                        }
+                      ],
+                      "justifyContent": "space-between"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "tipjdd64",
+                      "name": "Help Tip",
+                      "layoutPosition": "absolute",
+                      "x": 40,
+                      "y": 20,
+                      "width": 250,
+                      "fill": "#0f172a",
+                      "cornerRadius": "$--radius-m",
+                      "padding": [
+                        6,
+                        10
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tf8eq0",
+                          "content": "Categoría de la despensa, ej. Bebidas, Abarrotes, Limpieza. No es el anaquel físico.",
+                          "fill": "#ffffff",
+                          "fontSize": 11,
+                          "fontWeight": "500"
+                        }
+                      ]
                     }
-                  }
+                  ]
                 },
                 {
-                  "id": "y10JL",
-                  "type": "ref",
-                  "ref": "cmpTextarea",
+                  "type": "frame",
+                  "id": "fldwzk8w",
                   "name": "Field Descripción",
+                  "layout": "vertical",
+                  "gap": 6,
                   "width": "fill_container",
-                  "descendants": {
-                    "cmpTextareaLabel": {
-                      "content": "Descripción"
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "lrd0gux",
+                      "name": "Label Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t03xzi",
+                          "content": "Descripción",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlpiuv9a",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tyav3b",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
                     },
-                    "cmpTextareaPh": {
-                      "content": "Leche pasteurizada",
-                      "fill": "$--text-strong"
+                    {
+                      "type": "frame",
+                      "id": "boxr6tf3",
+                      "name": "Box",
+                      "fill": "$--card",
+                      "stroke": "$--border",
+                      "strokeWidth": 1,
+                      "cornerRadius": "$--radius-m",
+                      "width": "fill_container",
+                      "height": 64,
+                      "padding": [
+                        10,
+                        12
+                      ],
+                      "alignItems": "start",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "t37hyn",
+                          "content": "Compra semanal",
+                          "fill": "$--faint",
+                          "fontSize": 14,
+                          "fontWeight": "500"
+                        }
+                      ]
                     }
-                  }
+                  ]
                 },
                 {
                   "type": "frame",
@@ -5929,14 +7226,44 @@
                   "gap": 8,
                   "children": [
                     {
-                      "type": "text",
-                      "id": "FvldJ",
-                      "name": "Legend",
-                      "fill": "$--text-strong",
-                      "content": "Propiedades personalizadas",
-                      "fontFamily": "$--font-primary",
-                      "fontSize": 13,
-                      "fontWeight": "700"
+                      "type": "frame",
+                      "id": "lgwhx5z",
+                      "name": "Legend Row",
+                      "gap": 4,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "th3esq",
+                          "content": "Propiedades personalizadas",
+                          "fill": "$--text-strong",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hlpdu7i8",
+                          "name": "Help",
+                          "width": 14,
+                          "height": 14,
+                          "fill": "$--card",
+                          "stroke": "$--border",
+                          "strokeWidth": 1,
+                          "cornerRadius": "$--radius-pill",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ty872x",
+                              "content": "?",
+                              "fill": "$--muted-foreground",
+                              "fontSize": 9,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        }
+                      ]
                     },
                     {
                       "type": "frame",
@@ -6185,7 +7512,7 @@
                           "id": "TAyeB",
                           "name": "T",
                           "fill": "$--faint",
-                          "content": "Toca para agregar imagen",
+                          "content": "Toca o arrastra para agregar imagen",
                           "fontFamily": "$--font-primary",
                           "fontSize": 12,
                           "fontWeight": "500"
