@@ -10,8 +10,9 @@ beforeEach(async () => {
   await Promise.all([db.products.clear(), db.productDefs.clear()])
 })
 
-/** Card link accessible name starts with the id: "#3 - Leche entera". */
-const cardLinkName = (id: number, title: string) => new RegExp(`^#${id} - ${title}`)
+/** Card link accessible name starts with the id pill: "#3Leche entera" (pill
+ * and title are sibling spans, no separator guaranteed). */
+const cardLinkName = (id: number, title: string) => new RegExp(`^#${id}\\s*${title}`)
 
 describe('ProductList', () => {
   it('renders the catalog products as links with their id, details and eye action', async () => {

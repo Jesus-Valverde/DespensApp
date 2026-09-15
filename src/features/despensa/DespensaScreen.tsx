@@ -58,7 +58,14 @@ function PantryCard({ product }: { product: Product }) {
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold text-slate-800">{product.title}</p>
+        <p className="flex items-center gap-1.5">
+          {product.id != null && (
+            <span className="flex-shrink-0 rounded-lg bg-slate-100 px-2 py-0.5 font-mono text-xs font-bold text-slate-900">
+              #{product.id}
+            </span>
+          )}
+          <span className="min-w-0 truncate text-sm font-semibold text-slate-800">{product.title}</span>
+        </p>
         <p className="truncate text-xs text-slate-500">
           {[product.brand, product.family].filter(Boolean).join(' · ') || 'Sin datos'}
         </p>

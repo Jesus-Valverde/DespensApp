@@ -61,9 +61,15 @@ function CatalogCard({ product }: { product: Product }) {
           </span>
         )}
         <span className="ml-3.5 min-w-0 flex-1">
-          <span className="block truncate text-base font-semibold leading-tight text-slate-800">
-            {product.id != null ? `#${product.id} - ` : ''}
-            {product.title}
+          <span className="flex items-center gap-1.5">
+            {product.id != null && (
+              <span className="flex-shrink-0 rounded-lg bg-slate-100 px-2 py-0.5 font-mono text-xs font-bold text-slate-900">
+                #{product.id}
+              </span>
+            )}
+            <span className="min-w-0 truncate text-base font-semibold leading-tight text-slate-800">
+              {product.title}
+            </span>
           </span>
           {subtitle && <span className="mt-1 block truncate text-xs text-slate-500">{subtitle}</span>}
         </span>
