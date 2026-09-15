@@ -18,6 +18,13 @@ const TONE_CLASSES: Record<string, string> = {
   over: 'bg-amber-50 text-amber-700 border-amber-200/60',
 }
 
+/** Selected stock-filter chips wear their status color ("Todos" stays blue). */
+const STATUS_CHIP_SELECTED: Record<string, string> = {
+  'Stock bajo': 'bg-amber-500 font-semibold text-white shadow-sm shadow-amber-500/20',
+  'Stock normal': 'bg-emerald-600 font-semibold text-white shadow-sm shadow-emerald-500/20',
+  'Sin stock': 'bg-red-600 font-semibold text-white shadow-sm shadow-red-500/20',
+}
+
 /** Product thumbnail card for the pantry list. */
 function PantryCard({ product }: { product: Product }) {
   const imageUrl = useObjectUrl(product.image)
@@ -130,25 +137,10 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
         <ListSkeleton className="mb-4 mt-4" />
       ) : (
         <>
-          {/* Search + labeled filter rows: Área and Stock (design contract) */}
+          {/* Labeled filter rows (Área, Stock) then search below (user
+              preference; the design contract was updated to match). */}
           {products.length > 0 && (
           <>
-          <div className="relative mb-1 mt-1">
-            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
-              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-                <circle cx="11" cy="11" r="7" />
-                <line strokeLinecap="round" x1="21" x2="16.65" y1="21" y2="16.65" />
-              </svg>
-            </span>
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar en catálogo..."
-              aria-label="Buscar en catálogo"
-              className="w-full rounded-xl border border-slate-200/80 bg-white py-3 pl-10 pr-4 text-sm text-slate-800 placeholder-slate-400 shadow-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-            />
-          </div>
           <p className="text-[11px] font-semibold text-slate-500">Área</p>
           <div className="no-scrollbar -mx-1 flex items-center gap-2 overflow-x-auto px-1 pb-3">
         {['Todos', ...areas].map((chip) => (
@@ -168,7 +160,7 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
         ))}
       </div>
           <p className="text-[11px] font-semibold text-slate-500">Stock</p>
-          <div className="no-scrollbar -mx-1 mb-4 flex items-center gap-2 overflow-x-auto px-1 pb-1">
+          <div className="no-scrollbar -mx-1 flex items-center gap-2 overflow-x-auto px-1 pb-3">
         {['Todos', 'Stock bajo', 'Stock normal', 'Sin stock'].map((chip) => (
           <button
             key={chip}
@@ -177,7 +169,7 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
             aria-pressed={status === chip}
             className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs ${
               status === chip
-                ? 'bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/20'
+                ? STATUS_CHIP_SELECTED[chip] ?? 'bg-blue-600 font-semibold text-white shadow-sm shadow-blue-500/20'
                 : 'border border-slate-200/70 bg-white font-medium text-slate-500 hover:border-slate-300'
             }`}
           >
@@ -185,6 +177,22 @@ export function DespensaScreen({ view = 'stock' }: { view?: 'stock' | 'catalogo'
           </button>
         ))}
       </div>
+          <div className="relative mb-4">
+            <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                <circle cx="11" cy="11" r="7" />
+                <line strokeLinecap="round" x1="21" x2="16.65" y1="21" y2="16.65" />
+              </svg>
+            </span>
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Buscar en catálogo..."
+              aria-label="Buscar en catálogo"
+              className="w-full rounded-xl border border-slate-200/80 bg-white py-3 pl-10 pr-4 text-sm text-slate-800 placeholder-slate-400 shadow-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            />
+          </div>
           </>
       )}
 

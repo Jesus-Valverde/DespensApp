@@ -7,15 +7,19 @@ import { db } from '../../db/db'
 import { createProduct } from './api'
 
 beforeEach(async () => {
-  await db.products.clear()
+  await Promise.all([db.products.clear(), db.productDefs.clear()])
 })
 
+/** Card link accessible name starts with the id: "#3 - Leche entera". */
+const cardLinkName = (id: number, title: string) => new RegExp(`^#${id} - ${title}`)
+
 describe('ProductList', () => {
-  it('renders the catalog products as links with their details and edit actions', async () => {
+  it('renders the catalog products as links with their id, details and eye action', async () => {
     const lecheId = await createProduct({
       title: 'Leche entera',
       brand: 'Alpura',
-      contentSize: '1 L',
+      content: '1',
+      unit: 'L',
       customProps: [],
     })
     const detergenteId = await createProduct({ title: 'Detergente', area: 'Lavandería', customProps: [] })
@@ -26,40 +30,42 @@ describe('ProductList', () => {
       </MemoryRouter>,
     )
 
-    // Anchored: the kebab "Editar …" links also mention the title.
-    const leche = await screen.findByRole('link', { name: /^Leche entera/ })
+    const leche = await screen.findByRole('link', { name: cardLinkName(lecheId, 'Leche entera') })
     expect(leche).toHaveAttribute('href', `/products/${lecheId}`)
-    expect(screen.getByRole('link', { name: /^Detergente/ })).toBeInTheDocument()
-    expect(screen.getByText(/Alpura/)).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: cardLinkName(detergenteId, 'Detergente') })).toBeInTheDocument()
+    // Subtitle: contenido unidad - marca ("modelo - contenido unidad - marca").
+    expect(screen.getByText('1 L - Alpura')).toBeInTheDocument()
     // The area also appears as a filter chip — any match is fine here.
     expect(screen.getAllByText(/Lavandería/).length).toBeGreaterThan(0)
 
-    expect(screen.getByRole('link', { name: 'Editar Leche entera' })).toHaveAttribute(
+    // The kebab edit action became an eye action to the detail screen.
+    expect(screen.getByRole('link', { name: 'Ver detalle de Leche entera' })).toHaveAttribute(
       'href',
-      `/products/${lecheId}/edit`,
+      `/products/${lecheId}`,
     )
-    expect(screen.getByRole('link', { name: 'Editar Detergente' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Ver detalle de Detergente' })).toHaveAttribute(
       'href',
-      `/products/${detergenteId}/edit`,
+      `/products/${detergenteId}`,
     )
+    expect(screen.queryByRole('link', { name: /Editar/ })).not.toBeInTheDocument()
   })
 
   it('filters the catalog with the search box', async () => {
     const user = userEvent.setup()
-    await createProduct({ title: 'Leche entera', brand: 'Alpura', customProps: [] })
-    await createProduct({ title: 'Detergente', customProps: [] })
+    const lecheId = await createProduct({ title: 'Leche entera', brand: 'Alpura', customProps: [] })
+    const detergenteId = await createProduct({ title: 'Detergente', customProps: [] })
 
     render(
       <MemoryRouter>
         <CatalogView />
       </MemoryRouter>,
     )
-    await screen.findByRole('link', { name: /^Leche entera/ })
+    await screen.findByRole('link', { name: cardLinkName(lecheId, 'Leche entera') })
 
     await user.type(screen.getByRole('searchbox', { name: 'Buscar en catálogo' }), 'leche')
 
-    expect(screen.getByRole('link', { name: /^Leche entera/ })).toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /^Detergente/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: cardLinkName(lecheId, 'Leche entera') })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: cardLinkName(detergenteId, 'Detergente') })).not.toBeInTheDocument()
 
     await user.clear(screen.getByRole('searchbox', { name: 'Buscar en catálogo' }))
     await user.type(screen.getByRole('searchbox', { name: 'Buscar en catálogo' }), 'zzz')

@@ -31,7 +31,9 @@ export function toneFor(title: string): string {
 
 function CatalogCard({ product }: { product: Product }) {
   const imageUrl = useObjectUrl(product.image)
-  const subtitle = [product.contentSize, product.brand, product.area].filter(Boolean).join(' • ')
+  // "#8 - Aceite" / "Puro de soya - 500 ml - Pirámide"
+  const contentUnit = [product.content, product.unit].filter(Boolean).join(' ')
+  const subtitle = [product.model, contentUnit, product.brand].filter(Boolean).join(' - ')
 
   return (
     <article className="flex items-center justify-between rounded-2xl border border-slate-100 bg-white p-3.5 shadow-sm transition-colors hover:border-slate-200">
@@ -60,21 +62,21 @@ function CatalogCard({ product }: { product: Product }) {
         )}
         <span className="ml-3.5 min-w-0 flex-1">
           <span className="block truncate text-base font-semibold leading-tight text-slate-800">
+            {product.id != null ? `#${product.id} - ` : ''}
             {product.title}
           </span>
           {subtitle && <span className="mt-1 block truncate text-xs text-slate-500">{subtitle}</span>}
         </span>
       </Link>
       <Link
-        to={`/products/${product.id}/edit`}
-        aria-label={`Editar ${product.title}`}
-        title={`Editar ${product.title}`}
+        to={`/products/${product.id}`}
+        aria-label={`Ver detalle de ${product.title}`}
+        title={`Ver detalle de ${product.title}`}
         className="ml-2 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
       >
         <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
-          <circle cx="12" cy="5" r="1" />
-          <circle cx="12" cy="12" r="1" />
-          <circle cx="12" cy="19" r="1" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
         </svg>
       </Link>
     </article>

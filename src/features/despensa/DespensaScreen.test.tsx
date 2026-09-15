@@ -78,4 +78,37 @@ describe('DespensaScreen', () => {
     expect(screen.getByText('Leche Lala')).toBeInTheDocument()
     expect(screen.getByText('Jabón')).toBeInTheDocument()
   })
+
+  it('colors the selected stock filter chips with their status color', async () => {
+    const user = userEvent.setup()
+    await makeProduct({ title: 'Leche Lala', area: 'Refri' })
+
+    renderScreen()
+    await screen.findByText('Leche Lala')
+
+    const chip = (name: string) => screen.getByRole('button', { name })
+
+    await user.click(chip('Stock bajo'))
+    expect(chip('Stock bajo').className).toMatch(/bg-amber-500/)
+
+    await user.click(chip('Stock normal'))
+    expect(chip('Stock normal').className).toMatch(/bg-emerald-600/)
+
+    await user.click(chip('Sin stock'))
+    expect(chip('Sin stock').className).toMatch(/bg-red-600/)
+  })
+
+  it('renders the search box after the filter rows', async () => {
+    await makeProduct({ title: 'Leche Lala', area: 'Refri' })
+
+    renderScreen()
+    await screen.findByText('Leche Lala')
+
+    // 'Todos' appears once per filter row: [0] = Área, [1] = Stock.
+    const todosChips = screen.getAllByRole('button', { name: 'Todos' })
+    const search = screen.getByRole('searchbox', { name: 'Buscar en catálogo' })
+    expect(todosChips).toHaveLength(2)
+    expect(todosChips[0].compareDocumentPosition(todosChips[1]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(todosChips[1].compareDocumentPosition(search) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
 })
