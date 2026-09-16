@@ -94,7 +94,7 @@ describe('InicioScreen', () => {
     expect(screen.queryByText('Stock de tus productos')).not.toBeInTheDocument()
   })
 
-  it('lists recent movements newest first with product titles', async () => {
+  it('lists recent movements as per-movement cards newest first', async () => {
     const productId = (await db.products.add({
       title: 'Frijol',
       customProps: [],
@@ -124,9 +124,13 @@ describe('InicioScreen', () => {
     renderScreen()
 
     const historial = await screen.findByRole('region', { name: 'Historial de movimientos' })
-    expect(await within(historial).findByText('Salida -2 → 4')).toBeInTheDocument()
-    const salidaRow = within(historial).getByText('Salida -2 → 4').closest('li')!
-    const entradaRow = within(historial).getByText('Entrada +6 → 6').closest('li')!
-    expect(salidaRow.compareDocumentPosition(entradaRow) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(await within(historial).findByText('-2')).toBeInTheDocument()
+    const salidaCard = within(historial).getByText('-2').closest('li')!
+    const entradaCard = within(historial).getByText('+6').closest('li')!
+    expect(within(salidaCard).getByText('Frijol')).toBeInTheDocument()
+    expect(within(salidaCard).getByText('→ 4')).toBeInTheDocument()
+    expect(within(salidaCard).getByText(/^Salida/)).toBeInTheDocument()
+    expect(within(entradaCard).getByText('→ 6')).toBeInTheDocument()
+    expect(salidaCard.compareDocumentPosition(entradaCard) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 })
