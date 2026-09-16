@@ -293,7 +293,7 @@ Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último res
 ### 19. Modal — datos del catálogo (from header data menu)
 
 ```text
-Modal "Datos del catálogo", bold title + gray subtitle "Importa productos o consulta la ayuda de la plantilla.", circular X close. Body: 2 full-width option rows (rounded-2xl, thin border, chevron right): "Importar CSV" / "Agrega productos desde un archivo .csv" with a blue file-up icon chip, and "Cómo llenar la plantilla" / "Tutorial para armar tu CSV de importación" with a green file-spreadsheet icon chip. Choosing an option closes this modal and opens the CSV import modal or the template tutorial modal respectively.
+Modal "Datos del catálogo", database icon chip (blue), bold title + gray subtitle "Importa productos o consulta la ayuda de la plantilla.", circular X close. Body: 2 full-width option rows (rounded-2xl, thin border, chevron right): "Importar CSV" / "Agrega productos desde un archivo .csv" with a blue file-up icon chip, and "Cómo llenar la plantilla" / "Tutorial para armar tu CSV de importación" with a green file-spreadsheet icon chip. Choosing an option closes this modal and opens the CSV import modal or the template tutorial modal respectively.
 ```
 
 ---

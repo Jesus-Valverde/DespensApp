@@ -1,4 +1,4 @@
-import { ChevronRight, FileSpreadsheet, FileUp } from 'lucide-react'
+import { ChevronRight, Database, FileSpreadsheet, FileUp } from 'lucide-react'
 
 type CatalogDataModalProps = {
   onClose: () => void
@@ -35,6 +35,9 @@ export function CatalogDataModal({ onClose, onImport, onHelp }: CatalogDataModal
     >
       <div className="w-full max-w-sm overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-2xl">
         <div className="flex items-start gap-3 p-5">
+          <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm">
+            <Database className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
+          </span>
           <div className="min-w-0 flex-1">
             <h2 className="text-base font-bold text-slate-900">Datos del catálogo</h2>
             <p className="text-xs text-slate-500">
