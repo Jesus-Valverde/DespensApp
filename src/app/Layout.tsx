@@ -6,7 +6,6 @@ import { db } from '../db/db'
 import { NotificationsPanel } from './NotificationsPanel'
 import { BackupModal } from './BackupModal'
 import { CatalogDataModal } from '../features/products/CatalogDataModal'
-import { ImportCsvModal } from '../features/products/ImportCsvModal'
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>
 
@@ -58,7 +57,6 @@ export function Layout({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [backupOpen, setBackupOpen] = useState(false)
   const [catalogDataOpen, setCatalogDataOpen] = useState(false)
-  const [csvImportOpen, setCsvImportOpen] = useState(false)
 
   // Notifications: products under their minimum stock with alerts enabled.
   const notifications = useLiveQuery(
@@ -157,16 +155,7 @@ export function Layout({ children }: { children: ReactNode }) {
         )}
 
         {backupOpen && <BackupModal onClose={() => setBackupOpen(false)} />}
-        {catalogDataOpen && (
-          <CatalogDataModal
-            onClose={() => setCatalogDataOpen(false)}
-            onImport={() => {
-              setCatalogDataOpen(false)
-              setCsvImportOpen(true)
-            }}
-          />
-        )}
-        {csvImportOpen && <ImportCsvModal onClose={() => setCsvImportOpen(false)} />}
+        {catalogDataOpen && <CatalogDataModal onClose={() => setCatalogDataOpen(false)} />}
 
         <main className="flex-1 px-5 pt-5 pb-28">{children}</main>
 

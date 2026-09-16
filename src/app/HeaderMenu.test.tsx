@@ -47,7 +47,6 @@ describe('Header data menu', () => {
     openMenu()
     fireEvent.click(screen.getByRole('menuitem', { name: 'Datos del catálogo' }))
     const dialog = await screen.findByRole('dialog', { name: 'Datos del catálogo' })
-    expect(within(dialog).getByRole('button', { name: /Importar CSV/ })).toBeInTheDocument()
     expect(within(dialog).getByRole('link', { name: /plantilla-catalogo\.csv/ })).toHaveAttribute(
       'href',
       '/plantilla-catalogo.csv',
@@ -56,12 +55,11 @@ describe('Header data menu', () => {
     expect(within(dialog).getByText('L')).toBeInTheDocument()
     expect(within(dialog).getByText('(Paquete)')).toBeInTheDocument()
 
-    fireEvent.click(within(dialog).getByRole('button', { name: /Importar CSV/ }))
+    // Import unfolds the dropzone inline, no second modal
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Importar CSV' }))
+    expect(await within(dialog).findByText(/Agrega o arrastra tu archivo CSV/)).toBeInTheDocument()
     expect(
-      await screen.findByRole('dialog', { name: 'Importar productos desde CSV' }),
-    ).toBeInTheDocument()
-    expect(
-      screen.queryByRole('dialog', { name: 'Datos del catálogo' }),
+      screen.queryByRole('dialog', { name: 'Importar productos desde CSV' }),
     ).not.toBeInTheDocument()
   })
 })

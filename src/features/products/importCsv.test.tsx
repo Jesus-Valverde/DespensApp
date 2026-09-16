@@ -1,8 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router'
-import { ImportCsvModal } from './ImportCsvModal'
+import { CatalogDataModal } from './CatalogDataModal'
 import { parseCatalogCsv } from './importCsv'
 import { db } from '../../db/db'
 import type { Product } from '../../db/types'
@@ -34,14 +33,12 @@ beforeEach(async () => {
 })
 
 function renderModal() {
-  render(
-    <MemoryRouter>
-      <ImportCsvModal onClose={() => {}} />
-    </MemoryRouter>,
-  )
+  render(<CatalogDataModal onClose={() => {}} />)
 }
 
-async function upload(user: ReturnType<typeof userEvent.setup>, text: string) {
+/** Open the inline import section and upload a CSV into its dropzone input. */
+async function openAndUpload(user: ReturnType<typeof userEvent.setup>, text: string) {
+  await user.click(screen.getByRole('button', { name: 'Importar CSV' }))
   const input = document.querySelector('input[type="file"]')! as HTMLElement
   await user.upload(input, new File([text], 'plantilla.csv', { type: 'text/csv' }))
 }
@@ -90,11 +87,11 @@ describe('parseCatalogCsv', () => {
   })
 })
 
-describe('ImportCsvModal', () => {
-  it('imports valid rows creating products with stock and purchase info', async () => {
+describe('CatalogDataModal inline import', () => {
+  it('unfolds the dropzone below the button and imports valid rows', async () => {
     const user = userEvent.setup()
     renderModal()
-    await upload(user, SAMPLE)
+    await openAndUpload(user, SAMPLE)
 
     expect(await screen.findByText('2 productos listos para importar')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Importar 2 productos' }))
@@ -114,7 +111,7 @@ describe('ImportCsvModal', () => {
   it('shows per-row errors and imports nothing when every row is invalid', async () => {
     const user = userEvent.setup()
     renderModal()
-    await upload(user, INVALID)
+    await openAndUpload(user, INVALID)
 
     expect(await screen.findByText('No se encontró ninguna fila válida.')).toBeInTheDocument()
     expect(screen.getByText('Fila 2: falta el Nombre')).toBeInTheDocument()
@@ -137,7 +134,7 @@ describe('ImportCsvModal', () => {
 
     const user = userEvent.setup()
     renderModal()
-    await upload(user, SAMPLE)
+    await openAndUpload(user, SAMPLE)
 
     await user.click(await screen.findByRole('button', { name: 'Importar 2 productos' }))
 
@@ -145,14 +142,16 @@ describe('ImportCsvModal', () => {
     expect(await db.products.where('title').equals('Leche').count()).toBe(1)
     expect(await db.products.where('title').equals('Atún').count()).toBe(1)
   })
-})
 
-describe('ImportCsvModal wiring', () => {
-  it('calls onClose on Cancelar', async () => {
+  it('Cancel collapses the import section back into the modal', async () => {
     const user = userEvent.setup()
-    const onClose = vi.fn()
-    render(<ImportCsvModal onClose={onClose} />)
+    renderModal()
+
+    await user.click(screen.getByRole('button', { name: 'Importar CSV' }))
+    expect(await screen.findByText(/Agrega o arrastra tu archivo CSV/)).toBeInTheDocument()
+
     await user.click(screen.getByRole('button', { name: 'Cancelar' }))
-    expect(onClose).toHaveBeenCalledTimes(1)
+    expect(screen.queryByLabelText(/Agrega o arrastra/)).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Importar CSV' })).toBeInTheDocument()
   })
 })
