@@ -181,7 +181,7 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
           <a
             href="/plantilla-catalogo.csv"
             download
-            className="pressable flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-600 shadow-sm hover:border-slate-300"
+            className="pressable flex-1 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-600 shadow-sm hover:border-slate-300"
           >
             Descargar plantilla
           </a>
@@ -189,7 +189,7 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
             type="button"
             onClick={() => (importActive ? closeImport() : setImportPhase('picking'))}
             disabled={importPhase === 'importing'}
-            className="pressable flex-[1.4] rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:opacity-50"
+            className="pressable flex-1 whitespace-nowrap rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:opacity-50"
           >
             {importActive ? 'Cancelar' : 'Importar CSV'}
           </button>
