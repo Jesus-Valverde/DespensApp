@@ -1,31 +1,24 @@
-import { ChevronRight, Database, FileSpreadsheet, FileUp } from 'lucide-react'
+import { ChevronRight, Database, FileUp } from 'lucide-react'
+import type { ReactNode } from 'react'
 
-type CatalogDataModalProps = {
-  onClose: () => void
-  onImport: () => void
-  onHelp: () => void
+const UNITS: [string, string][] = [
+  ['L', 'Litros'],
+  ['ml', 'Mililitros'],
+  ['g', 'Gramos'],
+  ['kg', 'Kilogramos'],
+  ['pza', 'Piezas'],
+  ['paq', 'Paquete'],
+]
+
+function Info({ children }: { children: ReactNode }) {
+  return (
+    <p className="rounded-xl bg-slate-50 p-3 leading-relaxed text-slate-500">{children}</p>
+  )
 }
 
-const OPTIONS = [
-  {
-    key: 'import',
-    title: 'Importar CSV',
-    description: 'Agrega productos desde un archivo .csv',
-    Icon: FileUp,
-    tile: 'bg-blue-50 text-blue-600',
-  },
-  {
-    key: 'help',
-    title: 'Cómo llenar la plantilla',
-    description: 'Tutorial para armar tu CSV de importación',
-    Icon: FileSpreadsheet,
-    tile: 'bg-emerald-50 text-emerald-700',
-  },
-] as const
-
-/** Catalog data modal: the two catalog-data entries — CSV import and the
- * template tutorial (opened from the header menu). */
-export function CatalogDataModal({ onClose, onImport, onHelp }: CatalogDataModalProps) {
+/** Catalog data modal: the CSV import entry plus inline template help
+ * (Respaldo-style body info instead of a separate tutorial modal). */
+export function CatalogDataModal({ onClose, onImport }: { onClose: () => void; onImport: () => void }) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
@@ -56,24 +49,52 @@ export function CatalogDataModal({ onClose, onImport, onHelp }: CatalogDataModal
           </button>
         </div>
 
-        <div className="space-y-2 px-5 pb-5">
-          {OPTIONS.map(({ key, title, description, Icon, tile }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={key === 'import' ? onImport : onHelp}
-              className="pressable flex w-full items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3 text-left shadow-sm transition hover:border-blue-300"
+        <div className="max-h-[70vh] space-y-2 overflow-y-auto px-5 pb-5">
+          <button
+            type="button"
+            onClick={onImport}
+            className="pressable flex w-full items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3 text-left shadow-sm transition hover:border-blue-300"
+          >
+            <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+              <FileUp className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-bold text-slate-900">Importar CSV</span>
+              <span className="block text-xs text-slate-500">
+                Agrega productos desde un archivo .csv
+              </span>
+            </span>
+            <ChevronRight className="h-4 w-4 flex-shrink-0 text-slate-400" aria-hidden="true" />
+          </button>
+
+          <Info>
+            <strong className="text-slate-800">Cómo llenar la plantilla:</strong> descarga{' '}
+            <a
+              href="/plantilla-catalogo.csv"
+              download
+              className="font-semibold text-blue-600 hover:underline"
             >
-              <span className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl ${tile}`}>
-                <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
+              plantilla-catalogo.csv
+            </a>{' '}
+            — ya trae las columnas en el orden correcto — y llena una fila por producto:{' '}
+            <strong className="text-slate-800">Nombre</strong> obligatorio,{' '}
+            <strong className="text-slate-800">Contenido</strong> numérico y{' '}
+            <strong className="text-slate-800">Unidad</strong> de la lista; stock, precio y
+            frecuencia son opcionales. Guarda como CSV y pulsa{' '}
+            <strong className="text-slate-800">Importar CSV</strong>: te mostraremos errores por
+            fila antes de confirmar.
+          </Info>
+          <Info>
+            <strong className="text-slate-800">Unidades válidas:</strong>{' '}
+            {UNITS.map(([sym, name], index) => (
+              <span key={sym}>
+                {index > 0 && ', '}
+                <span className="font-bold text-blue-600">{sym}</span>{' '}
+                <span className="text-slate-400">({name})</span>
               </span>
-              <span className="min-w-0 flex-1">
-                <span className="block text-sm font-bold text-slate-900">{title}</span>
-                <span className="block text-xs text-slate-500">{description}</span>
-              </span>
-              <ChevronRight className="h-4 w-4 flex-shrink-0 text-slate-400" aria-hidden="true" />
-            </button>
-          ))}
+            ))}
+            .
+          </Info>
         </div>
       </div>
     </div>

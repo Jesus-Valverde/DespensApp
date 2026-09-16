@@ -275,14 +275,9 @@ Modal "Notificaciones", subtitle "Productos bajo su stock mínimo", bell icon ch
 List rows: product thumbnail, bold title, amber badge "Bajo mínimo", meta "Mín: {n} · Actual: {m}", each row links to the product detail. Empty: "Sin notificaciones." + "Todos tus productos están por encima de su stock mínimo." Single footer button "Cerrar".
 ```
 
-### 17. Modal — tutorial CSV (import guide)
+### 17. Modal — tutorial CSV — REMOVED (absorbed into block 19)
 
-```text
-Modal "Cómo importar tu catálogo", subtitle "Llena la plantilla y súbela a Despensa", info icon chip.
-Numbered steps (blue circle + bold title + gray body): 1 "Descarga la plantilla" (link to plantilla-catalogo.csv); 2 "Llena una fila por producto" (Nombre obligatorio; Contenido numérico; Unidad de la lista; stock/precio/frecuencia opcionales); 3 "Sube el archivo" (errores por fila antes de confirmar).
-Section "Unidades válidas": rows with blue symbol + "—" + name: L — Litros, ml — Mililitros, g — Gramos, kg — Kilogramos, pza — Piezas, paq — Paquete.
-Footer: single filled blue button "Descargar plantilla".
-```
+Removed 2026-09-16: the tutorial is no longer a standalone modal. Its content (template download link, fill rules, valid units) renders INLINE inside the "Datos del catálogo" modal — see screen block 19.
 
 ### 18. Modal — respaldo de datos (from header data menu)
 
@@ -293,7 +288,7 @@ Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último res
 ### 19. Modal — datos del catálogo (from header data menu)
 
 ```text
-Modal "Datos del catálogo", database icon chip (blue), bold title + gray subtitle "Importa productos o consulta la ayuda de la plantilla.", circular X close. Body: 2 full-width option rows (rounded-2xl, thin border, chevron right): "Importar CSV" / "Agrega productos desde un archivo .csv" with a blue file-up icon chip, and "Cómo llenar la plantilla" / "Tutorial para armar tu CSV de importación" with a green file-spreadsheet icon chip. Choosing an option closes this modal and opens the CSV import modal or the template tutorial modal respectively.
+Modal "Datos del catálogo", database icon chip (blue), bold title + gray subtitle "Importa productos o consulta la ayuda de la plantilla.", circular X close. 🆕 2026-09-16: ONE option row — "Importar CSV" / "Agrega productos desde un archivo .csv" (blue file-up icon chip, chevron right) — opens the CSV import modal. Below it, INLINE template help in Respaldo-modal body style (gray rounded-slate-50 info boxes, bold keywords): "Cómo llenar la plantilla:" (download link plantilla-catalogo.csv, one row per product, Nombre obligatorio / Contenido numérico / Unidad de la lista, stock-precio-frecuencia optional, per-row errors before confirming) and "Unidades válidas:" inline list L (Litros), ml (Mililitros), g (Gramos), kg (Kilogramos), pza (Piezas), paq (Paquete).
 ```
 
 ---

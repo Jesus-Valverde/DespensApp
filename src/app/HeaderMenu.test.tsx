@@ -41,14 +41,20 @@ describe('Header data menu', () => {
     expect(await screen.findByRole('dialog', { name: 'Respaldo de datos' })).toBeInTheDocument()
   })
 
-  it('catalog data modal chains to the CSV import and template help modals', async () => {
+  it('catalog data modal offers the CSV import and inline template help', async () => {
     renderLayout()
 
     openMenu()
     fireEvent.click(screen.getByRole('menuitem', { name: 'Datos del catálogo' }))
     const dialog = await screen.findByRole('dialog', { name: 'Datos del catálogo' })
-    expect(within(dialog).getByText('Importar CSV')).toBeInTheDocument()
-    expect(within(dialog).getByText('Cómo llenar la plantilla')).toBeInTheDocument()
+    expect(within(dialog).getByRole('button', { name: /Importar CSV/ })).toBeInTheDocument()
+    expect(within(dialog).getByRole('link', { name: /plantilla-catalogo\.csv/ })).toHaveAttribute(
+      'href',
+      '/plantilla-catalogo.csv',
+    )
+    expect(within(dialog).getByText(/Unidades válidas/)).toBeInTheDocument()
+    expect(within(dialog).getByText('L')).toBeInTheDocument()
+    expect(within(dialog).getByText('(Paquete)')).toBeInTheDocument()
 
     fireEvent.click(within(dialog).getByRole('button', { name: /Importar CSV/ }))
     expect(
@@ -57,16 +63,5 @@ describe('Header data menu', () => {
     expect(
       screen.queryByRole('dialog', { name: 'Datos del catálogo' }),
     ).not.toBeInTheDocument()
-
-    fireEvent.click(screen.getByRole('button', { name: 'Cerrar' }))
-    openMenu()
-    fireEvent.click(screen.getByRole('menuitem', { name: 'Datos del catálogo' }))
-    const dialog2 = await screen.findByRole('dialog', { name: 'Datos del catálogo' })
-    fireEvent.click(within(dialog2).getByRole('button', { name: /Cómo llenar la plantilla/ }))
-    const help = await screen.findByRole('dialog', { name: 'Cómo importar tu catálogo' })
-    expect(within(help).getByRole('link', { name: /Descargar plantilla/ })).toHaveAttribute(
-      'href',
-      '/plantilla-catalogo.csv',
-    )
   })
 })
