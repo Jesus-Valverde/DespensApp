@@ -287,7 +287,7 @@ Footer: single filled blue button "Descargar plantilla".
 ### 18. Modal — respaldo de datos (from header data menu)
 
 ```text
-Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último respaldo: {fecha}" or "Nunca has respaldado tus datos". Body explains Exportar (downloads everything) / Restaurar (replaces current data). Footer buttons: outline "Restaurar" + filled blue "Exportar". Restore uses the system file picker (.json) and asks for confirmation before replacing. Entry point (2026-09-16): header data menu (ellipsis button next to the bell) → "Respaldo de datos"; the old discreet link at the bottom of Inicio was removed.
+Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último respaldo: {fecha}" or "Nunca has respaldado tus datos". Body explains Exportar (downloads everything) / Restaurar (replaces current data). Footer buttons: outline "Restaurar" + filled blue "Exportar". 🆕 2026-09-16: clicking "Restaurar" does NOT open the raw file picker — it reveals a DRAG & DROP ZONE (dashed rounded border, upload cloud icon, "Arrastra tu respaldo aquí / o haz clic para seleccionarlo — archivo .json") plus an amber warning "Restaurar reemplaza todos tus datos actuales…". The footer's outline button becomes "Cancelar" while the zone is open. Dropping or selecting the .json restores immediately (inline status messages: "Restaurando respaldo…", "Datos restaurados correctamente.", or the validation error). Entry point (2026-09-16): header data menu (ellipsis button next to the bell) → "Respaldo de datos"; the old discreet link at the bottom of Inicio was removed.
 ```
 
 ### 19. Modal — datos del catálogo (from header data menu)

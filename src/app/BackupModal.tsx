@@ -19,13 +19,15 @@ function rememberLastBackup(): void {
   }
 }
 
-type Phase = 'idle' | 'restoring' | 'done'
+type Phase = 'idle' | 'picking' | 'restoring' | 'done'
 
 /** Data backup modal: export the whole database as a JSON file and restore
- * from one (V1 of the backup flow; Drive upload rides on the same file). */
+ * from one (V1 of the backup flow; Drive upload rides on the same file).
+ * Restaurar opens a drag & drop zone instead of the raw file picker. */
 export function BackupModal({ onClose }: { onClose: () => void }) {
   const fileInput = useRef<HTMLInputElement>(null)
   const [phase, setPhase] = useState<Phase>('idle')
+  const [dragOver, setDragOver] = useState(false)
   const [message, setMessage] = useState('')
   const [lastBackup, setLastBackup] = useState(lastBackupDate())
 
@@ -38,13 +40,11 @@ export function BackupModal({ onClose }: { onClose: () => void }) {
     setMessage('Copia descargada.')
   }
 
-  async function handleRestoreFile(event: React.ChangeEvent<HTMLInputElement>) {
-    const input = event.target.files?.[0]
-    event.target.value = ''
-    if (!input) return
+  async function handleRestoreFile(file: File | undefined) {
+    if (!file) return
     setMessage('')
     try {
-      const parsed = validateBackup(JSON.parse(await input.text()))
+      const parsed = validateBackup(JSON.parse(await file.text()))
       setPhase('restoring')
       await restoreBackup(parsed)
       rememberLastBackup()
@@ -92,26 +92,65 @@ export function BackupModal({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="space-y-3 px-5 pb-2 text-xs leading-relaxed text-slate-500">
-          <p>
-            <strong className="text-slate-800">Exportar</strong> descarga un archivo con todo tu
-            catálogo, stock, compras y movimientos.{' '}
-            <strong className="text-slate-800">Restaurar</strong> reemplaza los datos actuales con
-            el contenido del archivo.
-          </p>
-          {phase === 'restoring' && (
-            <p className="rounded-xl bg-amber-50 p-3 text-amber-700">
-              Confirma para reemplazar tus datos actuales. Esta acción no se puede deshacer.
-              <button
-                type="button"
-                onClick={() => {
-                  setPhase('done')
-                  setMessage('Restauración cancelada.')
+          {phase === 'picking' ? (
+            <>
+              <label
+                htmlFor="backup-file"
+                onDragOver={(event) => {
+                  event.preventDefault()
+                  setDragOver(true)
                 }}
-                className="ml-1 font-semibold text-blue-600 hover:underline"
+                onDragLeave={() => setDragOver(false)}
+                onDrop={(event) => {
+                  event.preventDefault()
+                  setDragOver(false)
+                  void handleRestoreFile(event.dataTransfer.files?.[0])
+                }}
+                className={`group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-5 text-center transition-all ${
+                  dragOver
+                    ? 'border-blue-500 bg-blue-50/60'
+                    : 'border-slate-300 bg-slate-50/70 hover:border-blue-400 hover:bg-blue-50/30'
+                }`}
               >
-                Cancelar
-              </button>
+                <input
+                  ref={fileInput}
+                  id="backup-file"
+                  type="file"
+                  accept=".json,application/json"
+                  className="sr-only"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0]
+                    event.target.value = ''
+                    void handleRestoreFile(file)
+                  }}
+                />
+                <span className="mb-2 flex h-11 w-11 items-center justify-center rounded-full border border-slate-200/70 bg-white text-blue-600 shadow-xs transition-transform group-hover:scale-105">
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
+                  </svg>
+                </span>
+                <span className="text-sm font-semibold text-slate-700 transition-colors group-hover:text-blue-600">
+                  Arrastra tu respaldo aquí
+                </span>
+                <span className="mt-0.5 text-xs text-slate-500">
+                  o haz clic para seleccionarlo — archivo .json
+                </span>
+              </label>
+              <p className="rounded-xl bg-amber-50 p-3 text-amber-700">
+                Restaurar reemplaza todos tus datos actuales con el contenido del archivo. Esta
+                acción no se puede deshacer.
+              </p>
+            </>
+          ) : (
+            <p>
+              <strong className="text-slate-800">Exportar</strong> descarga un archivo con todo tu
+              catálogo, stock, compras y movimientos.{' '}
+              <strong className="text-slate-800">Restaurar</strong> reemplaza los datos actuales con
+              el contenido del archivo.
             </p>
+          )}
+          {phase === 'restoring' && (
+            <p className="rounded-xl bg-amber-50 p-3 text-amber-700">Restaurando respaldo…</p>
           )}
           {message && (
             <p role="status" className="rounded-xl bg-slate-50 p-3 text-slate-700">
@@ -123,11 +162,11 @@ export function BackupModal({ onClose }: { onClose: () => void }) {
         <div className="flex gap-2 border-t border-slate-100 p-4">
           <button
             type="button"
-            onClick={() => fileInput.current?.click()}
+            onClick={() => setPhase(phase === 'picking' ? 'idle' : 'picking')}
             disabled={phase === 'restoring'}
             className="pressable flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 shadow-sm hover:border-slate-300 disabled:opacity-50"
           >
-            Restaurar
+            {phase === 'picking' ? 'Cancelar' : 'Restaurar'}
           </button>
           <button
             type="button"
@@ -136,13 +175,6 @@ export function BackupModal({ onClose }: { onClose: () => void }) {
           >
             Exportar
           </button>
-          <input
-            ref={fileInput}
-            type="file"
-            accept=".json,application/json"
-            onChange={handleRestoreFile}
-            className="hidden"
-          />
         </div>
       </div>
     </div>
