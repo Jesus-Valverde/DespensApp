@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { CatalogView } from './ProductList'
@@ -71,26 +71,6 @@ describe('ProductList', () => {
     await user.clear(screen.getByRole('searchbox', { name: 'Buscar en catálogo' }))
     await user.type(screen.getByRole('searchbox', { name: 'Buscar en catálogo' }), 'zzz')
     expect(screen.getByText(/Sin resultados/)).toBeInTheDocument()
-  })
-
-  it('opens the CSV help modal from the catalog', async () => {
-    const user = userEvent.setup()
-    render(
-      <MemoryRouter>
-        <CatalogView />
-      </MemoryRouter>,
-    )
-    await screen.findByRole('button', { name: /Cómo llenar la plantilla/ })
-
-    await user.click(screen.getByRole('button', { name: /Cómo llenar la plantilla/ }))
-
-    const dialog = await screen.findByRole('dialog', { name: 'Cómo importar tu catálogo' })
-    expect(within(dialog).getByText('Unidades válidas')).toBeInTheDocument()
-    expect(within(dialog).getByText('L')).toBeInTheDocument()
-    expect(within(dialog).getByRole('link', { name: /Descargar plantilla/ })).toHaveAttribute(
-      'href',
-      '/plantilla-catalogo.csv',
-    )
   })
 
   it('shows the empty state when the catalog has no products', async () => {

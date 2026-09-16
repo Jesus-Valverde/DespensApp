@@ -63,8 +63,10 @@ describe('Header data menu', () => {
     fireEvent.click(screen.getByRole('menuitem', { name: 'Datos del catálogo' }))
     const dialog2 = await screen.findByRole('dialog', { name: 'Datos del catálogo' })
     fireEvent.click(within(dialog2).getByRole('button', { name: /Cómo llenar la plantilla/ }))
-    expect(
-      await screen.findByRole('dialog', { name: 'Cómo importar tu catálogo' }),
-    ).toBeInTheDocument()
+    const help = await screen.findByRole('dialog', { name: 'Cómo importar tu catálogo' })
+    expect(within(help).getByRole('link', { name: /Descargar plantilla/ })).toHaveAttribute(
+      'href',
+      '/plantilla-catalogo.csv',
+    )
   })
 })
