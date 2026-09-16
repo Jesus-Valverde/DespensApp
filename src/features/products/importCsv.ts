@@ -14,6 +14,30 @@ const FREQUENCIES: Record<string, Exclude<Period, null>> = {
   mensual: 'mensual',
 }
 
+/** Column contract (order matters for the generated template). */
+export const CATALOG_COLUMNS = [
+  'Nombre',
+  'Marca',
+  'Modelo',
+  'Contenido',
+  'Unidad',
+  'Familia',
+  'Área',
+  'Descripción',
+  'Stock actual',
+  'Stock mínimo',
+  'Stock máximo',
+  'Ubicación',
+  'Precio referencia',
+  'Frecuencia',
+] as const
+
+/** Example rows shipped inside the generated template (same as the legacy CSV). */
+const TEMPLATE_EXAMPLES = [
+  ['Leche', 'Lala', '100 Entera', '1', 'L', 'Lácteo', 'Refri', 'Leche entera pasteurizada', '6', '2', '12', 'Refri', '28.00', 'Semanal'],
+  ['Frijol negro', 'Isadora', '500 g', '500', 'g', 'Granos', 'Alacena', '', '2', '1', '6', 'Alacena', '22.50', 'Quincenal'],
+]
+
 export interface ProductDraft {
   title: string
   brand?: string
@@ -54,17 +78,12 @@ function toInt(value: string): number | null {
   return Number.isInteger(n) && n >= 0 ? n : null
 }
 
-/** Parses catalog CSV text (headers in Spanish, comma or semicolon separated).
- * Rows with problems are returned per-row; valid rows become product drafts. */
-export function parseCatalogCsv(text: string): CatalogCsvParse {
-  const parsed = Papa.parse<Record<string, string>>(text.replace(/^\uFEFF/, ''), {
-    header: true,
-    skipEmptyLines: 'greedy',
-  })
-  const rows: ProductDraft[] = []
+/** Validates raw header-keyed rows (shared by the CSV and XLSX readers). */
+function buildDrafts(rows: Record<string, string>[]): CatalogCsvParse {
+  const drafts: ProductDraft[] = []
   const errors: CsvRowError[] = []
 
-  parsed.data.forEach((raw, index) => {
+  rows.forEach((raw, index) => {
     const rowNumber = index + 2 // + header row
     const rowErrors: string[] = []
 
@@ -114,7 +133,7 @@ export function parseCatalogCsv(text: string): CatalogCsvParse {
       return
     }
 
-    rows.push({
+    drafts.push({
       title,
       brand: optional(clean(raw['Marca'])),
       model: optional(clean(raw['Modelo'])),
@@ -138,5 +157,48 @@ export function parseCatalogCsv(text: string): CatalogCsvParse {
     })
   })
 
-  return { rows, errors }
+  return { rows: drafts, errors }
+}
+
+/** Parses catalog CSV text (headers in Spanish, comma or semicolon separated).
+ * Rows with problems are returned per-row; valid rows become product drafts. */
+export function parseCatalogCsv(text: string): CatalogCsvParse {
+  const parsed = Papa.parse<Record<string, string>>(text.replace(/^\uFEFF/, ''), {
+    header: true,
+    skipEmptyLines: 'greedy',
+  })
+  return buildDrafts(parsed.data)
+}
+
+const XLSX_EXTENSIONS = /\.(xlsx|xls)$/i
+
+/** Parses an uploaded catalog file — .xlsx/.xls via SheetJS, plain text
+ * (.csv) via PapaParse — into the same validated draft set. */
+export async function parseCatalogFile(file: File): Promise<CatalogCsvParse> {
+  if (XLSX_EXTENSIONS.test(file.name)) {
+    const XLSX = await import('xlsx')
+    const workbook = XLSX.read(await file.arrayBuffer())
+    const sheet = workbook.Sheets[workbook.SheetNames[0]]
+    const rows = XLSX.utils.sheet_to_json<Record<string, string>>(sheet, { defval: '', raw: false })
+    return buildDrafts(rows)
+  }
+  return parseCatalogCsv(await file.text())
+}
+
+type XLSXModule = typeof import('xlsx')
+
+/** Builds the catalog template workbook (headers + 2 example rows). */
+export async function buildCatalogTemplate(): Promise<XLSXModule.WorkBook> {
+  const XLSX: XLSXModule = await import('xlsx')
+  const sheet = XLSX.utils.aoa_to_sheet([CATALOG_COLUMNS, ...TEMPLATE_EXAMPLES])
+  sheet['!cols'] = CATALOG_COLUMNS.map((header) => ({ wch: Math.max(header.length + 4, 10) }))
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, sheet, 'Catálogo')
+  return workbook
+}
+
+/** Generates the catalog template as .xlsx and triggers the browser download. */
+export async function downloadCatalogTemplate(): Promise<void> {
+  const XLSX: XLSXModule = await import('xlsx')
+  XLSX.writeFile(await buildCatalogTemplate(), 'plantilla-catalogo.xlsx')
 }

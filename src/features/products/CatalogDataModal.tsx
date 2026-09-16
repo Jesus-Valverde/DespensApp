@@ -5,7 +5,7 @@ import { db } from '../../db/db'
 import { createProduct } from './api'
 import { setStock } from '../inventory/api'
 import { savePurchaseInfo } from '../purchase/api'
-import { parseCatalogCsv, type CatalogCsvParse, type ProductDraft } from './importCsv'
+import { parseCatalogFile, downloadCatalogTemplate, type CatalogCsvParse, type ProductDraft } from './importCsv'
 
 const UNITS: [string, string][] = [
   ['L', 'Litros'],
@@ -56,7 +56,7 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
 
   async function handleFile(file: File | undefined) {
     if (!file) return
-    setParsed(parseCatalogCsv(await file.text()))
+    setParsed(await parseCatalogFile(file))
     setImportPhase('preview')
   }
 
@@ -138,13 +138,13 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
           <ol className="space-y-4">
             <Step n="1" title="Descarga la plantilla">
               Usa{' '}
-              <a
-                href="/plantilla-catalogo.csv"
-                download
+              <button
+                type="button"
+                onClick={downloadCatalogTemplate}
                 className="font-semibold text-blue-600 hover:underline"
               >
-                plantilla-catalogo.csv
-              </a>
+                plantilla-catalogo.xlsx
+              </button>
               ; ya trae las columnas en el orden correcto.
             </Step>
             <Step n="2" title="Llena una fila por producto">
@@ -153,8 +153,8 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
               opcionales.
             </Step>
             <Step n="3" title="Sube el archivo">
-              Guarda como CSV y pulsa <strong>Importar CSV</strong>. Te mostraremos errores por
-              fila antes de confirmar.
+              Guarda como XLSX o CSV y pulsa <strong>Importar CSV</strong>. Te mostraremos errores
+              por fila antes de confirmar.
             </Step>
           </ol>
 
@@ -178,13 +178,13 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="flex gap-2 border-t border-slate-100 p-4">
-          <a
-            href="/plantilla-catalogo.csv"
-            download
+          <button
+            type="button"
+            onClick={downloadCatalogTemplate}
             className="pressable flex-1 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-600 shadow-sm hover:border-slate-300"
           >
             Descargar plantilla
-          </a>
+          </button>
           <button
             type="button"
             onClick={() => (importActive ? closeImport() : setImportPhase('picking'))}
@@ -219,7 +219,7 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
                 ref={fileInput}
                 id="catalog-csv"
                 type="file"
-                accept=".csv,text/csv"
+                accept=".xlsx,.xls,.csv,text/csv"
                 className="sr-only"
                 onChange={(event) => {
                   const file = event.target.files?.[0]
@@ -233,10 +233,10 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
                 </svg>
               </span>
               <span className="text-sm font-semibold text-slate-700 transition-colors group-hover:text-blue-600">
-                Agrega o arrastra tu archivo CSV
+                Agrega o arrastra tu archivo
               </span>
               <span className="mt-0.5 text-xs text-slate-500">
-                o haz clic para seleccionarlo — plantilla-catalogo.csv
+                o haz clic para seleccionarlo — .xlsx o .csv
               </span>
             </label>
           </div>

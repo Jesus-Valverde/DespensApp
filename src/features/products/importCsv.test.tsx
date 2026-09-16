@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import * as XLSX from 'xlsx'
 import { CatalogDataModal } from './CatalogDataModal'
-import { parseCatalogCsv } from './importCsv'
+import { parseCatalogCsv, parseCatalogFile, buildCatalogTemplate, CATALOG_COLUMNS } from './importCsv'
 import { db } from '../../db/db'
 import type { Product } from '../../db/types'
 
@@ -11,6 +12,12 @@ const SAMPLE = [
   'Leche,Lala,100 Entera,1,L,Lácteo,Refri,,6,2,12,Refri,28.00,Semanal',
   'Atún,Dolores,3 pack,3,pza,Enlatados,Alacena,,,,,,,',
 ].join('\r\n')
+
+const SAMPLE_GRID = [
+  CATALOG_COLUMNS,
+  ['Leche', 'Lala', '100 Entera', '1', 'L', 'Lácteo', 'Refri', '', '6', '2', '12', 'Refri', '28.00', 'Semanal'],
+  ['Atún', 'Dolores', '3 pack', '3', 'pza', 'Enlatados', 'Alacena', '', '', '', '', '', '', ''],
+]
 
 const INVALID = [
   'Nombre,Contenido,Unidad,Stock actual,Precio referencia,Frecuencia',
@@ -36,11 +43,24 @@ function renderModal() {
   render(<CatalogDataModal onClose={() => {}} />)
 }
 
-/** Open the inline import section and upload a CSV into its dropzone input. */
-async function openAndUpload(user: ReturnType<typeof userEvent.setup>, text: string) {
+function csvFile(text: string): File {
+  return new File([text], 'plantilla.csv', { type: 'text/csv' })
+}
+
+function xlsxFile(rows: (string | number)[][]): File {
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(rows), 'Catálogo')
+  const data = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' }) as ArrayBuffer
+  return new File([data], 'plantilla.xlsx', {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  })
+}
+
+/** Open the inline import section and upload a file into its dropzone input. */
+async function openAndUpload(user: ReturnType<typeof userEvent.setup>, file: File) {
   await user.click(screen.getByRole('button', { name: 'Importar CSV' }))
   const input = document.querySelector('input[type="file"]')! as HTMLElement
-  await user.upload(input, new File([text], 'plantilla.csv', { type: 'text/csv' }))
+  await user.upload(input, file)
 }
 
 describe('parseCatalogCsv', () => {
@@ -87,11 +107,42 @@ describe('parseCatalogCsv', () => {
   })
 })
 
+describe('parseCatalogFile', () => {
+  it('reads .xlsx workbooks into the same validated drafts', async () => {
+    const { rows, errors } = await parseCatalogFile(xlsxFile(SAMPLE_GRID))
+    expect(errors).toEqual([])
+    expect(rows).toHaveLength(2)
+    expect(rows[0]).toMatchObject({
+      title: 'Leche',
+      brand: 'Lala',
+      content: '1',
+      unit: 'L',
+      stock: { current: 6, min: 2, max: 12, location: 'Refri' },
+      purchase: { originalPrice: 2800, period: 'semanal' },
+    })
+    expect(rows[1]).toMatchObject({ title: 'Atún', content: '3', unit: 'pza' })
+  })
+
+  it('still reads plain .csv files', async () => {
+    const { rows, errors } = await parseCatalogFile(csvFile(SAMPLE))
+    expect(errors).toEqual([])
+    expect(rows).toHaveLength(2)
+    expect(rows[0]?.title).toBe('Leche')
+  })
+
+  it('builds a template workbook with the catalog column contract', async () => {
+    const workbook = await buildCatalogTemplate()
+    const grid = XLSX.utils.sheet_to_json<unknown[]>(workbook.Sheets['Catálogo'], { header: 1 })
+    expect(grid[0]).toEqual(CATALOG_COLUMNS)
+    expect(grid).toHaveLength(3) // header + 2 example rows
+  })
+})
+
 describe('CatalogDataModal inline import', () => {
-  it('unfolds the dropzone below the button and imports valid rows', async () => {
+  it('unfolds the dropzone below the button and imports valid .xlsx rows', async () => {
     const user = userEvent.setup()
     renderModal()
-    await openAndUpload(user, SAMPLE)
+    await openAndUpload(user, xlsxFile(SAMPLE_GRID))
 
     expect(await screen.findByText('2 productos listos para importar')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Importar 2 productos' }))
@@ -103,7 +154,7 @@ describe('CatalogDataModal inline import', () => {
     expect(leche?.purchase.period).toBe('semanal')
     expect(await db.products.where('title').equals('Atún').count()).toBe(1)
     // The import registers each product name as a def (props stay empty: the
-    // CSV has no props column and must not clobber existing templates).
+    // template has no props column and must not clobber existing templates).
     const lecheDef = await db.productDefs.where('title').equals('Leche').first()
     expect(lecheDef).toMatchObject({ title: 'Leche', props: [] })
   })
@@ -111,7 +162,7 @@ describe('CatalogDataModal inline import', () => {
   it('shows per-row errors and imports nothing when every row is invalid', async () => {
     const user = userEvent.setup()
     renderModal()
-    await openAndUpload(user, INVALID)
+    await openAndUpload(user, csvFile(INVALID))
 
     expect(await screen.findByText('No se encontró ninguna fila válida.')).toBeInTheDocument()
     expect(screen.getByText('Fila 2: falta el Nombre')).toBeInTheDocument()
@@ -134,7 +185,7 @@ describe('CatalogDataModal inline import', () => {
 
     const user = userEvent.setup()
     renderModal()
-    await openAndUpload(user, SAMPLE)
+    await openAndUpload(user, xlsxFile(SAMPLE_GRID))
 
     await user.click(await screen.findByRole('button', { name: 'Importar 2 productos' }))
 
@@ -148,7 +199,7 @@ describe('CatalogDataModal inline import', () => {
     renderModal()
 
     await user.click(screen.getByRole('button', { name: 'Importar CSV' }))
-    expect(await screen.findByText(/Agrega o arrastra tu archivo CSV/)).toBeInTheDocument()
+    expect(await screen.findByText(/Agrega o arrastra tu archivo/)).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Cancelar' }))
     expect(screen.queryByLabelText(/Agrega o arrastra/)).not.toBeInTheDocument()
