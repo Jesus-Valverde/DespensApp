@@ -25,9 +25,17 @@ const MOVEMENT_STYLES: Record<MovementType, { icon: LucideIcon; tile: string; de
   ajuste: { icon: SlidersHorizontal, tile: 'bg-amber-50 text-amber-700', delta: 'text-amber-700' },
 }
 
-// ponytail: short date; upgrade to relative "Hoy, 10:24" log format if asked
-const shortDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })
+// ponytail: relative day label only for today/yesterday, then short date; 24h time per pen
+const movementTimestamp = (iso: string) => {
+  const d = new Date(iso)
+  const now = new Date()
+  const startOf = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime()
+  const days = Math.round((startOf(now) - startOf(d)) / 86_400_000)
+  const label =
+    days === 0 ? 'Hoy' : days === 1 ? 'Ayer' : d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })
+  const time = d.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: false })
+  return `${label}, ${time}`
+}
 
 type StockBucket = { label: string; count: number; color: string; text: string }
 
@@ -222,9 +230,16 @@ export function InicioScreen() {
                           <p className="truncate text-[13px] font-bold text-slate-900">
                             {m.productTitle}
                           </p>
-                          <p className="text-[10px] font-semibold text-slate-500">
-                            {MOVEMENT_LABEL[m.type]} · {shortDate(m.date)}
-                          </p>
+                          <div className="mt-0.5 flex items-center gap-1.5">
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${style.tile}`}
+                            >
+                              {MOVEMENT_LABEL[m.type]}
+                            </span>
+                            <span className="text-[10px] font-semibold text-slate-500">
+                              {movementTimestamp(m.date)}
+                            </span>
+                          </div>
                         </div>
                         <div className="flex-shrink-0 text-right">
                           <p className={`text-[13px] font-extrabold ${style.delta}`}>

@@ -129,7 +129,8 @@ describe('InicioScreen', () => {
     const entradaCard = within(historial).getByText('+6').closest('li')!
     expect(within(salidaCard).getByText('Frijol')).toBeInTheDocument()
     expect(within(salidaCard).getByText('→ 4')).toBeInTheDocument()
-    expect(within(salidaCard).getByText(/^Salida/)).toBeInTheDocument()
+    expect(within(salidaCard).getByText('Salida')).toBeInTheDocument()
+    expect(within(salidaCard).getByText(/, \d{2}:\d{2}/)).toBeInTheDocument()
     expect(within(entradaCard).getByText('→ 6')).toBeInTheDocument()
     expect(salidaCard.compareDocumentPosition(entradaCard) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
