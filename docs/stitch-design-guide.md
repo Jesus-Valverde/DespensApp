@@ -23,7 +23,7 @@ DespensApp data models — so it never invents fields, tabs, or actions.
 Mobile app "DespensApp" — a Spanish-language household pantry and inventory manager. 430px phone frame on a slate-100 (#F1F5F9) page background; the app surface is slate-50 (#F8FAFC). Cards are white, rounded-2xl, thin slate-200 border, soft shadow. Primary color blue-600 (#2563EB); accent gradient from blue-600 to indigo-600; destructive red-600; stock-OK emerald; warnings amber. Headings: very bold, tight tracking, slate-900. Muted text slate-500/400. Pills and badges fully rounded. Inputs rounded-lg/xl with slate-200 borders.
 
 Chrome, every screen:
-- Top brand header, IDENTICAL on every screen: small rounded logo tile with blue gradient + bold wordmark "DespensApp" (dark, near-black) with small gray tagline "Control de despensa" under it, and on the right a CIRCULAR notification button (36px, slate-100 background, no border) containing a bell icon with a small blue dot indicator at its top-right when there are notifications (products under their minimum stock with alerts enabled). Tapping it opens the notifications panel. The header NEVER changes between screens — no back button, no screen title inside it.
+- Top brand header, IDENTICAL on every screen: small rounded logo tile with blue gradient + bold wordmark "DespensApp" (dark, near-black) with small gray tagline "Control de despensa" under it, and on the right TWO circular icon buttons (36px, slate-100 background, no border) side by side: the notification button (bell icon with a small blue dot indicator at its top-right when there are notifications — products under their minimum stock with alerts enabled — tapping opens the notifications panel) and to its right the DATA MENU button (Lucide ellipsis-vertical). The menu button opens a small dropdown anchored under it (white rounded-2xl card, shadow, 2 menu items with small icons): "Respaldo de datos" (Lucide database-backup, blue) opens the backup modal, and "Datos del catálogo" (Lucide database, green) opens the catalog-data modal (screen block 19). The header NEVER changes between screens — no back button, no screen title inside it.
 - Below the header, each screen renders its own window title bar separated by a thin divider: on tab-root screens the big title + small gray subtitle + a green count pill, NO back button; on form and detail screens a circular back-arrow button at top-left next to the window title (e.g. ← "Nuevo producto") that returns to the previous screen.
 - Bottom tab bar, 3 tabs, fixed, white with top border: "Inicio" (Lucide layout-grid), "Despensa" (Lucide warehouse), "Compras" (Lucide shopping-cart). Active tab: blue pill behind icon + bold blue label; inactive slate-500. Despensa hosts the catalog via a "Stock | Catálogo" toggle; Compras hosts Carritos, Listas and Proveedores via a three-way toggle. There are NO Productos, Carritos, Listas, or Proveedores tabs.
 - Module switch (view selector inside Despensa and Compras): full-width segmented control right under the window title. Container: rounded-xl, slate-100 background, p-1. Segments: equal width; the ACTIVE segment is a white rounded-lg pill with small shadow and bold blue-700 text; inactive segments medium slate-500. There are no tab-panel semantics — segments are links.
@@ -284,10 +284,16 @@ Section "Unidades válidas": rows with blue symbol + "—" + name: L — Litros,
 Footer: single filled blue button "Descargar plantilla".
 ```
 
-### 18. Modal — respaldo de datos (from Inicio link)
+### 18. Modal — respaldo de datos (from header data menu)
 
 ```text
-Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último respaldo: {fecha}" or "Nunca has respaldado tus datos". Body explains Exportar (downloads everything) / Restaurar (replaces current data). Footer buttons: outline "Restaurar" + filled blue "Exportar". Restore uses the system file picker (.json) and asks for confirmation before replacing.
+Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último respaldo: {fecha}" or "Nunca has respaldado tus datos". Body explains Exportar (downloads everything) / Restaurar (replaces current data). Footer buttons: outline "Restaurar" + filled blue "Exportar". Restore uses the system file picker (.json) and asks for confirmation before replacing. Entry point (2026-09-16): header data menu (ellipsis button next to the bell) → "Respaldo de datos"; the old discreet link at the bottom of Inicio was removed.
+```
+
+### 19. Modal — datos del catálogo (from header data menu)
+
+```text
+Modal "Datos del catálogo", bold title + gray subtitle "Importa productos o consulta la ayuda de la plantilla.", circular X close. Body: 2 full-width option rows (rounded-2xl, thin border, chevron right): "Importar CSV" / "Agrega productos desde un archivo .csv" with a blue file-up icon chip, and "Cómo llenar la plantilla" / "Tutorial para armar tu CSV de importación" with a green file-spreadsheet icon chip. Choosing an option closes this modal and opens the CSV import modal or the template tutorial modal respectively.
 ```
 
 ---
@@ -296,7 +302,7 @@ Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último res
 
 | Screen / surface | State |
 |---|---|
-| Shell (brand header, 3 tabs: Inicio/Despensa/Compras, FAB) | ✅ Stitched — 🆕 2026-09-12: 3-tab footer |
+| Shell (brand header, 3 tabs: Inicio/Despensa/Compras, FAB) | ✅ Stitched — 🆕 2026-09-12: 3-tab footer — 🆕 2026-09-16: header data menu (ellipsis → Respaldo de datos / Datos del catálogo) + block 19 |
 | Inicio | ✅ Stitched |
 | Despensa | ✅ Stitched — 🆕 2026-09-12: now hosts Catalog via "Stock | Catálogo" toggle |
 | Productos catalog | ✅ Stitched — relocated as Despensa's Catálogo view |

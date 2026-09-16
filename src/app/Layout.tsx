@@ -1,9 +1,13 @@
 import { useState, type ComponentType, type ReactNode, type SVGProps } from 'react'
 import { Link, NavLink, useLocation } from 'react-router'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { LayoutGrid, ShoppingCart, Warehouse } from 'lucide-react'
+import { Database, DatabaseBackup, EllipsisVertical, LayoutGrid, ShoppingCart, Warehouse } from 'lucide-react'
 import { db } from '../db/db'
 import { NotificationsPanel } from './NotificationsPanel'
+import { BackupModal } from './BackupModal'
+import { CatalogDataModal } from '../features/products/CatalogDataModal'
+import { CsvHelpModal } from '../features/products/CsvHelpModal'
+import { ImportCsvModal } from '../features/products/ImportCsvModal'
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>
 
@@ -52,6 +56,11 @@ export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
   const fab = fabFor(pathname)
   const [bellOpen, setBellOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [backupOpen, setBackupOpen] = useState(false)
+  const [catalogDataOpen, setCatalogDataOpen] = useState(false)
+  const [csvImportOpen, setCsvImportOpen] = useState(false)
+  const [csvHelpOpen, setCsvHelpOpen] = useState(false)
 
   // Notifications: products under their minimum stock with alerts enabled.
   const notifications = useLiveQuery(
@@ -81,25 +90,90 @@ export function Layout({ children }: { children: ReactNode }) {
                 <span className="mt-0.5 block text-[10px] font-medium text-slate-400">Control de despensa</span>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => setBellOpen(true)}
-              aria-label={`Notificaciones${notificationCount > 0 ? ` (${notificationCount})` : ''}`}
-              className="pressable relative flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200"
-            >
-              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-              </svg>
-              {notificationCount > 0 && (
-                <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-blue-600" aria-hidden="true" />
-              )}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setBellOpen(true)}
+                aria-label={`Notificaciones${notificationCount > 0 ? ` (${notificationCount})` : ''}`}
+                className="pressable relative flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+                </svg>
+                {notificationCount > 0 && (
+                  <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-blue-600" aria-hidden="true" />
+                )}
+              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen((open) => !open)}
+                  aria-label="Más opciones"
+                  aria-expanded={menuOpen}
+                  className="pressable flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200"
+                >
+                  <EllipsisVertical className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
+                </button>
+                {menuOpen && (
+                  <>
+                    <div className="fixed inset-0 z-30" aria-hidden="true" onClick={() => setMenuOpen(false)} />
+                    <div
+                      role="menu"
+                      aria-label="Opciones de datos"
+                      className="absolute right-0 top-11 z-40 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xl"
+                    >
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={() => {
+                          setMenuOpen(false)
+                          setBackupOpen(true)
+                        }}
+                        className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                      >
+                        <DatabaseBackup className="h-4 w-4 text-blue-600" strokeWidth={2} aria-hidden="true" />
+                        Respaldo de datos
+                      </button>
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={() => {
+                          setMenuOpen(false)
+                          setCatalogDataOpen(true)
+                        }}
+                        className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                      >
+                        <Database className="h-4 w-4 text-emerald-600" strokeWidth={2} aria-hidden="true" />
+                        Datos del catálogo
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </header>
 
         {bellOpen && (
           <NotificationsPanel products={notifications ?? []} onClose={() => setBellOpen(false)} />
         )}
+
+        {backupOpen && <BackupModal onClose={() => setBackupOpen(false)} />}
+        {catalogDataOpen && (
+          <CatalogDataModal
+            onClose={() => setCatalogDataOpen(false)}
+            onImport={() => {
+              setCatalogDataOpen(false)
+              setCsvImportOpen(true)
+            }}
+            onHelp={() => {
+              setCatalogDataOpen(false)
+              setCsvHelpOpen(true)
+            }}
+          />
+        )}
+        {csvImportOpen && <ImportCsvModal onClose={() => setCsvImportOpen(false)} />}
+        {csvHelpOpen && <CsvHelpModal onClose={() => setCsvHelpOpen(false)} />}
 
         <main className="flex-1 px-5 pt-5 pb-28">{children}</main>
 
