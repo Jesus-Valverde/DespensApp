@@ -1,5 +1,4 @@
-import { ChevronRight, Database, FileUp } from 'lucide-react'
-import type { ReactNode } from 'react'
+import { Database, FileUp } from 'lucide-react'
 
 const UNITS: [string, string][] = [
   ['L', 'Litros'],
@@ -9,12 +8,6 @@ const UNITS: [string, string][] = [
   ['pza', 'Piezas'],
   ['paq', 'Paquete'],
 ]
-
-function Info({ children }: { children: ReactNode }) {
-  return (
-    <p className="rounded-xl bg-slate-50 p-3 leading-relaxed text-slate-500">{children}</p>
-  )
-}
 
 /** Catalog data modal: the CSV import entry plus inline template help
  * (Respaldo-style body info instead of a separate tutorial modal). */
@@ -49,25 +42,8 @@ export function CatalogDataModal({ onClose, onImport }: { onClose: () => void; o
           </button>
         </div>
 
-        <div className="max-h-[70vh] space-y-2 overflow-y-auto px-5 pb-5">
-          <button
-            type="button"
-            onClick={onImport}
-            className="pressable flex w-full items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-3 text-left shadow-sm transition hover:border-blue-300"
-          >
-            <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-              <FileUp className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-sm font-bold text-slate-900">Importar CSV</span>
-              <span className="block text-xs text-slate-500">
-                Agrega productos desde un archivo .csv
-              </span>
-            </span>
-            <ChevronRight className="h-4 w-4 flex-shrink-0 text-slate-400" aria-hidden="true" />
-          </button>
-
-          <Info>
+        <div className="max-h-[70vh] space-y-3 overflow-y-auto px-5 pb-2 text-xs leading-relaxed text-slate-500">
+          <p>
             <strong className="text-slate-800">Cómo llenar la plantilla:</strong> descarga{' '}
             <a
               href="/plantilla-catalogo.csv"
@@ -80,11 +56,10 @@ export function CatalogDataModal({ onClose, onImport }: { onClose: () => void; o
             <strong className="text-slate-800">Nombre</strong> obligatorio,{' '}
             <strong className="text-slate-800">Contenido</strong> numérico y{' '}
             <strong className="text-slate-800">Unidad</strong> de la lista; stock, precio y
-            frecuencia son opcionales. Guarda como CSV y pulsa{' '}
-            <strong className="text-slate-800">Importar CSV</strong>: te mostraremos errores por
-            fila antes de confirmar.
-          </Info>
-          <Info>
+            frecuencia son opcionales. Guarda como CSV y te mostraremos errores por fila antes de
+            confirmar.
+          </p>
+          <p>
             <strong className="text-slate-800">Unidades válidas:</strong>{' '}
             {UNITS.map(([sym, name], index) => (
               <span key={sym}>
@@ -94,7 +69,18 @@ export function CatalogDataModal({ onClose, onImport }: { onClose: () => void; o
               </span>
             ))}
             .
-          </Info>
+          </p>
+        </div>
+
+        <div className="border-t border-slate-100 p-4">
+          <button
+            type="button"
+            onClick={onImport}
+            className="pressable flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
+          >
+            <FileUp className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+            Importar CSV
+          </button>
         </div>
       </div>
     </div>

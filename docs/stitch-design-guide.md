@@ -288,7 +288,7 @@ Modal "Respaldo de datos", cloud-download icon chip, subtitle shows "Último res
 ### 19. Modal — datos del catálogo (from header data menu)
 
 ```text
-Modal "Datos del catálogo", database icon chip (blue), bold title + gray subtitle "Importa productos o consulta la ayuda de la plantilla.", circular X close. 🆕 2026-09-16: ONE option row — "Importar CSV" / "Agrega productos desde un archivo .csv" (blue file-up icon chip, chevron right) — opens the CSV import modal. Below it, INLINE template help in Respaldo-modal body style (gray rounded-slate-50 info boxes, bold keywords): "Cómo llenar la plantilla:" (download link plantilla-catalogo.csv, one row per product, Nombre obligatorio / Contenido numérico / Unidad de la lista, stock-precio-frecuencia optional, per-row errors before confirming) and "Unidades válidas:" inline list L (Litros), ml (Mililitros), g (Gramos), kg (Kilogramos), pza (Piezas), paq (Paquete).
+Modal "Datos del catálogo", database icon chip (blue), bold title + gray subtitle "Importa productos o consulta la ayuda de la plantilla.", circular X close. Layout mirrors the Respaldo modal (2026-09-16): plain body text (no background boxes) — "Cómo llenar la plantilla:" (download link plantilla-catalogo.csv, one row per product, Nombre obligatorio / Contenido numérico / Unidad de la lista, stock-precio-frecuencia optional, per-row errors before confirming) and "Unidades válidas:" inline list L (Litros), ml (Mililitros), g (Gramos), kg (Kilogramos), pza (Piezas), paq (Paquete) — then a footer under a thin divider with one full-width filled blue button "Importar CSV" (file-up icon) that opens the CSV import modal.
 ```
 
 ---
