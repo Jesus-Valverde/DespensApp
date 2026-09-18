@@ -5,7 +5,7 @@ import { db } from '../../db/db'
 import { createProduct } from './api'
 import { setStock } from '../inventory/api'
 import { savePurchaseInfo } from '../purchase/api'
-import { parseCatalogFile, downloadCatalogTemplate, type CatalogCsvParse, type ProductDraft } from './importCsv'
+import { parseCatalogFile, downloadCatalogTemplate, downloadCatalogExport, type CatalogCsvParse, type ProductDraft } from './importCsv'
 
 const UNITS: [string, string][] = [
   ['L', 'Litros'],
@@ -180,10 +180,10 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
         <div className="flex gap-2 border-t border-slate-100 p-4">
           <button
             type="button"
-            onClick={downloadCatalogTemplate}
+            onClick={downloadCatalogExport}
             className="pressable flex-1 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center text-sm font-semibold text-slate-600 shadow-sm hover:border-slate-300"
           >
-            Descargar plantilla
+            Exportar catálogo
           </button>
           <button
             type="button"

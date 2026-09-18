@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import * as XLSX from 'xlsx'
 import { CatalogDataModal } from './CatalogDataModal'
-import { parseCatalogCsv, parseCatalogFile, buildCatalogTemplate, CATALOG_COLUMNS } from './importCsv'
+import { parseCatalogCsv, parseCatalogFile, buildCatalogTemplate, buildCatalogExport, CATALOG_COLUMNS } from './importCsv'
 import { db } from '../../db/db'
 import type { Product } from '../../db/types'
 
@@ -135,6 +135,51 @@ describe('parseCatalogFile', () => {
     const grid = XLSX.utils.sheet_to_json<unknown[]>(workbook.Sheets['Catálogo'], { header: 1 })
     expect(grid[0]).toEqual(CATALOG_COLUMNS)
     expect(grid).toHaveLength(3) // header + 2 example rows
+  })
+
+  it('exports every product as a template-format row that round-trips', async () => {
+    await db.products.add({
+      title: 'Leche',
+      brand: 'Lala',
+      model: '100 Entera',
+      content: '1',
+      unit: 'L',
+      family: 'Lácteo',
+      area: 'Refri',
+      customProps: [],
+      stock: { current: 6, min: 2, max: 12, location: 'Refri' },
+      purchase: { originalPrice: 2800, period: 'semanal', secondarySupplierIds: [], links: [] },
+      createdAt: '2026-09-01T00:00:00.000Z',
+      updatedAt: '2026-09-01T00:00:00.000Z',
+    } as Product)
+    await db.products.add({
+      title: 'Sal',
+      customProps: [],
+      stock: { current: 3, min: null, max: null },
+      purchase: { secondarySupplierIds: [], period: null, links: [] },
+      createdAt: '2026-09-01T00:00:00.000Z',
+      updatedAt: '2026-09-01T00:00:00.000Z',
+    } as Product)
+
+    const workbook = await buildCatalogExport(await db.products.toArray())
+    const grid = XLSX.utils.sheet_to_json<unknown[]>(workbook.Sheets['Catálogo'], { header: 1 })
+    expect(grid[0]).toEqual(CATALOG_COLUMNS)
+    expect(grid[1]).toEqual([
+      'Leche', 'Lala', '100 Entera', '1', 'L', 'Lácteo', 'Refri', '',
+      '6', '2', '12', 'Refri', '28.00', 'Semanal',
+    ])
+    expect(grid[2]).toEqual(['Sal', '', '', '', '', '', '', '', '3', '', '', '', '', ''])
+    // The exported rows re-import as the same drafts
+    const text = XLSX.utils.sheet_to_csv(workbook.Sheets['Catálogo'])
+    const { rows, errors } = parseCatalogCsv(text)
+    expect(errors).toEqual([])
+    expect(rows[0]).toMatchObject({
+      title: 'Leche',
+      content: '1',
+      unit: 'L',
+      stock: { current: 6, min: 2, max: 12, location: 'Refri' },
+      purchase: { originalPrice: 2800, period: 'semanal' },
+    })
   })
 })
 

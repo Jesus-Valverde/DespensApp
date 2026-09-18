@@ -51,7 +51,7 @@ describe('Header data menu', () => {
     expect(within(dialog).getByText(/Unidades válidas/)).toBeInTheDocument()
     expect(within(dialog).getByText('L')).toBeInTheDocument()
     expect(within(dialog).getByText('Paquete')).toBeInTheDocument()
-    expect(within(dialog).getByRole('button', { name: 'Descargar plantilla' })).toBeInTheDocument()
+    expect(within(dialog).getByRole('button', { name: 'Exportar catálogo' })).toBeInTheDocument()
 
     // Import unfolds the dropzone inline, no second modal
     fireEvent.click(within(dialog).getByRole('button', { name: 'Importar CSV' }))

@@ -202,3 +202,36 @@ export async function downloadCatalogTemplate(): Promise<void> {
   const XLSX: XLSXModule = await import('xlsx')
   XLSX.writeFile(await buildCatalogTemplate(), 'plantilla-catalogo.xlsx')
 }
+
+/** Builds the catalog export workbook: every product as one template-format
+ * row, so the file round-trips with the importer. */
+export async function buildCatalogExport(products: Product[]): Promise<XLSXModule.WorkBook> {
+  const XLSX: XLSXModule = await import('xlsx')
+  const rows = products.map((product) => [
+    product.title,
+    product.brand ?? '',
+    product.model ?? '',
+    product.content ?? '',
+    product.unit ?? '',
+    product.family ?? '',
+    product.area ?? '',
+    product.description ?? '',
+    String(product.stock.current),
+    product.stock.min != null ? String(product.stock.min) : '',
+    product.stock.max != null ? String(product.stock.max) : '',
+    product.stock.location ?? '',
+    product.purchase.originalPrice != null ? (product.purchase.originalPrice / 100).toFixed(2) : '',
+    product.purchase.period ? product.purchase.period[0]!.toUpperCase() + product.purchase.period.slice(1) : '',
+  ])
+  const sheet = XLSX.utils.aoa_to_sheet([CATALOG_COLUMNS, ...rows])
+  sheet['!cols'] = CATALOG_COLUMNS.map((header) => ({ wch: Math.max(header.length + 4, 10) }))
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, sheet, 'Catálogo')
+  return workbook
+}
+
+/** Exports every product as .xlsx and triggers the browser download. */
+export async function downloadCatalogExport(): Promise<void> {
+  const XLSX: XLSXModule = await import('xlsx')
+  XLSX.writeFile(await buildCatalogExport(await db.products.toArray()), 'catalogo-despensapp.xlsx')
+}
