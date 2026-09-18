@@ -58,7 +58,7 @@ function xlsxFile(rows: (string | number)[][]): File {
 
 /** Open the inline import section and upload a file into its dropzone input. */
 async function openAndUpload(user: ReturnType<typeof userEvent.setup>, file: File) {
-  await user.click(screen.getByRole('button', { name: 'Importar CSV' }))
+  await user.click(screen.getByRole('button', { name: 'Importar catálogo' }))
   const input = document.querySelector('input[type="file"]')! as HTMLElement
   await user.upload(input, file)
 }
@@ -243,11 +243,11 @@ describe('CatalogDataModal inline import', () => {
     const user = userEvent.setup()
     renderModal()
 
-    await user.click(screen.getByRole('button', { name: 'Importar CSV' }))
+    await user.click(screen.getByRole('button', { name: 'Importar catálogo' }))
     expect(await screen.findByText(/Agrega o arrastra tu archivo/)).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Cancelar' }))
     expect(screen.queryByLabelText(/Agrega o arrastra/)).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Importar CSV' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Importar catálogo' })).toBeInTheDocument()
   })
 })

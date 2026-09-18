@@ -54,7 +54,7 @@ describe('Header data menu', () => {
     expect(within(dialog).getByRole('button', { name: 'Exportar catálogo' })).toBeInTheDocument()
 
     // Import unfolds the dropzone inline, no second modal
-    fireEvent.click(within(dialog).getByRole('button', { name: 'Importar CSV' }))
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Importar catálogo' }))
     expect(await within(dialog).findByText(/Agrega o arrastra tu archivo/)).toBeInTheDocument()
     expect(
       screen.queryByRole('dialog', { name: 'Importar productos desde CSV' }),

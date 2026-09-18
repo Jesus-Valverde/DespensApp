@@ -39,7 +39,7 @@ type ImportPhase = 'closed' | 'picking' | 'preview' | 'importing' | 'done'
 
 /** Catalog data modal (guide block 19): the tutorial as the body — numbered
  * steps + valid units — with "Descargar plantilla" and the inline CSV import
- * flow ("Importar CSV" unfolds the dropzone below, no second modal). */
+ * flow ("Importar catálogo" unfolds the dropzone below, no second modal). */
 export function CatalogDataModal({ onClose }: { onClose: () => void }) {
   const fileInput = useRef<HTMLInputElement>(null)
   const [importPhase, setImportPhase] = useState<ImportPhase>('closed')
@@ -153,8 +153,8 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
               opcionales.
             </Step>
             <Step n="3" title="Sube el archivo">
-              Guarda como XLSX o CSV y pulsa <strong>Importar CSV</strong>. Te mostraremos errores
-              por fila antes de confirmar.
+              Guarda como XLSX o CSV y pulsa <strong>Importar catálogo</strong>. Te mostraremos
+              errores por fila antes de confirmar.
             </Step>
           </ol>
 
@@ -191,7 +191,7 @@ export function CatalogDataModal({ onClose }: { onClose: () => void }) {
             disabled={importPhase === 'importing'}
             className="pressable flex-1 whitespace-nowrap rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:opacity-50"
           >
-            {importActive ? 'Cancelar' : 'Importar CSV'}
+            {importActive ? 'Cancelar' : 'Importar catálogo'}
           </button>
         </div>
 
