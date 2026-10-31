@@ -4,13 +4,18 @@ import tailwindcss from '@tailwindcss/vite'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// HTTPS for preview: lets the PWA be installed from a phone on the same Wi-Fi
-// (secure context). Accept the self-signed certificate warning once.
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  // Distinctive dev port: 5173 belongs to another project the user runs at
+  // the same time (Vite's auto-increment would land on 5174 and collide too).
+  server: { port: 5273 },
   plugins: [
     react(),
     tailwindcss(),
-    basicSsl(),
+    // TLS only for `vite preview` (production mode): lets the PWA be installed
+    // from a phone on the same Wi-Fi (secure context). Dev stays plain http —
+    // embedded browsers (zcode sidebar) reject the self-signed cert with no
+    // "proceed anyway" option.
+    ...(mode === 'production' ? [basicSsl()] : []),
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
@@ -40,6 +45,8 @@ export default defineConfig({
     // Heavy Dexie+DOM tests exceed the 5s default under full-suite parallel load,
     // and one-worker-per-file contention makes liveQuery renders flake.
     testTimeout: 15000,
-    maxWorkers: 8,
+    // Host has 16GB RAM: each worker re-loads the whole app + Dexie, so high
+    // worker counts spike commit past the ceiling and freeze the system.
+    maxWorkers: 2,
   },
-})
+}))
