@@ -1,0 +1,603 @@
+<mxfile host="Electron" compressed="false" pages="10">
+  <diagram id="idx" name="Índice">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="idx-t1" value="DespensApp — Documentación técnica del sistema" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="185" y="40" width="800" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="idx-t2" value="PWA offline-first de control de despensa · React + Vite + Dexie (IndexedDB) · sin backend" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="185" y="80" width="800" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="idx-list" value="&lt;table style=&#39;border-collapse:collapse;font-size:12px;&#39; cellpadding=&#39;6&#39; border=&#39;1&#39;&gt;&#xa;&lt;tr&gt;&lt;td bgcolor=&#39;#2d5f8b&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;b&gt;Página&lt;/b&gt;&lt;/td&gt;&lt;td bgcolor=&#39;#2d5f8b&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;b&gt;Contenido&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;tr&gt;&lt;td&gt;1 · Contexto (C4 Nivel 1)&lt;/td&gt;&lt;td&gt;Sistema, usuario y colaboradores externos&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;tr&gt;&lt;td&gt;2 · Contenedores (C4 Nivel 2)&lt;/td&gt;&lt;td&gt;SPA, Service Worker, Dexie, IndexedDB, archivos y despliegue&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;tr&gt;&lt;td&gt;3 · Entidades (ERD)&lt;/td&gt;&lt;td&gt;6 tablas Dexie, campos y relaciones (cardinalidad)&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;tr&gt;&lt;td&gt;4 · Diccionario de Datos&lt;/td&gt;&lt;td&gt;Campo, tipo, nulidad, restricciones y propósito&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;tr&gt;&lt;td&gt;5 · Secuencia: Pagar carrito&lt;/td&gt;&lt;td&gt;buyCart() — transacción todo-o-nada&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;tr&gt;&lt;td&gt;6 · Flujo: Registrar movimiento&lt;/td&gt;&lt;td&gt;entrada / salida / ajuste y actualización de stock&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;tr&gt;&lt;td&gt;7 · Flujo: Respaldo y restauración&lt;/td&gt;&lt;td&gt;Exportación e importación local (.json)&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;tr&gt;&lt;td&gt;8 · Flujo: Importar catálogo CSV&lt;/td&gt;&lt;td&gt;Validación por fila y creación de productos&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;tr&gt;&lt;td&gt;9 · Flujo: Carrito automático&lt;/td&gt;&lt;td&gt;generateAutoCart() — reposición programada&lt;/td&gt;&lt;/tr&gt;&#xa;&lt;/table&gt;" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#999999;verticalAlign=top;align=center;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="235" y="140" width="700" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="idx-note" value="&lt;b&gt;Alcance&lt;/b&gt;&lt;br&gt;· No hay especificación OpenAPI/Swagger: la app no tiene backend ni API REST — todos los datos viven localmente en el navegador (IndexedDB).&lt;br&gt;· Casos de uso omitidos: sistema de usuario único (el actor se documenta en el Contexto, página 1).&lt;br&gt;· Diagrama de despliegue incluido como nota en la página de Contenedores (página 2)." style="shape=note;whiteSpace=wrap;html=1;size=20;verticalAlign=top;align=left;spacing=8;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="235" y="590" width="700" height="140" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="c4l1" name="1 · Contexto (C4 L1)">
+    <mxGraphModel dx="1471" dy="894" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="826" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="l1-title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" value="Diagrama de Contexto — C4 Nivel 1" vertex="1">
+          <mxGeometry height="30" width="600" x="285" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-actor" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Usuario&lt;br&gt;(dueño de la despensa de su hogar&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;)&lt;/span&gt;" vertex="1">
+          <mxGeometry height="100" width="60" x="150" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-sys" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;verticalAlign=top;spacing=10;" value="&lt;b&gt;DespensApp&lt;/b&gt;&lt;br&gt;[Sistema de software · PWA offline-first]&lt;br&gt;&lt;br&gt;Control de despensa: catálogo de productos,&lt;br&gt;stock con mínimos, compras programadas,&lt;br&gt;listas, proveedores y respaldos locales" vertex="1">
+          <mxGeometry height="180" width="300" x="460" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-files" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;verticalAlign=top;spacing=10;dashed=1;" value="&lt;b&gt;Sistema de archivos local&lt;/b&gt;&lt;br&gt;[Colaborador externo · dispositivo]&lt;br&gt;&lt;br&gt;Respaldo .json (dexie-export-import)&lt;br&gt;Catálogo .csv (plantilla de 14 columnas)" vertex="1">
+          <mxGeometry height="130" width="240" x="880" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-server" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;verticalAlign=top;spacing=10;dashed=1;" value="&lt;b&gt;Servidor estático en LAN&lt;/b&gt;&lt;br&gt;[vite preview · HTTPS, cert. autofirmado]&lt;br&gt;&lt;br&gt;Sirve el bundle (dist/) para instalar&lt;br;o abrir la app como PWA" vertex="1">
+          <mxGeometry height="130" width="240" x="880" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e1" edge="1" parent="1" source="l1-actor" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;" target="l1-sys" value="gestiona su despensa&lt;br&gt;(funciona sin red)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e2" edge="1" parent="1" source="l1-sys" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;" target="l1-files" value="exporta respaldo /&lt;br&gt;importa catálogo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e3" edge="1" parent="1" source="l1-server" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;dashed=1;" target="l1-sys" value="sirve la app&lt;br&gt;(bundle + Service Worker)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="c4l2" name="2 · Contenedores (C4 L2)">
+    <mxGraphModel dx="1717" dy="1043" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="l2-title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" value="Diagrama de Contenedores — C4 Nivel 2" vertex="1">
+          <mxGeometry height="30" width="600" x="500" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-browser" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;fontSize=13;fontStyle=1;spacing=10;" value="Navegador del usuario (Chrome — instalada o como pestaña)" vertex="1">
+          <mxGeometry height="860" width="1120" x="40" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-spa" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;verticalAlign=top;spacing=12;align=center;" value="&lt;b&gt;React SPA&lt;/b&gt;&lt;br&gt;[Vite · TypeScript · Tailwind v4]&lt;br&gt;&lt;br&gt;&lt;b&gt;Pantallas&lt;/b&gt;&lt;br&gt;· Inicio — KPIs de stock y reposición&lt;br&gt;· Despensa — Stock · Catálogo&lt;br&gt;· Compras — Carritos · Listas · Proveedores&lt;br&gt;&lt;br&gt;&lt;b&gt;Servicios de dominio&lt;/b&gt;&lt;br&gt;· inventory/api — stock y movimientos&lt;br&gt;· carts/api — ciclo de compra y carrito auto&lt;br&gt;· products/importCsv — PapaParse&lt;br&gt;· lib/backup — dexie-export-import" vertex="1">
+          <mxGeometry height="420" width="430" x="80" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-sw" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;verticalAlign=top;spacing=10;" value="&lt;b&gt;Service Worker&lt;/b&gt;&lt;br&gt;[vite-plugin-pwa]&lt;br&gt;&lt;br&gt;Caché offline-first&lt;br&gt;actualización automática (autoUpdate)" vertex="1">
+          <mxGeometry height="150" width="250" x="730" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-dexie" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;verticalAlign=top;spacing=10;" value="&lt;b&gt;Dexie&lt;/b&gt;&lt;br&gt;[capa de datos]&lt;br&gt;&lt;br&gt;BD &#39;despensapp&#39; · esquema v2&lt;br&gt;migraciones (content/unit,&lt;br&gt;productDefs) · transacciones &#39;rw&#39;" vertex="1">
+          <mxGeometry height="170" width="250" x="180" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-idb" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;verticalAlign=top;spacing=10;" value="&lt;b&gt;IndexedDB&lt;/b&gt;&lt;br&gt;&#39;despensapp&#39;&lt;br&gt;&lt;br&gt;6 object stores:&lt;br&gt;products · productDefs · suppliers&lt;br&gt;movements · carts · lists" vertex="1">
+          <mxGeometry height="230" width="250" x="570" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-files" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;verticalAlign=top;spacing=10;dashed=1;" value="&lt;b&gt;Archivos locales&lt;/b&gt;&lt;br&gt;[dispositivo del usuario]&lt;br&gt;&lt;br&gt;· Respaldo .json (exporta / restaura)&lt;br&gt;· plantilla-catalogo.csv (importa)" vertex="1">
+          <mxGeometry height="150" width="300" x="1200" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-server" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;verticalAlign=top;spacing=10;dashed=1;" value="&lt;b&gt;vite preview (LAN)&lt;/b&gt;&lt;br&gt;[HTTPS · cert. autofirmado]&lt;br&gt;&lt;br&gt;Sirve dist/ — instalación&lt;br&gt;como PWA" vertex="1">
+          <mxGeometry height="140" width="300" x="1200" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-depnote" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=20;verticalAlign=top;align=left;spacing=8;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;b&gt;Despliegue&lt;/b&gt;&lt;br&gt;&lt;br&gt;Build estático (pnpm build → dist/) servido por vite preview en HTTPS por la LAN, con certificado autofirmado que se acepta una vez. Instalable como PWA desde Chrome. Sin servidor de datos ni autenticación: cada navegador tiene su propia base IndexedDB." vertex="1">
+          <mxGeometry height="270" width="300" x="1200" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e1" edge="1" parent="1" source="l2-spa" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;" target="l2-dexie" value="Dexie API — transacciones &#39;rw&#39;&lt;br&gt;(todo-o-nada)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="295.06" y="650" />
+              <mxPoint x="295.06" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e2" edge="1" parent="1" source="l2-dexie" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;" target="l2-idb" value="lee / escribe&lt;br&gt;object stores">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e3" edge="1" parent="1" source="l2-sw" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;" target="l2-spa" value="intercepta fetch y&lt;br&gt;sirve la caché offline">
+          <mxGeometry relative="1" x="0.0114" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e4" edge="1" parent="1" source="l2-server" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;dashed=1;" target="l2-spa" value="sirve el bundle al abrir&lt;br&gt;o al haber nueva versión">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e5" edge="1" parent="1" source="l2-server" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;" target="l2-sw" value="instala / actualiza SW">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e6" edge="1" parent="1" source="l2-spa" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=11;" target="l2-files" value="BackupModal: descarga respaldo .json&lt;br&gt;lee respaldo .json y catálogo .csv">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="erd" name="3 · Entidades (ERD)">
+    <mxGraphModel dx="2575" dy="1565" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1140" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="er-title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" value="Diagrama Entidad-Relación — esquema Dexie v2 (IndexedDB &#39;despensapp&#39;)" vertex="1">
+          <mxGeometry height="30" width="800" x="400" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="er-pd" parent="1" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;4&#39;&gt;&lt;tr&gt;&lt;td bgcolor=&#39;#6a4c93&#39; align=&#39;center&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;b&gt;productDefs&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;color:#666666;&#39;&gt;índices: ++id, title&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt; : number — PK (auto)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;title&lt;/b&gt; : string (= products.title)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;props : [{key, value}]&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;updatedAt : ISO-8601&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="170" width="340" x="140" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="er-sup" parent="1" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;4&#39;&gt;&lt;tr&gt;&lt;td bgcolor=&#39;#3d7a4f&#39; align=&#39;center&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;b&gt;suppliers&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;color:#666666;&#39;&gt;índices: ++id, name&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt; : number — PK (auto)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;name&lt;/b&gt; : string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;type : string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;locations : string[]&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="160" width="320" x="640" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="er-pr" parent="1" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;4&#39;&gt;&lt;tr&gt;&lt;td bgcolor=&#39;#2d5f8b&#39; align=&#39;center&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;b&gt;products&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;color:#666666;&#39;&gt;índices: ++id, title, area, purchase.nextPurchaseDate&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt; : number — PK (auto)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;title&lt;/b&gt; : string (obligatorio) — nombre genérico&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;brand : string — marca&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;model : string — variante / descriptor&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;content : string — ej. &#39;500&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;unit : L · ml · g · kg · pza · paq&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;family : string — categoría&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;area : string — zona de la casa&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;description : string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;image : Blob — foto del producto&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;iconKey / iconTone : string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;customProps : [{key, value}]&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;stock&lt;/b&gt; : {current, min, max, location?, alerts?}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;purchase&lt;/b&gt; : {primarySupplierId?, secondarySupplierIds[], originalPrice?, lastPrice?, lastPurchaseDate?, nextPurchaseDate?, period, links[], supplierLinks?}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;createdAt / updatedAt : ISO-8601&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="500" width="340" x="140" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="er-cart" parent="1" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;4&#39;&gt;&lt;tr&gt;&lt;td bgcolor=&#39;#2a7a7a&#39; align=&#39;center&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;b&gt;carts&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;color:#666666;&#39;&gt;índices: ++id, status, createdAt&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt; : number — PK (auto)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;name&lt;/b&gt; : string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;status&lt;/b&gt; : active · purchased · cancelled&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;origin&lt;/b&gt; : manual · auto&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;createdAt : ISO-8601&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;generatedAt : ISO (solo auto)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchasedAt : ISO (solo comprados)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;budget : centavos MXN&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;estimatedDate : &#39;AAAA-MM-DD&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;items&lt;/b&gt; : [{productId, title, qty,&lt;br&gt;unitPrice, supplierId, supplierName}]&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="320" width="340" x="1140" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="er-mov" parent="1" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;4&#39;&gt;&lt;tr&gt;&lt;td bgcolor=&#39;#b07030&#39; align=&#39;center&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;b&gt;movements&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;color:#666666;&#39;&gt;índices: ++id, productId, date&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt; : number — PK (auto)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;productId&lt;/b&gt; : number — FK lógica → products.id&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;date&lt;/b&gt; : ISO-8601&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;type&lt;/b&gt; : entrada · salida · ajuste&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;qty : number — cantidad del evento&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;delta : number — +/- aplicado&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;resultingQty : number — stock resultante&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;note : string — ej. &#39;Compra: ...&#39;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="240" width="340" x="140" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="er-lst" parent="1" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;4&#39;&gt;&lt;tr&gt;&lt;td bgcolor=&#39;#555555&#39; align=&#39;center&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;b&gt;lists&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&#39;color:#666666;&#39;&gt;índices: ++id&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt; : number — PK (auto)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;title&lt;/b&gt; : string&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;icon : string — clave de glifo&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;color : string — clave de tono&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;productIds&lt;/b&gt; : number[] — N:M con products&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;createdAt : ISO-8601&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" vertex="1">
+          <mxGeometry height="180" width="340" x="620" y="850" as="geometry" />
+        </mxCell>
+        <mxCell id="er-note" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=20;verticalAlign=top;align=left;spacing=8;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;b&gt;Convenciones&lt;/b&gt;&lt;br&gt;· Dinero = centavos enteros (MXN)&lt;br&gt;· Fechas &#39;AAAA-MM-DD&#39; · timestamps ISO-8601&lt;br&gt;· IndexedDB no tiene FKs reales: la integridad la garantizan los servicios con transacciones Dexie&lt;br&gt;· stock, purchase y items son objetos embebidos dentro del documento padre&lt;br&gt;· productDefs se une a products por title (join lógico, sin FK)&lt;br&gt;· cart items denormalizan title y supplierName al momento de agregar" vertex="1">
+          <mxGeometry height="230" width="380" x="1140" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="er-e1" edge="1" parent="1" source="er-pd" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="er-pr" value="title = title&lt;br&gt;(join lógico, sin FK)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="er-e2" edge="1" parent="1" source="er-sup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.15;entryDx=0;entryDy=0;" target="er-pr" value="purchase.primarySupplierId ·&lt;br&gt;secondarySupplierIds · supplierLinks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="er-e3" edge="1" parent="1" source="er-pr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="er-mov" value="bitácora append-only&lt;br&gt;(1 producto → 0..N movimientos)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="er-e4" edge="1" parent="1" source="er-pr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="er-cart" value="items[].productId&lt;br&gt;(denormalizado)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="er-e5" edge="1" parent="1" source="er-sup" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERone;startFill=0;endArrow=ERmany;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="er-cart" value="items[].supplierId → supplierName&lt;br&gt;(denormalizado)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="er-e6" edge="1" parent="1" source="er-lst" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERmany;endFill=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.992;entryY=0.839;entryDx=0;entryDy=0;entryPerimeter=0;" target="er-pr" value="productIds[] — N:M">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="940" />
+              <mxPoint x="580" y="709.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="dd" name="4 · Diccionario de Datos">
+    <mxGraphModel dx="1400" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="dd-title" value="Diccionario de Datos — esquema Dexie v2" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="10" width="600" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="dd-products" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;3&#39;&gt;&lt;tr bgcolor=&#39;#2d5f8b&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;th align=&#39;left&#39;&gt;Campo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Tipo&lt;/th&gt;&lt;th&gt;Nulo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Notas&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;PK autoincremental (Dexie ++)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;title&lt;/b&gt;&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Nombre genérico, ej. &#39;Leche&#39; · index&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;brand&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Marca, ej. &#39;Lala&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;model&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Variante / descriptor, ej. &#39;100 Entera&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;content&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Cantidad de presentación, ej. &#39;500&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;unit&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;L · ml · g · kg · pza · paq (canónicas)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;family&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Categoría, ej. &#39;Lácteo&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;area&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Zona de la casa (texto libre) · index&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;description&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Notas del producto&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;image&lt;/td&gt;&lt;td&gt;Blob&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Foto del producto (en respaldo va como base64)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;iconKey / iconTone&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Icono y tono visual de la tarjeta&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;customProps&lt;/td&gt;&lt;td&gt;CustomProp[]&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;[{key, value}] — tipos, ej. key=&#39;Tipo&#39;, value=&#39;Entera&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;stock.current&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Stock global único del producto&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;stock.min&lt;/td&gt;&lt;td&gt;number | null&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Nivel mínimo (dispara aviso de stock bajo)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;stock.max&lt;/td&gt;&lt;td&gt;number | null&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Nivel máximo (sugerencia de reposición)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;stock.location&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Ubicación física (texto libre)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;stock.alerts&lt;/td&gt;&lt;td&gt;boolean&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Alertar al cruzar el mínimo&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchase.primarySupplierId&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;FK lógica → suppliers.id&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchase.secondarySupplierIds&lt;/td&gt;&lt;td&gt;number[]&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Proveedores alternos&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchase.originalPrice&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Precio de referencia (centavos)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchase.lastPrice&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Último precio pagado (centavos)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchase.lastPurchaseDate&lt;/td&gt;&lt;td&gt;date&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;&#39;AAAA-MM-DD&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchase.nextPurchaseDate&lt;/td&gt;&lt;td&gt;date&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;index — al vencer dispara el carrito automático&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchase.period&lt;/td&gt;&lt;td&gt;enum | null&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;semanal · quincenal · mensual · null&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchase.links&lt;/td&gt;&lt;td&gt;{id, url}[]&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Enlaces de compra del producto&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchase.supplierLinks&lt;/td&gt;&lt;td&gt;SupplierLink[]&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;{supplierId, price?, frequency?, url?, notes?} por proveedor&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;createdAt / updatedAt&lt;/td&gt;&lt;td&gt;timestamp&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;ISO-8601&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;spacing=4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="600" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="dd-note" value="&lt;b&gt;Convenciones globales&lt;/b&gt;&lt;br&gt;&lt;br&gt;· Dinero: centavos enteros (MXN)&lt;br&gt;· Fechas: &#39;AAAA-MM-DD&#39;; timestamps: ISO-8601&lt;br&gt;· Sin FKs reales (IndexedDB): la integridad referencial la aplican los servicios dentro de transacciones Dexie &#39;rw&#39;&lt;br&gt;· Los campos de objetos embebidos (stock.*, purchase.*, items[].*) se listan con notación de ruta&lt;br&gt;· Validaciones de negocio en los servicios lanzan Errors en español; los formularios los muestran al usuario" style="shape=note;whiteSpace=wrap;html=1;size=20;verticalAlign=top;align=left;spacing=8;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="680" y="50" width="660" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="dd-suppliers" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;3&#39;&gt;&lt;tr bgcolor=&#39;#3d7a4f&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;th align=&#39;left&#39;&gt;Campo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Tipo&lt;/th&gt;&lt;th&gt;Nulo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Notas&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;PK autoincremental (Dexie ++)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Nombre · index · único en la práctica&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;type&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Ej. supermercado, tienda&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;locations&lt;/td&gt;&lt;td&gt;string[]&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Sucursales / zonas&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;spacing=4;" vertex="1" parent="1">
+          <mxGeometry x="680" y="250" width="320" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="dd-productdefs" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;3&#39;&gt;&lt;tr bgcolor=&#39;#6a4c93&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;th align=&#39;left&#39;&gt;Campo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Tipo&lt;/th&gt;&lt;th&gt;Nulo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Notas&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;PK autoincremental (Dexie ++)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;title&lt;/b&gt;&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Igual a products.title (join lógico) · index&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;props&lt;/td&gt;&lt;td&gt;CustomProp[]&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Props sugeridas al capturar ese nombre&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;updatedAt&lt;/td&gt;&lt;td&gt;timestamp&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;ISO-8601&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;spacing=4;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="250" width="310" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="dd-movements" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;3&#39;&gt;&lt;tr bgcolor=&#39;#b07030&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;th align=&#39;left&#39;&gt;Campo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Tipo&lt;/th&gt;&lt;th&gt;Nulo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Notas&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;PK autoincremental (Dexie ++)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;productId&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Producto (FK lógica) · index&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;date&lt;/b&gt;&lt;/td&gt;&lt;td&gt;timestamp&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;ISO-8601 · index&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;type&lt;/b&gt;&lt;/td&gt;&lt;td&gt;enum&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;entrada · salida · ajuste&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;qty&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Cantidad del evento (en ajuste: cantidad objetivo)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;delta&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Cantidad con signo aplicada al stock&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;resultingQty&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Stock resultante (auditoría)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;note&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Ej. &#39;Compra: Carrito generado (...)&#39;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;spacing=4;" vertex="1" parent="1">
+          <mxGeometry x="680" y="430" width="660" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="dd-carts" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;3&#39;&gt;&lt;tr bgcolor=&#39;#2a7a7a&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;th align=&#39;left&#39;&gt;Campo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Tipo&lt;/th&gt;&lt;th&gt;Nulo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Notas&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;PK autoincremental (Dexie ++)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;name&lt;/b&gt;&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Nombre del carrito (obligatorio)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;status&lt;/b&gt;&lt;/td&gt;&lt;td&gt;enum&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;active · purchased · cancelled · index — los comprados/cancelados se retienen como historial&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;origin&lt;/b&gt;&lt;/td&gt;&lt;td&gt;enum&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;manual · auto&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;createdAt&lt;/b&gt;&lt;/td&gt;&lt;td&gt;timestamp&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;ISO-8601 · index&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;generatedAt&lt;/td&gt;&lt;td&gt;timestamp&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Solo carritos automáticos&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;purchasedAt&lt;/td&gt;&lt;td&gt;timestamp&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Solo carritos comprados&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;budget&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Tope planeado de gasto (centavos, ≥ 0)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;estimatedDate&lt;/td&gt;&lt;td&gt;date&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Fecha estimada de compra &#39;AAAA-MM-DD&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;items&lt;/b&gt;&lt;/td&gt;&lt;td&gt;CartItem[]&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Embebido y denormalizado — se congela al agregar&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;items[].productId&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;→ products.id (FK lógica)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;items[].title&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Copia del título al momento de agregar&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;items[].qty&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Entero &gt; 0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;items[].unitPrice&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Centavos, ≥ 0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;items[].supplierId&lt;/td&gt;&lt;td&gt;number | null&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;null = grupo &#39;Sin proveedor&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;items[].supplierName&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Copia del nombre del proveedor&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;spacing=4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="880" width="600" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="dd-lists" value="&lt;table style=&#39;width:100%;border-collapse:collapse;font-size:10px;&#39; border=&#39;1&#39; cellpadding=&#39;3&#39;&gt;&lt;tr bgcolor=&#39;#555555&#39; style=&#39;color:#ffffff;&#39;&gt;&lt;th align=&#39;left&#39;&gt;Campo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Tipo&lt;/th&gt;&lt;th&gt;Nulo&lt;/th&gt;&lt;th align=&#39;left&#39;&gt;Notas&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;PK autoincremental (Dexie ++)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;title&lt;/b&gt;&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Nombre de la lista&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;icon&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Clave de glifo, ej. &#39;carrito&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;color&lt;/td&gt;&lt;td&gt;string&lt;/td&gt;&lt;td&gt;Sí&lt;/td&gt;&lt;td&gt;Clave de tono, ej. &#39;azul&#39;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;b&gt;productIds&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number[]&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;Productos de la lista (N:M con products)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;createdAt&lt;/td&gt;&lt;td&gt;timestamp&lt;/td&gt;&lt;td&gt;No&lt;/td&gt;&lt;td&gt;ISO-8601&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#666666;verticalAlign=top;overflow=fill;spacing=4;" vertex="1" parent="1">
+          <mxGeometry x="680" y="880" width="400" height="220" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="seqbuy" name="5 · Secuencia — Pagar carrito">
+    <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sq-title" value="Diagrama de Secuencia — Pagar carrito (carts/api · buyCart)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="600" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-l1" value="&lt;b&gt;Usuario&lt;/b&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="150" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-l2" value="&lt;b&gt;UI&lt;/b&gt;&lt;br&gt;Detalle de carrito" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="170" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-l3" value="&lt;b&gt;carts/api&lt;/b&gt;&lt;br&gt;buyCart()" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;" vertex="1" parent="1">
+          <mxGeometry x="560" y="80" width="180" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-l4" value="&lt;b&gt;inventory/api&lt;/b&gt;&lt;br&gt;registerMovement()" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;" vertex="1" parent="1">
+          <mxGeometry x="820" y="80" width="190" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-l5" value="&lt;b&gt;db&lt;/b&gt;&lt;br&gt;(Dexie / IndexedDB)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="80" width="180" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-loop" value="loop [por cada item del carrito]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;verticalAlign=top;align=left;spacing=8;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="545" y="330" width="730" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-note" value="&lt;b&gt;Todo-o-nada&lt;/b&gt;: cualquier error (carrito no activo, producto borrado, precio negativo) revierte TODAS las escrituras — una sola transacción Dexie &#39;rw&#39; sobre products, movements y carts." style="shape=note;whiteSpace=wrap;html=1;size=18;verticalAlign=top;align=left;spacing=8;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="690" width="640" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m0" value="1: toca &#39;Pagar&#39; y captura precios reales" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=none;fontSize=10;exitX=1;exitY=0.079;exitDx=0;exitDy=0;entryX=0;entryY=0.079;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l1" target="sq-l2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m1" value="2: pagarCarrito(cartId, preciosReales)" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=none;fontSize=10;exitX=1;exitY=0.132;exitDx=0;exitDy=0;entryX=0;entryY=0.132;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l2" target="sq-l3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m2" value="3: transaction(&#39;rw&#39;, products, movements, carts)" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=none;fontSize=10;exitX=1;exitY=0.211;exitDx=0;exitDy=0;entryX=0;entryY=0.211;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l3" target="sq-l5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m3" value="4: carts.get(cartId) — valida status=&#39;active&#39;" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=none;fontSize=10;exitX=1;exitY=0.289;exitDx=0;exitDy=0;entryX=0;entryY=0.289;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l3" target="sq-l5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m4" value="5: products.get(productId)" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=none;fontSize=10;exitX=1;exitY=0.368;exitDx=0;exitDy=0;entryX=0;entryY=0.368;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l3" target="sq-l5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m5" value="6: registerMovement(&#39;entrada&#39;, qty, &#39;Compra: nombre&#39;)" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=none;fontSize=10;exitX=1;exitY=0.447;exitDx=0;exitDy=0;entryX=0;entryY=0.447;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l3" target="sq-l4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m6" value="7: movements.add(...) + products.update(stock.current)" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=none;fontSize=10;exitX=1;exitY=0.526;exitDx=0;exitDy=0;entryX=0;entryY=0.526;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l4" target="sq-l5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m7" value="8: products.update(lastPrice, lastPurchaseDate, nextPurchaseDate = hoy + period)" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=none;fontSize=10;exitX=1;exitY=0.605;exitDx=0;exitDy=0;entryX=0;entryY=0.605;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l3" target="sq-l5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m8" value="9: carts.update(status=&#39;purchased&#39;, purchasedAt, items con precios finales)" style="html=1;verticalAlign=bottom;endArrow=block;edgeStyle=none;fontSize=10;exitX=1;exitY=0.684;exitDx=0;exitDy=0;entryX=0;entryY=0.684;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l3" target="sq-l5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sq-m9" value="10: confirmación (commit de la transacción)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;edgeStyle=none;fontSize=10;exitX=0;exitY=0.763;exitDx=0;exitDy=0;entryX=1;entryY=0.763;entryDx=0;entryDy=0;" edge="1" parent="1" source="sq-l3" target="sq-l2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="flomov" name="6 · Flujo — Registrar movimiento">
+    <mxGraphModel dx="1471" dy="894" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1060" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="fm-title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" value="Diagrama de Flujo — Registrar movimiento de stock (inventory/api · registerMovement)" vertex="1">
+          <mxGeometry height="30" width="800" x="185" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-s" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Inicio:&lt;br&gt;registrar movimiento" vertex="1">
+          <mxGeometry height="60" width="240" x="465" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-v" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Validar cantidad: entrada/salida qty &amp;gt; 0 · ajuste qty ≥ 0" vertex="1">
+          <mxGeometry height="50" width="310" x="430" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-g" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="products.get(productId)" vertex="1">
+          <mxGeometry height="40" width="250" x="460" y="210" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-d1" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="¿Existe el producto?" vertex="1">
+          <mxGeometry height="80" width="270" x="450" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-err1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Error:&lt;br&gt;&#39;Producto no encontrado&#39;" vertex="1">
+          <mxGeometry height="50" width="230" x="70" y="295" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-d2" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="¿Tipo de movimiento?" vertex="1">
+          <mxGeometry height="80" width="270" x="450" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-pe" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="entrada&lt;br&gt;delta = +qty" vertex="1">
+          <mxGeometry height="60" width="200" x="90" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-ds" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="salida:&lt;br&gt;¿qty &amp;gt; stock actual?" vertex="1">
+          <mxGeometry height="90" width="270" x="400" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-errs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Error: &#39;La salida no puede ser mayor que el stock actual&#39;" vertex="1">
+          <mxGeometry height="50" width="330" x="220" y="665" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-ps" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="salida&lt;br&gt;delta = −qty" vertex="1">
+          <mxGeometry height="60" width="200" x="600" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-pa" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="ajuste&lt;br&gt;delta = qty − current" vertex="1">
+          <mxGeometry height="60" width="220" x="740" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-m" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Misma transacción &#39;rw&#39;:&lt;br&gt;movements.add({type, qty, delta, resultingQty, note})&lt;br&gt;+ products.update(stock.current = resultingQty)" vertex="1">
+          <mxGeometry height="80" width="370" x="400" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Stock actualizado&lt;br&gt;bitácora append-only (solo consulta)" vertex="1">
+          <mxGeometry height="60" width="260" x="455" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e1" edge="1" parent="1" source="fm-s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="fm-v">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e2" edge="1" parent="1" source="fm-v" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="fm-g">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e3" edge="1" parent="1" source="fm-g" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="fm-d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e4" edge="1" parent="1" source="fm-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;" target="fm-err1" value="no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e5" edge="1" parent="1" source="fm-d1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;" target="fm-d2" value="sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e6" edge="1" parent="1" source="fm-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="fm-pe" value="entrada">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e7" edge="1" parent="1" source="fm-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="fm-ds" value="salida">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e8" edge="1" parent="1" source="fm-d2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="fm-pa" value="ajuste">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e9" edge="1" parent="1" source="fm-ds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="fm-errs" value="sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e10" edge="1" parent="1" source="fm-ds" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="fm-ps" value="no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="fm-e11" edge="1" parent="1" source="fm-pe" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="fm-m">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="190" y="810" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fm-e12" edge="1" parent="1" source="fm-ps" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="fm-m">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="730" />
+              <mxPoint x="585" y="730" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fm-e13" edge="1" parent="1" source="fm-pa" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="fm-m">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="730" />
+              <mxPoint x="585" y="730" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="fm-e14" edge="1" parent="1" source="fm-m" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="fm-e">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="floresp" name="7 · Flujo — Respaldo y restauración">
+    <mxGraphModel dx="1288" dy="783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="860" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bk-title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" value="Diagrama de Flujo — Respaldo local (lib/backup · BackupModal)" vertex="1">
+          <mxGeometry height="30" width="700" x="350" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-s1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Exportar respaldo" vertex="1">
+          <mxGeometry height="50" width="240" x="185" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="createBackup(): db.export()&lt;br&gt;dexie-export-import: imágenes Blob → base64,&lt;br&gt;incluye esquema y versiones" vertex="1">
+          <mxGeometry height="70" width="300" x="155" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Sobre (envelope):&lt;br&gt;{ app:&#39;despensapp&#39;, format:1,&lt;br&gt;createdAt, payload }" vertex="1">
+          <mxGeometry height="70" width="300" x="155" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="downloadBackup(): Blob JSON → descarga&lt;br&gt;despensapp-backup-AAAA-MM-DD.json" vertex="1">
+          <mxGeometry height="60" width="300" x="155" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Archivo .json guardado por el usuario" vertex="1">
+          <mxGeometry height="60" width="280" x="165" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-s2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Restaurar respaldo" vertex="1">
+          <mxGeometry height="50" width="240" x="705" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Usuario selecciona archivo .json&lt;br&gt;→ JSON.parse" vertex="1">
+          <mxGeometry height="50" width="300" x="675" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-d3" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="¿Sobre válido?&lt;br&gt;(app, format numérico,&lt;br&gt;payload.data.tables)" vertex="1">
+          <mxGeometry height="100" width="270" x="690" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-err3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Error: &#39;El archivo no es un respaldo de DespensApp válido&#39;" vertex="1">
+          <mxGeometry height="60" width="260" x="1100" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-d4" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="¿format &amp;gt; 1?" vertex="1">
+          <mxGeometry height="80" width="210" x="720" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-err4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Error: &#39;creado con una&lt;br&gt;versión más reciente de la app&#39;" vertex="1">
+          <mxGeometry height="60" width="260" x="1100" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-p5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Transacción &#39;rw&#39;: clear() de products,&lt;br&gt;suppliers, carts, lists, movements" vertex="1">
+          <mxGeometry height="60" width="300" x="675" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-p6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="db.import(Blob del payload)&lt;br&gt;reconstruye esquema + datos" vertex="1">
+          <mxGeometry height="60" width="300" x="675" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Base reemplazada por completo&lt;br&gt;(sin mezcla con datos previos)" vertex="1">
+          <mxGeometry height="70" width="270" x="690" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-note" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=18;verticalAlign=top;align=left;spacing=8;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" value="El respaldo es JSON portable: sirve para migrar entre dispositivos y navegadores. Restaurar BORRA todos los datos actuales antes de importar (reemplazo completo, sin mezcla)." vertex="1">
+          <mxGeometry height="170" width="260" x="1100" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e1b" edge="1" parent="1" source="bk-s1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="bk-p1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e2b" edge="1" parent="1" source="bk-p1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="bk-p2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e3b" edge="1" parent="1" source="bk-p2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="bk-p3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e4b" edge="1" parent="1" source="bk-p3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="bk-e1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e5b" edge="1" parent="1" source="bk-s2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="bk-p4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e6b" edge="1" parent="1" source="bk-p4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="bk-d3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e7b" edge="1" parent="1" source="bk-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="bk-err3" value="no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e8b" edge="1" parent="1" source="bk-d3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;" target="bk-d4" value="sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e9b" edge="1" parent="1" source="bk-d4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="bk-err4" value="sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e10b" edge="1" parent="1" source="bk-d4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;" target="bk-p5" value="no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e11b" edge="1" parent="1" source="bk-p5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="bk-p6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bk-e12b" edge="1" parent="1" source="bk-p6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="bk-e2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="flocsv" name="8 · Flujo — Importar catálogo CSV">
+    <mxGraphModel dx="1585" dy="963" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="1010" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="cs-title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" value="Diagrama de Flujo — Importar catálogo CSV (products/importCsv · PapaParse)" vertex="1">
+          <mxGeometry height="30" width="700" x="300" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-s" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Importar catálogo CSV" vertex="1">
+          <mxGeometry height="50" width="260" x="500" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-t" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Plantilla: public/plantilla-catalogo.csv — 14 columnas:&lt;br&gt;Nombre, Marca, Modelo, Contenido, Unidad, Familia, Área, Descripción,&lt;br&gt;Stock actual, Stock mínimo, Stock máximo, Ubicación, Precio referencia, Frecuencia" vertex="1">
+          <mxGeometry height="80" width="360" x="450" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-u" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Usuario llena la plantilla y sube el archivo&lt;br&gt;(ImportCsvModal, desde el Catálogo)" vertex="1">
+          <mxGeometry height="50" width="300" x="480" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-pp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Quitar BOM → Papa.parse(header: true, skipEmptyLines)&lt;br&gt;parseCatalogCsv(texto)" vertex="1">
+          <mxGeometry height="50" width="340" x="460" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-loop" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;verticalAlign=top;align=left;spacing=8;fontStyle=1;fontSize=11;" value="loop [por cada fila]" vertex="1">
+          <mxGeometry height="290" width="900" x="60" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-dv" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="¿Fila válida?&lt;br&gt;Nombre presente · Contenido &amp;gt; 0 y Unidad ∈ {L, ml, g, kg, pza, paq}&lt;br&gt;· stocks enteros ≥ 0 · Precio sin &#39;$&#39; (parseMoney) · Frecuencia válida" vertex="1">
+          <mxGeometry height="120" width="360" x="330" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-ea" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" value="errors.push({ fila, mensajes })&lt;br&gt;la fila se descarta" vertex="1">
+          <mxGeometry height="60" width="200" x="90" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-dr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" value="ProductDraft&lt;br&gt;(borrador en memoria)" vertex="1">
+          <mxGeometry height="60" width="180" x="740" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-d5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="¿Hubo errores?" vertex="1">
+          <mxGeometry height="90" width="220" x="480" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-fix" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" value="Vista previa con errores por fila (número + motivo)&lt;br&gt;el usuario corrige la plantilla y vuelve a subirla" vertex="1">
+          <mxGeometry height="70" width="300" x="90" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-imp" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" value="Por cada draft:&lt;br&gt;createProduct() · setStock() / savePurchaseInfo()&lt;br&gt;si traen datos · los duplicados&lt;br&gt;(title|brand|model) se saltan" vertex="1">
+          <mxGeometry height="110" width="290" x="800" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Resumen:&lt;br&gt;importados / saltados / errores" vertex="1">
+          <mxGeometry height="70" width="240" x="825" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e1" edge="1" parent="1" source="cs-s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="cs-t">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e2" edge="1" parent="1" source="cs-t" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="cs-u">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e3" edge="1" parent="1" source="cs-u" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="cs-pp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e4" edge="1" parent="1" source="cs-pp" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="cs-dv">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e5" edge="1" parent="1" source="cs-dv" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="cs-ea" value="no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e6" edge="1" parent="1" source="cs-dv" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="cs-dr" value="sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e7" edge="1" parent="1" source="cs-dv" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="cs-d5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e8" edge="1" parent="1" source="cs-d5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="cs-fix" value="sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e9" edge="1" parent="1" source="cs-d5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="cs-imp" value="no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-e10" edge="1" parent="1" source="cs-fix" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;dashed=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="cs-u" value="archivo corregido">
+          <mxGeometry relative="1" x="-0.007" as="geometry">
+            <mxPoint y="-1" as="offset" />
+            <Array as="points">
+              <mxPoint x="40.08" y="765" />
+              <mxPoint x="40.08" y="265" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cs-e11" edge="1" parent="1" source="cs-imp" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="cs-e">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="floauto" name="9 · Flujo — Carrito automático">
+    <mxGraphModel dx="1288" dy="783" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="au-title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" value="Diagrama de Flujo — Carrito automático (carts/api · generateAutoCart)" vertex="1">
+          <mxGeometry height="30" width="800" x="185" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="au-s" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Generar carrito automático" vertex="1">
+          <mxGeometry height="50" width="260" x="450" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="au-p1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Leer todos los products + carritos con status=&#39;active&#39;" vertex="1">
+          <mxGeometry height="50" width="310" x="425" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="au-p2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="cubiertos = productos ya presentes en algún carrito activo&lt;br&gt;(guarda de idempotencia: nunca se duplican)" vertex="1">
+          <mxGeometry height="60" width="340" x="410" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="au-p3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="vencidos = nextPurchaseDate ≤ hoy AND id ∉ cubiertos&lt;br&gt;orden: fecha más próxima, luego título (es)" vertex="1">
+          <mxGeometry height="60" width="340" x="410" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="au-d" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="¿Hay vencidos?" vertex="1">
+          <mxGeometry height="90" width="220" x="470" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="au-n" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" value="null — no se crea&lt;br&gt;ningún carrito vacío" vertex="1">
+          <mxGeometry height="60" width="220" x="820" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="au-p4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Crear carrito origin=&#39;auto&#39;, nombre &#39;Carrito generado (fecha)&#39;:&lt;br&gt;items qty = 1, precio = lastPrice,&lt;br&gt;agrupados por proveedor principal (&#39;Sin proveedor&#39; como grupo)" vertex="1">
+          <mxGeometry height="90" width="390" x="385" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="au-e" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Carrito activo listo&lt;br&gt;para revisar y pagar" vertex="1">
+          <mxGeometry height="60" width="260" x="450" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="au-e1" edge="1" parent="1" source="au-s" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="au-p1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="au-e2" edge="1" parent="1" source="au-p1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="au-p2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="au-e3" edge="1" parent="1" source="au-p2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="au-p3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="au-e4" edge="1" parent="1" source="au-p3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="au-d">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="au-e5" edge="1" parent="1" source="au-d" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="au-n" value="no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="au-e6" edge="1" parent="1" source="au-d" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;fontSize=10;" target="au-p4" value="sí">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="au-e7" edge="1" parent="1" source="au-p4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="au-e">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
